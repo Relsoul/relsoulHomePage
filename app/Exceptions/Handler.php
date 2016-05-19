@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
     {
 
         if(get_class($e)=="UnexpectedValueException"||get_class($e)=="Firebase\\JWT\\SignatureInvalidException"){
-            return response()->json(["type"=>"false","message"=>"无效的token"]);
+            return response()->json(["type"=>"false","message"=>"无效的token","code"=>"40402"]);
         }
 
 

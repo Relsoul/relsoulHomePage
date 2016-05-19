@@ -38,7 +38,7 @@ class userController extends Controller
         if($logintype=1){
             $user=$usersModel->where("name","=",$login)->get();
             if(!$user){
-                return response()->json(["type"=>"false","message"=>"用户不存在"]);
+                return response()->json(["type"=>"false","message"=>"用户不存在",code=>"40003"]);
             }
             if(Crypt::decrypt($user[0]->password)==$password){
                 $key=config("app.jwt");
@@ -46,7 +46,7 @@ class userController extends Controller
                 $token=JWT::encode(["name"=>$user[0]->name,"time"=>time(),"exp"=>time()+$exp],$key);
                 return response()->json(["type"=>"true","message"=>"登录成功","result"=>$token]);
             }
-            return  response()->json(["type"=>"true","message"=>"密码不正确"]);
+            return  response()->json(["type"=>"true","message"=>"密码不正确",code=>"40003"]);
         }else{
 
         }
