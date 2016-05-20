@@ -1,0 +1,77 @@
+
+*{
+  font-family: '微软雅黑';
+}
+
+.row.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+.row.no-gutters  [class^="col"],
+.row.no-gutters  [class*=" col"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+
+
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(../lib/materialize/f/font.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+.breadcrumb:before {
+  content: '\E5CC';
+  color: rgba(255, 255, 255, 0.7);
+  vertical-align: top;
+  display: inline-block;
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 25px;
+  margin: 0 10px 0 8px;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+.break-dl{
+
+  dt,dd{
+    display: inline;
+  }
+
+  dd{
+    margin: 0;
+    font-weight: bold;
+  }
+
+  dd+dt::before{
+    content:"\A";
+    white-space: pre;
+  }
+
+  dd+dd::before{
+    content:",";
+    font-weight: normal;
+  }
+
+}

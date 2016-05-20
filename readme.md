@@ -23,9 +23,9 @@ restfulAPI返回的格式为
 
 
 ## 注册与登录
-| 说明 | URL | 附加参数 | 返回说明 |
-| --- | ---: | :---: | :---:|
-| 注册 | /register | name,password,email |result(object) |
-| 登录 | /login | name(email or username ),password,loginType(1:userName登录,2:email登录)|
+| 说明 | URL | 附加参数 | 成功返回说明 |
+| --- | :---: | :---: | :---:|
+| 注册 | /register | name,password,email |result(username) |
+| 登录 | /login | name(email or username ),password,loginType(1:userName登录,2:email登录)|result(token)|
 
 

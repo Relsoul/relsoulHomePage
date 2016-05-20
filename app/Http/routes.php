@@ -14,14 +14,14 @@
 use Illuminate\Http\Response;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-Route::get("/cc/",function(){
-    return view('welcome');
+    return view('index');
 });
 
 Route::group(["middleware"=>"JWTAuthToken","prefix"=>"admin"],function(){
-    Route::get("users","adminController@users");
+    Route::get("users","Admin\\adminController@users");
+
+    //修改首页个人信息
+    Route::post("home/me","Admin\\adminHome@me");
 });
 
 Route::post("/login","userController@login");
