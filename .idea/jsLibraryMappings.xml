@@ -2,6 +2,7 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$" libraries="{relsoul node_modules}" />
+    <file url="PROJECT" libraries="{vue}" />
     <includedPredefinedLibrary name="ECMAScript 6" />
   </component>
 </project>

@@ -1,23 +1,51 @@
 .header{
-
+  position: relative;
   nav{
     max-height: 100%;
     min-height: 300px;
+    @media all and(max-width: 420px) {
+      min-height: 120px;
+    }
 
     .header-nav{
       position: relative;
       li{
-        position: relative;
-        left: 50%;
-        transform: translateX(-25%);
-        margin: 0 auto;
         display: block;
         float: none;
+        text-align: center;
       }
-
     }
-
-
   }
+
+  div.col.navcol{
+    position: absolute;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    left: 0;
+  }
+
+  .header-btn{
+    position: absolute;
+    z-index: 99;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    opacity: 1;
+  }
+
+  .header-btn.header-btn-hide{
+    opacity: 0;
+  }
+
+ div.col.nav-hide{
+   left: -400px;
+   overflow: hidden;
+  }
+
 
 }

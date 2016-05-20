@@ -3,9 +3,15 @@
   font-family: '微软雅黑';
 }
 
+html,body{
+  overflow-x:hidden;
+}
+body{
+  perspective: 1500px;
+}
+
 .row.no-gutters {
-  margin-right: 0;
-  margin-left: 0;
+  margin: 0;
 }
 .row.no-gutters  [class^="col"],
 .row.no-gutters  [class*=" col"] {
@@ -13,6 +19,13 @@
   padding-left: 0;
 }
 
+.col{
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
 
 
 
@@ -53,6 +66,7 @@
 }
 
 
+// about me
 .break-dl{
 
   dt,dd{
@@ -75,3 +89,23 @@
   }
 
 }
+
+.text_underline{
+  position: relative;
+  
+  &::before{
+    content:"";
+    width: 100px;
+    height: 2px;
+    background: #fb6470;
+    position: absolute;
+    bottom: -15px;
+  }
+}
+
+// show content
+.body-content-show{
+  background: #fb6470;
+}
+
+

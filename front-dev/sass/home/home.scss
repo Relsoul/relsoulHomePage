@@ -3,8 +3,31 @@
   @import "homeTitle";
   @import "homeAboutMe";
   @import "timeLine";
+  @import "homeSkills";
 
   color: #3e3e3e;
 
+
+  .home-content{
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+  }
+
+  .show-content{
+    .home-content{
+      @media all and (max-width: 420px) {
+        transform:none;
+        left: 0;
+        position: static;
+      }
+      left: 25%;
+      position: relative;
+      transform: translate3d(0, -200px, -600px) rotateY(-20deg);
+    }
+
+  }
 
 }

@@ -1,0 +1,32 @@
+.home-skills{
+  background:#1d1d24 ;
+  color: #fff;
+
+.progress{
+  background: #bcbcbe;
+  border-radius: 2px;
+  height: 6px;
+  overflow: visible;
+
+  .determinate{
+    background-color: #fb6470;
+    &::before{
+      position: absolute;
+      content: "";
+      display: block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      right:-1px;
+      top: -100%;
+      background: inherit;
+    }
+  }
+}
+
+  .skills-value{
+    margin-left: 10px;
+  }
+
+
+}

@@ -25,4 +25,14 @@ $('.button-collapse').sideNav({
     }
 );
 
-$(".header nav").height($("#wrapper").height());
+
+if($(document).width()>420){
+    $("body").addClass("body-content-show");
+    $(".header nav").height($("body").height());
+}else{
+
+}
+
+
+
+

@@ -5,5 +5,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="relsoul node_modules" level="project" />
+    <orderEntry type="library" name="vue" level="project" />
   </component>
 </module>
