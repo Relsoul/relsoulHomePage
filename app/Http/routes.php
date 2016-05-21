@@ -24,5 +24,10 @@ Route::group(["middleware"=>"JWTAuthToken","prefix"=>"admin"],function(){
     Route::post("home/me","Admin\\adminHome@me");
 });
 
+// 用户登录验证
 Route::post("/login","userController@login");
+Route::get("/login","userController@initGeeTest");
+
+
+
 Route::post("/register","userController@register");

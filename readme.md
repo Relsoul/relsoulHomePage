@@ -22,13 +22,14 @@ restfulAPI返回的格式为
 |40001|用户token过期|
 |40002|无效的token|
 |40003|用户不存在或者账号密码错误|
+|40004|验证码不正确|
 
 
 ## 注册与登录
 | 说明 | URL | 附加参数 | 成功返回说明 |
 | --- | :---: | :---: | :---:|
 | 注册 | /register | name,password,email |result(username) |
-| 登录 | /login | name(email or username ),password,loginType(1:userName登录,2:email登录)|result(token)|
+| 登录 | /login | name(email or username ),geetest_challenge(验证码参数一),geetest_validate(验证码参数二),geetest_seccode(验证码参数三),password,loginType(1:userName登录,2:email登录)|result(token)|
 
 
 

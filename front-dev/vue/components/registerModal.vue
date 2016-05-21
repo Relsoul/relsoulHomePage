@@ -3,10 +3,15 @@
         <div class="modal-content">
             <div class="container">
                 <div class="row">
+                    <h4>注册</h4>
+                    <p class="info-text"></p>
+                    <form action="">
+
+                    </form>
 
                     <div class="modal-footer">
-                        <p>还没有账号?赶紧来注册吧</p>
-                        <a href="#" class="btn btn-flat left">注册</a>
+                        <p>已有账号?来登陆吧</p>
+                        <button :data-target="loginId" class="modal-close btn btn-flat left modal-trigger">登陆</button>
                         <a href="#" class="btn modal-action modal-close waves-effect waves-green btn-flat">close</a>
                     </div>
                 </div>
@@ -35,7 +40,7 @@
             },
             registerId:{
                 type:String,
-                default:"registerId"
+                default:"registerModal"
             }
         },
         components:{
