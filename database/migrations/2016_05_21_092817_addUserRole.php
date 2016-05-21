@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class addUserRole extends Migration
+class AddUserRole extends Migration
 {
     /**
      * Run the migrations.
@@ -15,6 +15,7 @@ class addUserRole extends Migration
         Schema::table('users', function ($table) {
             $table->tinyInteger("role")->default(0);
         });
+
     }
 
     /**
@@ -24,6 +25,6 @@ class addUserRole extends Migration
      */
     public function down()
     {
-        Schema::drop('users');
+
     }
 }

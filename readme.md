@@ -1,4 +1,6 @@
 # relsoul个人主页说明
+博客引用了以下互联网资源,如有侵权请联系relsoul@outlook.com
+- https://dash.readme.io/login 密码登陆框
 
 
 # restful返回信息与错误代码
@@ -29,3 +31,12 @@ restfulAPI返回的格式为
 | 登录 | /login | name(email or username ),password,loginType(1:userName登录,2:email登录)|result(token)|
 
 
+
+
+# 登陆与注册modal框
+```
+<login-modal :login-id="loginModalId" :register-id="registerModalId"></login-modal>
+<register-modal :login-id="loginModalId" :register-id="registerModalId"></register-modal>
+```
+login与register可以传递两个值 register-id与login-id 类型为String 如果不传递默认的值为
+login-id:"loginModal",register-id:"registerId"

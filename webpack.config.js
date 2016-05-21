@@ -8,7 +8,7 @@ module.exports={
         "VueRouter":"VueRouter"
     },
     output:{
-        filename:"main.js"
+        filename:"main.js",
     },
     module:{
         loaders:[
@@ -18,7 +18,8 @@ module.exports={
     },
     vue:{
         loaders:{
-            js:"babel"
+            js:"babel",
+            html: 'raw'
         }
     }
 };

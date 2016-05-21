@@ -1,6 +1,8 @@
 <template>
     <div class="header ">
         <button class="btn header-btn" :class="navButton" @click="showNav">233</button>
+        <login-modal :login-id="loginModalId"></login-modal>
+        <register-modal :register-id="registerModalId"></register-modal>
         <div class="col s12 navcol" :class="[headerWidth,navHide]">
             <nav>
                 <div class="header-nav-title" @click="hideNav" >
@@ -10,11 +12,17 @@
                     <li><a href="#!">First Sidebar Link</a></li>
                     <li><a href="#!">Second Sidebar Link</a></li>
                     <li><a href=""><i class=" material-icons">face</i>2333</a></li>
+                    <!--
+                    data-target to login id
+                    -->
+                    <li><button :data-target="loginModalId" class="btn waves-effect waves-purple modal-trigger">登陆</button></li>
+                    <li><button :data-target="registerModalId" class="btn waves-effect waves-purple modal-trigger">注册</button></li>
                 </ul>
 
                 <ul id="slide-out" class="side-nav">
                     <li><a href="#!">First Sidebar Link</a></li>
                     <li><a href="#!">Second Sidebar Link</a></li>
+                    <li><button data-target="loginModal" class="btn waves-effect waves-purple modal-trigger">登陆</button></li>
                 </ul>
                 <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
             </nav>
@@ -27,6 +35,8 @@
 </style>
 <script>
 
+    import loginModal from "./loginModal.vue"
+    import registerModal from "./registerModal.vue"
     export default{
         data(){
             return{
@@ -36,8 +46,16 @@
                 },
                 navButton:{
                     "header-btn-hide":true
-                }
+                },
+                loginModalId:"loginModal",
+                registerModalId:"registerModal"
             }
+        },
+        ready(){
+            if($(document).width()>420){
+                $(".header nav").height($("body").height());
+            }
+            $(".modal-trigger").leanModal();
         },
         props:{
             headerWidth:String
@@ -55,7 +73,8 @@
             }
         },
         components:{
-
+            loginModal,
+            registerModal
         }
     }
 </script>
