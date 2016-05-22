@@ -19,7 +19,7 @@
                     <li><button :data-target="registerModalId" class="btn waves-effect waves-purple modal-trigger">注册</button></li>
                 </ul>
 
-                <ul id="slide-out" class="side-nav">
+                <ul id="slide-out" class="side-nav ">
                     <li><a href="#!">First Sidebar Link</a></li>
                     <li><a href="#!">Second Sidebar Link</a></li>
                     <li><button data-target="loginModal" class="btn waves-effect waves-purple modal-trigger">登陆</button></li>

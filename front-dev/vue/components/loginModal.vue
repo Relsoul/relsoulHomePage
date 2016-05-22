@@ -17,19 +17,19 @@
                     <p class="info-text"></p>
                     <form action="" class="col m12">
                         <div class="row">
-                            <div class="input-field col m5 offset-m3 ">
+                            <div class="input-field col m5 offset-m3 s12 ">
                                 <i class="material-icons prefix">account_box</i>
                                 <input type="text" id="loginUser" name="loginUser" v-model="loginUser" class="validate">
                                 <label for="loginUser">用户名/邮箱地址</label>
                             </div>
-                            <div class="input-field col m5 offset-m3 ">
+                            <div class="input-field col m5 offset-m3 s12 ">
                                 <i class="material-icons prefix">vpn_key</i>
                                 <input type="password" id="loginPw" name="loginPw" v-model="loginPw" @focus="pwFocus" @blur="pwBlur" class="validate">
                                 <label for="loginPw">密码</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div id="popup-captcha"></div>
+                            <div id="popup-captcha" class="col m5 offset-m3 s12 "></div>
                         </div>
                         <div class="row">
                             <button class="btn col m3 offset-m2 s12 login-btn" >登陆</button>

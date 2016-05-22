@@ -105,8 +105,17 @@
       -ms-transform: translateY(-40px) translateX(-40px) scaleX(-1);
       transform: translateY(-40px) translateX(-40px) scaleX(-1);
     }
-
-
   }
+
+  #popup-captcha{
+    /*@media all and(min-width: 360px) and (max-width: 420px) {
+
+    }*/
+    @media all and(max-width: 360px) {
+      transform: scale(0.9);
+      margin-left: -15px;
+    }
+  }
+
 
 }

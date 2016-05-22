@@ -201,6 +201,14 @@ body {
       -o-transform: translateY(-40px) translateX(-40px) scaleX(-1);
       -ms-transform: translateY(-40px) translateX(-40px) scaleX(-1);
       transform: translateY(-40px) translateX(-40px) scaleX(-1); }
+    .header .login-modal #popup-captcha {
+      /*@media all and(min-width: 360px) and (max-width: 420px) {
+
+    }*/ }
+      @media all and (max-width: 360px) {
+        .header .login-modal #popup-captcha {
+          transform: scale(0.9);
+          margin-left: -15px; } }
 
 .home {
   color: #3e3e3e; }

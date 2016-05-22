@@ -25,9 +25,9 @@ class userController extends Controller
         $userPassword=$request->input("password");
         $email=$request->input("email");
         $userPassword=Crypt::encrypt($userPassword);
-
-
-        $done=DB::insert("insert into users(id,name,email,password) VALUES (?,?,?,?)",[NULL,$userName,$email,$userPassword]);
+        $time=date('Y-m-d H:i:s',time());
+        //数据库错误在Exceptions
+        $done=DB::insert("insert into users(id,name,email,password,created_at) VALUES (?,?,?,?,?)",[NULL,$userName,$email,$userPassword,$time]);
         if(!$done){
             return response()->json(["type"=>"false","message"=>"注册失败"]);
         }
