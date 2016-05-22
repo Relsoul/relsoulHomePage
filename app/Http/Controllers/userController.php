@@ -21,15 +21,29 @@ class userController extends Controller
 {
 
     public function register(Request $request){
-        $userName=$request->input("name");
-        $userPassword=$request->input("password");
-        $email=$request->input("email");
+        $userName=trim($request->input("name"));
+        $userPassword=trim($request->input("password"));
+        $email=trim($request->input("email"));
+
+
+        //判断是否获取到用户参数
+        if(!$userName||!$userPassword||!$email){
+            return response()->json(["type"=>"false","message"=>"注册失败,请填写好完整表单","code"=>"40005"]);
+        }
+
+        //判断用户email是否正确
+        if(!preg_match('/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/',$email)){
+            return response()->json(["type"=>"false","message"=>"注册失败,email格式不正确","code"=>"40005"]);
+        }
+
+
         $userPassword=Crypt::encrypt($userPassword);
+
         $time=date('Y-m-d H:i:s',time());
         //数据库错误在Exceptions
         $done=DB::insert("insert into users(id,name,email,password,created_at) VALUES (?,?,?,?,?)",[NULL,$userName,$email,$userPassword,$time]);
         if(!$done){
-            return response()->json(["type"=>"false","message"=>"注册失败"]);
+            return response()->json(["type"=>"false","message"=>"注册失败","code"=>"40006"]);
         }
         return response()->json(["type"=>"true","message"=>"注册成功","result"=>$userName]);
     }

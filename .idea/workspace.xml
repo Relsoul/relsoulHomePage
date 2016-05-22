@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/app/Http/Controllers/userController.php" line="74" />
+    <bookmark url="file://$PROJECT_DIR$/app/Http/Controllers/userController.php" line="88" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0b629d6-981a-47e8-8232-6a2dcc5e9446" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/front-dev/sass/registerModal.scss" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/front-dev/vue/service/showInfo.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/userController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/userController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/front-dev/sass/loginModal.scss" afterPath="$PROJECT_DIR$/front-dev/sass/loginModal.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/front-dev/vue/components/loginModal.vue" afterPath="$PROJECT_DIR$/front-dev/vue/components/loginModal.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/front-dev/vue/components/rHeader.vue" afterPath="$PROJECT_DIR$/front-dev/vue/components/rHeader.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/front-dev/vue/components/registerModal.vue" afterPath="$PROJECT_DIR$/front-dev/vue/components/registerModal.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/css/main.css" afterPath="$PROJECT_DIR$/public/css/main.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/main.js" afterPath="$PROJECT_DIR$/public/js/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/readme.md" afterPath="$PROJECT_DIR$/readme.md" />
     </list>
     <ignored path="relsoul.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,12 +31,25 @@
       <file leaf-file-name="userController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/userController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="29" column="141" selection-start-line="29" selection-start-column="141" selection-end-line="29" selection-end-column="141" />
+            <state relative-caret-position="519">
+              <caret line="34" column="80" selection-start-line="34" selection-start-column="80" selection-end-line="34" selection-end-column="80" />
               <folding>
                 <element signature="e#119#147#0#PHP" expanded="true" />
-                <marker date="1463915107572" expanded="true" signature="727:798" placeholder="insert into users... " />
+                <marker date="1463922395240" expanded="true" signature="1158:1229" placeholder="insert into users... " />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="readme.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/readme.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="452">
+                <caret line="26" column="17" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
+                <folding />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -168,7 +173,6 @@
         <option value="$PROJECT_DIR$/config/app.php" />
         <option value="$PROJECT_DIR$/front-dev/index.html" />
         <option value="$PROJECT_DIR$/app/Http/routes.php" />
-        <option value="$PROJECT_DIR$/readme.md" />
         <option value="$PROJECT_DIR$/vendor/gee-team/gt-php-sdk/config/config.php" />
         <option value="$PROJECT_DIR$/front-dev/sass/loginModal.scss" />
         <option value="$PROJECT_DIR$/front-dev/vue/components/rHeader.vue" />
@@ -176,6 +180,7 @@
         <option value="$PROJECT_DIR$/front-dev/vue/service/showInfo.js" />
         <option value="$PROJECT_DIR$/front-dev/vue/components/loginModal.vue" />
         <option value="$PROJECT_DIR$/front-dev/vue/components/registerModal.vue" />
+        <option value="$PROJECT_DIR$/readme.md" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/userController.php" />
       </list>
     </option>
@@ -496,15 +501,15 @@
       <workItem from="1463809320022" duration="599000" />
       <workItem from="1463811261368" duration="24430000" />
       <workItem from="1463889540538" duration="2479000" />
-      <workItem from="1463901234200" duration="7761000" />
+      <workItem from="1463901234200" duration="9197000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="97491000" />
+    <option name="totallyTimeSpent" value="98927000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
@@ -856,22 +861,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/readme.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="28" column="98" selection-start-line="28" selection-start-column="98" selection-end-line="28" selection-end-column="98" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="524">
-            <caret line="30" column="38" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="38" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/gee-team/gt-php-sdk/config/config.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -938,13 +927,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/readme.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="28" column="98" selection-start-line="28" selection-start-column="98" selection-end-line="28" selection-end-column="98" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="452">
+            <caret line="26" column="17" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/userController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="29" column="141" selection-start-line="29" selection-start-column="141" selection-end-line="29" selection-end-column="141" />
+        <state relative-caret-position="519">
+          <caret line="34" column="80" selection-start-line="34" selection-start-column="80" selection-end-line="34" selection-end-column="80" />
           <folding>
             <element signature="e#119#147#0#PHP" expanded="true" />
-            <marker date="1463915107572" expanded="true" signature="727:798" placeholder="insert into users... " />
+            <marker date="1463922395240" expanded="true" signature="1158:1229" placeholder="insert into users... " />
           </folding>
         </state>
       </provider>
