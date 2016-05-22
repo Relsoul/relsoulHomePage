@@ -25,14 +25,14 @@ class JWTAuthToken
     public function handle($request,$next){
 
         //return response()->json(["status"=>"404","message"=>$tokens,"code"=>"40402"]);
-        if(!$request->headers->get("authorization")){
-            return response()->json(["type"=>"false","message"=>"token不存在","code"=>"40402"]);
+        $authorization=$request->headers->get("authorization");
+        if(!$authorization||$authorization!=session("token")){
+            return response()->json(["type"=>"false","message"=>"token不存在","code"=>"40002"]);
         }
-
         //捕捉不到错误,在服务层错误进行处理
-        $users=JWT::decode($request->headers->get("authorization"),config("app.jwt"),['HS256']);
+        $users=JWT::decode($authorization,config("app.jwt"),['HS256']);
         if($users->exp<=time()){
-            return  response()->json(["type"=>"false","message"=>"token已经过期,请重新登陆","code"=>"40401"]);
+            return  response()->json(["type"=>"false","message"=>"token已经过期,请重新登陆","code"=>"40001"]);
         }
         $request->users=$users;
         return $next($request);

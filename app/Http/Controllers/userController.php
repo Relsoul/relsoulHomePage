@@ -25,7 +25,6 @@ class userController extends Controller
         $userPassword=trim($request->input("password"));
         $email=trim($request->input("email"));
 
-
         //判断是否获取到用户参数
         if(!$userName||!$userPassword||!$email){
             return response()->json(["type"=>"false","message"=>"注册失败,请填写好完整表单","code"=>"40005"]);
@@ -37,10 +36,12 @@ class userController extends Controller
         }
 
 
+
+
         $userPassword=Crypt::encrypt($userPassword);
 
         $time=date('Y-m-d H:i:s',time());
-        //数据库错误在Exceptions
+        //数据库错误捕获在Exceptions
         $done=DB::insert("insert into users(id,name,email,password,created_at) VALUES (?,?,?,?,?)",[NULL,$userName,$email,$userPassword,$time]);
         if(!$done){
             return response()->json(["type"=>"false","message"=>"注册失败","code"=>"40006"]);
@@ -52,12 +53,13 @@ class userController extends Controller
         if($logintype=1){
             $user=$usersModel->where("name","=",$login)->get();
             if(!$user){
-                return response()->json(["type"=>"false","message"=>"用户不存在",code=>"40003"]);
+                return response()->json(["type"=>"false","message"=>"用户不存在","code"=>"40003"]);
             }
             if(Crypt::decrypt($user[0]->password)==$password){
                 $key=config("app.jwt");
                 $exp=config("app.jwtTime");
                 $token=JWT::encode(["name"=>$user[0]->name,"time"=>time(),"exp"=>time()+$exp],$key);
+                session(["token"=>$token]);
                 return response()->json(["type"=>"true","message"=>"登录成功","result"=>$token]);
             }
             return  response()->json(["type"=>"true","message"=>"密码不正确","code"=>"40003"]);
@@ -81,7 +83,9 @@ class userController extends Controller
         $geetestValidate=$request->input("geetest_validate");
         $geetestSeccode=$request->input("geetest_seccode");
         //dd($geetestChallenge,$geetestValidate,$geetestSeccode,$login,$logintype,$password,$userID);
-        if ($status == 1) {
+
+        return $this->validateUser($login,$logintype,$password,$usersModel);
+/*        if ($status == 1) {
             $result = $GtSdk->success_validate($geetestChallenge, $geetestValidate, $geetestSeccode,$userID);
             if ($result) {
                 return $this->validateUser($login,$logintype,$password,$usersModel);
@@ -94,7 +98,7 @@ class userController extends Controller
             }else{
                 return response()->json(["type"=>"false","message"=>"验证码不正确","code"=>"40004"]);
             }
-        }
+        }*/
 
 
 

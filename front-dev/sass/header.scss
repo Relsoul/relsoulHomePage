@@ -1,5 +1,10 @@
 .header{
   position: relative;
+
+  @media all and(max-width: 420px) {
+    min-height: 150px;
+  }
+
   nav{
     max-height: 100%;
     min-height: 300px;
@@ -16,6 +21,34 @@
       }
     }
   }
+
+  //logo
+  .header-nav-title{
+    clear: both;
+    padding: 10px;
+    overflow: hidden;
+    background: url(../img/navTitle.png);
+    background-size:cover;
+    min-height: 150px;
+
+    .user-choose-box{
+      padding-top:0.8rem;
+
+      .user-choose-btn{
+        padding: 0 15px;
+        font-size: 0.9rem;
+      }
+
+      //user选择框箭头
+      .user-choose-arrow{
+        font-size: 1.1rem;
+        margin-top: -10px;
+      }
+    }
+
+
+  }
+
 
   div.col.navcol{
     position: absolute;

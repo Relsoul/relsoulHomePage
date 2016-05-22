@@ -86,6 +86,9 @@ body {
 
 .header {
   position: relative; }
+  @media all and (max-width: 420px) {
+    .header {
+      min-height: 150px; } }
   .header nav {
     max-height: 100%;
     min-height: 300px; }
@@ -98,6 +101,21 @@ body {
         display: block;
         float: none;
         text-align: center; }
+  .header .header-nav-title {
+    clear: both;
+    padding: 10px;
+    overflow: hidden;
+    background: url(../img/navTitle.png);
+    background-size: cover;
+    min-height: 150px; }
+    .header .header-nav-title .user-choose-box {
+      padding-top: 0.8rem; }
+      .header .header-nav-title .user-choose-box .user-choose-btn {
+        padding: 0 15px;
+        font-size: 0.9rem; }
+      .header .header-nav-title .user-choose-box .user-choose-arrow {
+        font-size: 1.1rem;
+        margin-top: -10px; }
   .header div.col.navcol {
     position: absolute;
     -webkit-transition: all 0.5s;

@@ -15,7 +15,8 @@ gulp.task("watch",function(){
     livereload.listen();
     gulp.watch("front-dev/sass/**/*.scss",["sass:compile"]);
     gulp.watch(["front-dev/vue/**/*.js","front-dev/vue/**/*.vue"],["webpack:compipe"]);
-    gulp.watch(["front-dev/*.html"],["copy"])
+    gulp.watch(["front-dev/*.html"],["copy"]);
+    gulp.watch(["front-dev/img/*.*"],["copy"]);
 });
 
 gulp.task("build:file",function () {
