@@ -1,5 +1,25 @@
 .header{
+  //header也得设置left 否则为auto 动画效果无法执行
+  left: 0px !important;
   position: relative;
+  -webkit-transition: left 0.6s ease;
+  -moz-transition: left 0.6s ease;
+  -ms-transition: left 0.6s ease;
+  -o-transition: left 0.6s ease;
+  transition: left 0.6s ease;
+
+
+  // header隐藏与显示
+  &.col.nav-hide{
+    width:0;
+    //修复动画问题0 0
+    left:-300px !important;
+  }
+
+  &.col.nav-hide .header-btn{
+
+    left: 300px;
+  }
 
   @media all and(max-width: 420px) {
     min-height: 150px;
@@ -61,38 +81,18 @@
 
   }
 
-
-  &.col.navcol{
-    -webkit-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    -ms-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    transition: all 0.5s;
-    left: 0;
-  }
-  &.col.nav-hide{
-    width: 0;
-    left: -400px;
-  }
-
-  &.col.nav-hide .header-btn{
-    left: 400px;
-  }
-
+  // 控制class
   .header-btn{
     position: absolute;
     z-index: 99;
-    -webkit-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    -ms-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    transition: all 0.5s;
+    -webkit-transition: all 0.5s cubic-bezier(.43,.22,.22,1.51);
+    -moz-transition: all 0.5s cubic-bezier(.43,.22,.22,1.51);
+    -ms-transition: all 0.5s cubic-bezier(.43,.22,.22,1.51);
+    -o-transition: all 0.5s cubic-bezier(.43,.22,.22,1.51);
+    transition: all 0.5s cubic-bezier(.43,.22,.22,1.51);
     opacity: 1;
     left: 0;
   }
-
-
-
 
   .header-btn.header-btn-hide{
     opacity: 0;

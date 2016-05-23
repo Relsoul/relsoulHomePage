@@ -13514,15 +13514,19 @@
 	        }
 	    },
 	    methods: {
-	        hideNav: function hideNav() {
+	        hideNav: function hideNav(e) {
 	            this.navHide["nav-hide"] = true;
 	            this.navButton["header-btn-hide"] = false;
 	            this.$dispatch("header-hide-change");
+	            e.stopImmediatePropagation();
+	            e.preventDefault();
 	        },
-	        showNav: function showNav() {
+	        showNav: function showNav(e) {
 	            this.$dispatch("header-show-change");
 	            this.navHide["nav-hide"] = false;
 	            this.navButton["header-btn-hide"] = true;
+	            e.preventDefault();
+	            e.stopImmediatePropagation();
 	        }
 	    },
 	    components: {
@@ -16487,10 +16491,24 @@
 	exports.default = {
 	    data: function data() {
 	        return {
-	            msg: 'hello vue'
+	            msg: 'hello vue',
+	            Contentcls: {
+	                "m10": true,
+	                "m12": false
+	            }
 	        };
 	    },
 
+	    methods: {
+	        headerHide: function headerHide() {
+	            this.Contentcls.m10 = false;
+	            this.Contentcls.m12 = true;
+	        },
+	        headerShow: function headerShow() {
+	            this.Contentcls.m10 = true;
+	            this.Contentcls.m12 = false;
+	        }
+	    },
 	    components: {
 	        rHeader: _rHeader2.default
 	    }
@@ -16500,8 +16518,8 @@
 	//     <div class="admin">
 	//         <div class="row no-gutters">
 	//
-	//             <r-header ></r-header>
-	//             <div class="col s12 m10">
+	//             <r-header @header-show-change="headerShow" @header-hide-change="headerHide" ></r-header>
+	//             <div class="col s12 m10" :class="[Contentcls]">
 	//                 444555666
 	//             </div>
 	//         </div>
@@ -16517,7 +16535,7 @@
 /* 132 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"admin\">\n    <div class=\"row no-gutters\">\n\n        <r-header ></r-header>\n        <div class=\"col s12 m10\">\n            444555666\n        </div>\n    </div>\n\n</div>\n"
+	module.exports = "\n<div class=\"admin\">\n    <div class=\"row no-gutters\">\n\n        <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n        <div class=\"col s12 m10\" :class=\"[Contentcls]\">\n            444555666\n        </div>\n    </div>\n\n</div>\n"
 
 /***/ }
 /******/ ]);

@@ -2,8 +2,8 @@
     <div class="admin">
         <div class="row no-gutters">
 
-            <r-header ></r-header>
-            <div class="col s12 m10">
+            <r-header @header-show-change="headerShow" @header-hide-change="headerHide" ></r-header>
+            <div class="col s12 m10" :class="[Contentcls]">
                 444555666
             </div>
         </div>
@@ -18,7 +18,21 @@
     export default{
         data(){
             return{
-                msg:'hello vue'
+                msg:'hello vue',
+                Contentcls:{
+                    "m10":true,
+                    "m12":false
+                }
+            }
+        },
+        methods:{
+            headerHide(){
+                this.Contentcls.m10=false;
+                this.Contentcls.m12=true;
+            },
+            headerShow(){
+                this.Contentcls.m10=true;
+                this.Contentcls.m12=false;
             }
         },
         components:{

@@ -90,15 +90,19 @@
             }
         },
         methods:{
-            hideNav(){
+            hideNav(e){
                 this.navHide["nav-hide"]=true;
                 this.navButton["header-btn-hide"]=false;
                 this.$dispatch("header-hide-change");
+                e.stopImmediatePropagation();
+                e.preventDefault();
             },
-            showNav(){
+            showNav(e){
                 this.$dispatch("header-show-change");
                 this.navHide["nav-hide"]=false;
                 this.navButton["header-btn-hide"]=true;
+                e.preventDefault();
+                e.stopImmediatePropagation();
             }
         },
         components:{
