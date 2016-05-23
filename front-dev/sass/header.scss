@@ -7,7 +7,7 @@
 
   nav{
     max-height: 100%;
-    min-height: 300px;
+    min-height: 500px;
     @media all and(max-width: 420px) {
       min-height: 120px;
     }
@@ -22,6 +22,17 @@
     }
   }
 
+  .nav-logo{
+    clear: both;
+    overflow: hidden;
+  }
+
+  .nav-clear{
+    @media all and(max-width: 420px) {
+      visibility: hidden;
+    }
+  }
+
   //logo
   .header-nav-title{
     clear: both;
@@ -32,6 +43,7 @@
     min-height: 150px;
 
     .user-choose-box{
+
       padding-top:0.8rem;
 
       .user-choose-btn{
@@ -50,14 +62,21 @@
   }
 
 
-  div.col.navcol{
-    position: absolute;
+  &.col.navcol{
     -webkit-transition: all 0.5s;
     -moz-transition: all 0.5s;
     -ms-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: all 0.5s;
     left: 0;
+  }
+  &.col.nav-hide{
+    width: 0;
+    left: -400px;
+  }
+
+  &.col.nav-hide .header-btn{
+    left: 400px;
   }
 
   .header-btn{
@@ -69,16 +88,19 @@
     -o-transition: all 0.5s;
     transition: all 0.5s;
     opacity: 1;
+    left: 0;
   }
+
+
+
 
   .header-btn.header-btn-hide{
     opacity: 0;
   }
 
- div.col.nav-hide{
-   left: -400px;
-   overflow: hidden;
-  }
+
+
+
 
   @import "loginModal";
 

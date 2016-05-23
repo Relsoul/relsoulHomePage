@@ -35,12 +35,9 @@ class userController extends Controller
             return response()->json(["type"=>"false","message"=>"注册失败,email格式不正确","code"=>"40005"]);
         }
 
-
-
-
         $userPassword=Crypt::encrypt($userPassword);
 
-        $time=date('Y-m-d H:i:s',time());
+        $time=date('Y-m-d H:i:s');
         //数据库错误捕获在Exceptions
         $done=DB::insert("insert into users(id,name,email,password,created_at) VALUES (?,?,?,?,?)",[NULL,$userName,$email,$userPassword,$time]);
         if(!$done){

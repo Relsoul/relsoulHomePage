@@ -62,6 +62,10 @@
 
 	var _home2 = _interopRequireDefault(_home);
 
+	var _admin = __webpack_require__(128);
+
+	var _admin2 = _interopRequireDefault(_admin);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	_vue2.default.use(_vueRouter2.default);
@@ -71,6 +75,10 @@
 	router.map({
 	    '/': {
 	        component: _home2.default
+	    },
+	    "/admin": {
+	        component: _admin2.default,
+	        auth: true
 	    }
 	});
 
@@ -13416,16 +13424,18 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// <template>
-	//     <div class="header ">
+	//     <div class="header col s12" :class="[headerWidth,navHide]">
 	//         <button class="btn header-btn" :class="navButton" @click="showNav"><i class="material-icons">menu</i></button>
 	//         <login-modal :login-id="loginModalId"></login-modal>
 	//         <register-modal :register-id="registerModalId"></register-modal>
-	//         <div class="col s12 navcol" :class="[headerWidth,navHide]">
-	//             <nav>
-	//                 <div class="header-nav-title">
-	//                     <a href="#" class="brand-logo left">Relsoul</a>
-	//                     <a href="#"><i class="material-icons right" @click="hideNav">clear</i></a>
-	//
+	//         <div class="row no-gutters">
+	//             <div class="navcol s12 m12 ">
+	//                 <nav>
+	//                     <div class="header-nav-title">
+	//                         <div class="nav-logo">
+	//                             <a href="#" class="brand-logo left">Relsoul</a>
+	//                             <a href="#" class="nav-clear"><i class="material-icons right " @click="hideNav">clear</i></a>
+	//                         </div>
 	//                         <div class="userInfo clearfix">
 	//                             <div class="row">
 	//                                 <div class="col s12">
@@ -13448,24 +13458,26 @@
 	//                                 </div>
 	//                             </div>
 	//                         </div>
-	//                 </div>
-	//                 <ul class="header-nav header-nav-list hide-on-med-and-down">
-	//                     <li><a href="#!">First Sidebar Link</a></li>
-	//                     <li><a href="#!">Second Sidebar Link</a></li>
-	//                     <!--
-	//                         data-target to login id
-	//                     -->
-	//                     <li><button :data-target="loginModalId" class="btn waves-effect waves-purple modal-trigger">登陆</button></li>
-	//                     <li><button :data-target="registerModalId" class="btn waves-effect waves-purple modal-trigger">注册</button></li>
-	//                 </ul>
+	//                     </div>
+	//                     <ul class="header-nav header-nav-list hide-on-med-and-down">
+	//                         <li><a href="#!">First Sidebar Link</a></li>
+	//                         <li><a href="#!">Second Sidebar Link</a></li>
+	//                         <!--
+	//                             data-target to login id
+	//                         -->
+	//                         <li><button :data-target="loginModalId" class="btn waves-effect waves-purple modal-trigger">登陆</button></li>
+	//                         <li><button :data-target="registerModalId" class="btn waves-effect waves-purple modal-trigger">注册</button></li>
+	//                     </ul>
 	//
-	//                 <ul id="slide-out" class="side-nav ">
-	//                     <li><a href="#!">First Sidebar Link</a></li>
-	//                     <li><a href="#!">Second Sidebar Link</a></li>
-	//                     <li><button data-target="loginModal" class="btn waves-effect waves-purple modal-trigger">登陆</button></li>
-	//                 </ul>
-	//             </nav>
+	//                     <ul id="slide-out" class="side-nav ">
+	//                         <li><a href="#!">First Sidebar Link</a></li>
+	//                         <li><a href="#!">Second Sidebar Link</a></li>
+	//                         <li><button data-target="loginModal" class="btn waves-effect waves-purple modal-trigger">登陆</button></li>
+	//                     </ul>
+	//                 </nav>
+	//             </div>
 	//         </div>
+	//
 	// </div>
 	//
 	// </template>
@@ -13496,7 +13508,10 @@
 	    },
 
 	    props: {
-	        headerWidth: String
+	        headerWidth: {
+	            type: String,
+	            default: "m2"
+	        }
 	    },
 	    methods: {
 	        hideNav: function hideNav() {
@@ -13994,7 +14009,7 @@
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"header \">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <div class=\"col s12 navcol\" :class=\"[headerWidth,navHide]\">\n            <nav>\n                <div class=\"header-nav-title\">\n                    <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                    <a href=\"#\"><i class=\"material-icons right\" @click=\"hideNav\">clear</i></a>\n\n                        <div class=\"userInfo clearfix\">\n                            <div class=\"row\">\n                                <div class=\"col s12\">\n                                    <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                                </div>\n                                <div class=\"col s6\">\n                                    <p>欢迎回来 <span>Soul</span></p>\n                                </div>\n                                <div class=\"col s6\">\n                                    <div class=\"user-choose-box\">\n                                        <ul id=\"user-choose\" class=\"dropdown-content\">\n                                            <li><a href=\"#!\">one<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li><a href=\"#!\">three</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" data-activates=\"user-choose\">\n                                            <i class=\"material-icons right user-choose-arrow\">keyboard_arrow_down</i>选择与访问\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                </div>\n                <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                    <li><a href=\"#!\">First Sidebar Link</a></li>\n                    <li><a href=\"#!\">Second Sidebar Link</a></li>\n                    <!--\n                        data-target to login id\n                    -->\n                    <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                </ul>\n\n                <ul id=\"slide-out\" class=\"side-nav \">\n                    <li><a href=\"#!\">First Sidebar Link</a></li>\n                    <li><a href=\"#!\">Second Sidebar Link</a></li>\n                    <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                </ul>\n            </nav>\n        </div>\n</div>\n\n"
+	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\">\n                            <div class=\"row\">\n                                <div class=\"col s12\">\n                                    <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                                </div>\n                                <div class=\"col s6\">\n                                    <p>欢迎回来 <span>Soul</span></p>\n                                </div>\n                                <div class=\"col s6\">\n                                    <div class=\"user-choose-box\">\n                                        <ul id=\"user-choose\" class=\"dropdown-content\">\n                                            <li><a href=\"#!\">one<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li><a href=\"#!\">three</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" data-activates=\"user-choose\">\n                                            <i class=\"material-icons right user-choose-arrow\">keyboard_arrow_down</i>选择与访问\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
 
 /***/ },
 /* 26 */
@@ -16383,6 +16398,126 @@
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"home\">\n        <div class=\"row no-gutters\">\n            <r-header  @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" :header-width=\"Headercls\"></r-header>\n\n            <div class=\"col s12 \"  :class=\"Contentcls\">\n                <div class=\" home-content\">\n                    <home-title></home-title>\n                    <home-about-me></home-about-me>\n                    <time-line title=\"test time-line project\" cls=\"home-project\"></time-line>\n                    <time-line title=\"test time-line project2\" cls=\"home-project2\"></time-line>\n                    <home-skills></home-skills>\n                </div>\n            </div>\n        </div>\n\n\n        <r-footer></r-footer>\n</div>\n"
+
+/***/ },
+/* 128 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(129)
+	__vue_script__ = __webpack_require__(131)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\admin.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(132)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Admin\\admin.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 129 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(130);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./admin.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 130 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 131 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _rHeader = __webpack_require__(10);
+
+	var _rHeader2 = _interopRequireDefault(_rHeader);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue'
+	        };
+	    },
+
+	    components: {
+	        rHeader: _rHeader2.default
+	    }
+	};
+	// </script>
+	// <template>
+	//     <div class="admin">
+	//         <div class="row no-gutters">
+	//
+	//             <r-header ></r-header>
+	//             <div class="col s12 m10">
+	//                 444555666
+	//             </div>
+	//         </div>
+	//
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script>
+
+/***/ },
+/* 132 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"admin\">\n    <div class=\"row no-gutters\">\n\n        <r-header ></r-header>\n        <div class=\"col s12 m10\">\n            444555666\n        </div>\n    </div>\n\n</div>\n"
 
 /***/ }
 /******/ ]);

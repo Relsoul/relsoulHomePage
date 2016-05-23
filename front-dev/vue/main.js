@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import App from "./APP.vue";
 
 import Home from "./components/Home/home.vue"
+import Admin from "./components/Admin/admin.vue"
 
 
 Vue.use(Router);
@@ -13,6 +14,10 @@ router.map({
     '/': {
         component: Home
     },
+    "/admin":{
+        component:Admin,
+        auth:true
+    }
 });
 
 
