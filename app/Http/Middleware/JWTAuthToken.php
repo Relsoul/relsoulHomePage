@@ -26,7 +26,10 @@ class JWTAuthToken
 
         //return response()->json(["status"=>"404","message"=>$tokens,"code"=>"40402"]);
         $authorization=$request->headers->get("authorization");
-        if(!$authorization||$authorization!=session("token")){
+/*        if(!$authorization||$authorization!=session("token")){
+            return response()->json(["type"=>"false","message"=>"token不存在","code"=>"40002"]);
+        }*/
+        if(!$authorization){
             return response()->json(["type"=>"false","message"=>"token不存在","code"=>"40002"]);
         }
         //捕捉不到错误,在服务层错误进行处理

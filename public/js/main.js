@@ -13417,7 +13417,7 @@
 
 	var _loginModal2 = _interopRequireDefault(_loginModal);
 
-	var _registerModal = __webpack_require__(19);
+	var _registerModal = __webpack_require__(20);
 
 	var _registerModal2 = _interopRequireDefault(_registerModal);
 
@@ -13426,7 +13426,7 @@
 	// <template>
 	//     <div class="header col s12" :class="[headerWidth,navHide]">
 	//         <button class="btn header-btn" :class="navButton" @click="showNav"><i class="material-icons">menu</i></button>
-	//         <login-modal :login-id="loginModalId"></login-modal>
+	//         <login-modal :login-id="loginModalId" @login-done="loginDone"></login-modal>
 	//         <register-modal :register-id="registerModalId"></register-modal>
 	//         <div class="row no-gutters">
 	//             <div class="navcol s12 m12 ">
@@ -13436,23 +13436,23 @@
 	//                             <a href="#" class="brand-logo left">Relsoul</a>
 	//                             <a href="#" class="nav-clear"><i class="material-icons right " @click="hideNav">clear</i></a>
 	//                         </div>
-	//                         <div class="userInfo clearfix">
+	//                         <div class="col s12">
+	//                             <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+	//                         </div>
+	//                         <div class="userInfo clearfix" v-if="isLogin">
 	//                             <div class="row">
-	//                                 <div class="col s12">
-	//                                     <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+	//                                 <div class="col s6">
+	//                                     <p>欢迎回来 <span class="green">{{loginName}}</span></p>
 	//                                 </div>
 	//                                 <div class="col s6">
-	//                                     <p>欢迎回来 <span>Soul</span></p>
-	//                                 </div>
-	//                                 <div class="col s6">
-	//                                     <div class="user-choose-box">
-	//                                         <ul id="user-choose" class="dropdown-content">
+	//                                     <div class="user-choose-box" >
+	//                                         <ul id="user-choose" class="dropdown-content" >
 	//                                             <li><a href="#!">one<span class="badge">1</span></a></li>
 	//                                             <li><a href="#!">two<span class="new badge">1</span></a></li>
-	//                                             <li><a href="#!">three</a></li>
+	//                                             <li ><a href="#!" v-link="{path:'/admin'}" >three</a></li>
 	//                                         </ul>
-	//                                         <button class="btn dropdown-button user-choose-btn" data-activates="user-choose">
-	//                                             <i class="material-icons right user-choose-arrow">keyboard_arrow_down</i>选择与访问
+	//                                         <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >
+	//                                             <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>选择与访问
 	//                                         </button>
 	//                                     </div>
 	//                                 </div>
@@ -13497,7 +13497,9 @@
 	                "header-btn-hide": true
 	            },
 	            loginModalId: "loginModal",
-	            registerModalId: "registerModal"
+	            registerModalId: "registerModal",
+	            isLogin: false,
+	            loginName: ""
 	        };
 	    },
 	    ready: function ready() {
@@ -13505,6 +13507,10 @@
 	            $(".header nav").height($("body").height());
 	        }
 	        $(".modal-trigger").leanModal();
+	        if (window.localStorage.getItem("token") && window.localStorage.getItem("name")) {
+	            this.isLogin = true;
+	            this.loginName = window.localStorage.getItem("name");
+	        };
 	    },
 
 	    props: {
@@ -13513,7 +13519,13 @@
 	            default: "m2"
 	        }
 	    },
+	    route: {
+	        data: function data() {}
+	    },
 	    methods: {
+	        loginDone: function loginDone() {
+	            this.isLogin = true;
+	        },
 	        hideNav: function hideNav(e) {
 	            this.navHide["nav-hide"] = true;
 	            this.navButton["header-btn-hide"] = false;
@@ -13527,6 +13539,10 @@
 	            this.navButton["header-btn-hide"] = true;
 	            e.preventDefault();
 	            e.stopImmediatePropagation();
+	        },
+	        showUserMenu: function showUserMenu(e) {
+	            $(e.target).dropdown();
+	            $(e.target).click();
 	        }
 	    },
 	    components: {
@@ -13547,7 +13563,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] front-dev\\vue\\components\\loginModal.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(18)
+	__vue_template__ = __webpack_require__(19)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -13607,65 +13623,15 @@
 
 /***/ },
 /* 17 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	// <template>
-	//     <div :id="loginId" class="modal login-modal">
-	//         <div class="owl-login"  :class="passwordCls">
-	//             <div class="hand"></div>
-	//             <div class="hand hand-r"></div>
-	//             <div class="arms">
-	//                 <div class="arm"></div>
-	//                 <div class="arm arm-r">
-	//                 </div>
-	//             </div>
-	//         </div>
-	//
-	//         <div class="modal-content">
-	//             <div class="container">
-	//                 <div class="row">
-	//                     <h4>登陆</h4>
-	//                     <p class="info-text"></p>
-	//                     <form action="" class="col m12">
-	//                         <div class="row">
-	//                             <div class="input-field col m5 offset-m3 s12 ">
-	//                                 <i class="material-icons prefix">account_box</i>
-	//                                 <input type="text" id="loginUser" name="loginUser" v-model="loginUser" class="validate">
-	//                                 <label for="loginUser">用户名/邮箱地址</label>
-	//                             </div>
-	//                             <div class="input-field col m5 offset-m3 s12 ">
-	//                                 <i class="material-icons prefix">vpn_key</i>
-	//                                 <input type="password" id="loginPw" name="loginPw" v-model="loginPw" @focus="pwFocus" @blur="pwBlur" class="validate">
-	//                                 <label for="loginPw">密码</label>
-	//                             </div>
-	//                         </div>
-	//                         <div class="row">
-	//                             <div id="popup-captcha" class="col m5 offset-m3 s12 "></div>
-	//                         </div>
-	//                         <div class="row">
-	//                             <button class="btn col m3 offset-m2 s12 login-btn" >登陆</button>
-	//                             <button class="btn col m3 offset-m1 s12 findpw-btn">忘记密码</button>
-	//                         </div>
-	//                     </form>
-	//                 </div>
-	//                 <div class="modal-footer">
-	//                     <p>还没有账号?赶紧来注册吧</p>
-	//                     <button :data-target="registerId" class=" modal-close btn btn-flat left modal-trigger">注册</button>
-	//                     <a href="#" class="btn modal-action modal-close waves-effect waves-green btn-flat">close</a>
-	//                 </div>
-	//             </div>
-	//         </div>
-	//     </div>
-	// </template>
-	// <style>
-	//
-	// </style>
-	// <script type="text/ecmascript-6">
+
+	var _showInfo = __webpack_require__(18);
 
 	exports.default = {
 	    data: function data() {
@@ -13674,7 +13640,9 @@
 	                "password": false
 	            },
 	            loginUser: "",
-	            loginPw: ""
+	            loginPw: "",
+	            loginFailed: false,
+	            loginDone: false
 	        };
 	    },
 
@@ -13685,11 +13653,12 @@
 	        pwBlur: function pwBlur(e) {
 	            this.passwordCls["password"] = false;
 	        },
+
+	        showInfo: (0, _showInfo.showInfo)(),
 	        loginValidate: function loginValidate(captchaObj) {
 	            var _this = this;
 
 	            $(".login-btn").on("click", function (e) {
-	                e.stopPropagation();
 	                var validate = captchaObj.getValidate();
 	                if (!validate) {
 	                    alert('请先完成验证！');
@@ -13709,15 +13678,28 @@
 	                        loginType: 1,
 	                        password: _this.loginPw
 	                    },
-	                    success: function success(result) {
-	                        console.log(91, result);
-	                        /* if (result == "Yes!") {
-	                             $(document.body).html('<h1>登录成功</h1>');
-	                         } else {
-	                             $(document.body).html('<h1>登录失败</h1>');
-	                         }*/
+	                    success: function success(data) {
+	                        console.log(91, data);
+	                        if (data.type == "true") {
+	                            _this.loginDone = true;
+	                            //成功通知父级事件
+	                            _this.$dispatch("login-done");
+	                            setTimeout(function () {
+	                                _this.loginDone = false;
+	                                $("#" + _this.loginId).closeModal();
+	                            }, 800);
+	                            window.localStorage.setItem("token", data.result.token);
+	                            window.localStorage.setItem("name", data.result.userName);
+	                        } else {
+	                            //登陆失败
+	                            _this.loginFailed = true;
+	                            setTimeout(function () {
+	                                _this.loginFailed = false;
+	                            }, 1000);
+	                        }
 	                    }
 	                });
+	                e.stopImmediatePropagation();
 	                return false;
 	            });
 	            captchaObj.bindOn(".login-btn");
@@ -13765,20 +13747,104 @@
 	    components: {}
 	};
 	// </script>
+	// <template>
+	//     <div :id="loginId" class="modal login-modal animated" :class="{'shake':loginFailed}">
+	//         <div class="owl-login"  :class="passwordCls">
+	//             <div class="hand"></div>
+	//             <div class="hand hand-r"></div>
+	//             <div class="arms">
+	//                 <div class="arm"></div>
+	//                 <div class="arm arm-r">
+	//                 </div>
+	//             </div>
+	//         </div>
+	//         <div class="modal-content">
+	//             <div class="container">
+	//                 <div class="row">
+	//                     <h4>登陆</h4>
+	//                     <p class="info-text"></p>
+	//                     <form  class="col m12">
+	//                         <div class="row">
+	//                             <div class="input-field col m5 offset-m3 s12 ">
+	//                                 <i class="material-icons prefix">account_box</i>
+	//                                 <input type="text" id="loginUser" name="loginUser" v-model="loginUser" class="validate">
+	//                                 <label for="loginUser">用户名/邮箱地址</label>
+	//                             </div>
+	//                             <div class="input-field col m5 offset-m3 s12 ">
+	//                                 <i class="material-icons prefix">vpn_key</i>
+	//                                 <input type="password" id="loginPw" name="loginPw" v-model="loginPw" @focus="pwFocus" @blur="pwBlur" class="validate">
+	//                                 <label for="loginPw">密码</label>
+	//                             </div>
+	//                         </div>
+	//                         <div class="row">
+	//                             <div id="popup-captcha" class="col m5 offset-m3 s12 "></div>
+	//                         </div>
+	//                         <div class="row">
+	//                             <button class="btn col m3 offset-m2 s12 login-btn animated" :class="{'flipInX':loginDone}" >登陆</button>
+	//                             <button class="btn col m3 offset-m1 s12 findpw-btn">忘记密码</button>
+	//                         </div>
+	//                     </form>
+	//                 </div>
+	//                 <div class="modal-footer">
+	//                     <p>还没有账号?赶紧来注册吧</p>
+	//                     <button :data-target="registerId" class=" modal-close btn btn-flat left modal-trigger">注册</button>
+	//                     <a href="#" class="btn modal-action modal-close waves-effect waves-green btn-flat">close</a>
+	//                 </div>
+	//             </div>
+	//         </div>
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
 
 /***/ },
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div :id=\"loginId\" class=\"modal login-modal\">\n    <div class=\"owl-login\"  :class=\"passwordCls\">\n        <div class=\"hand\"></div>\n        <div class=\"hand hand-r\"></div>\n        <div class=\"arms\">\n            <div class=\"arm\"></div>\n            <div class=\"arm arm-r\">\n            </div>\n        </div>\n    </div>\n\n    <div class=\"modal-content\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <h4>登陆</h4>\n                <p class=\"info-text\"></p>\n                <form action=\"\" class=\"col m12\">\n                    <div class=\"row\">\n                        <div class=\"input-field col m5 offset-m3 s12 \">\n                            <i class=\"material-icons prefix\">account_box</i>\n                            <input type=\"text\" id=\"loginUser\" name=\"loginUser\" v-model=\"loginUser\" class=\"validate\">\n                            <label for=\"loginUser\">用户名/邮箱地址</label>\n                        </div>\n                        <div class=\"input-field col m5 offset-m3 s12 \">\n                            <i class=\"material-icons prefix\">vpn_key</i>\n                            <input type=\"password\" id=\"loginPw\" name=\"loginPw\" v-model=\"loginPw\" @focus=\"pwFocus\" @blur=\"pwBlur\" class=\"validate\">\n                            <label for=\"loginPw\">密码</label>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div id=\"popup-captcha\" class=\"col m5 offset-m3 s12 \"></div>\n                    </div>\n                    <div class=\"row\">\n                        <button class=\"btn col m3 offset-m2 s12 login-btn\" >登陆</button>\n                        <button class=\"btn col m3 offset-m1 s12 findpw-btn\">忘记密码</button>\n                    </div>\n                </form>\n            </div>\n            <div class=\"modal-footer\">\n                <p>还没有账号?赶紧来注册吧</p>\n                <button :data-target=\"registerId\" class=\" modal-close btn btn-flat left modal-trigger\">注册</button>\n                <a href=\"#\" class=\"btn modal-action modal-close waves-effect waves-green btn-flat\">close</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	/**
+	 * Created by soul on 2016/5/22.
+	 */
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var showInfo = function showInfo() {
+	    var timer = void 0;
+	    return function (info, time, field) {
+	        var _this = this;
+
+	        if (!timer) {
+	            timer = setTimeout(function () {
+	                _this[field] = "";
+	                clearTimeout(timer);
+	                timer = null;
+	            }, time);
+	        } else {
+	            return false;
+	        }
+	        this[field] = info;
+	    };
+	};
+
+	exports.showInfo = showInfo;
 
 /***/ },
 /* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div :id=\"loginId\" class=\"modal login-modal animated\" :class=\"{'shake':loginFailed}\">\n    <div class=\"owl-login\"  :class=\"passwordCls\">\n        <div class=\"hand\"></div>\n        <div class=\"hand hand-r\"></div>\n        <div class=\"arms\">\n            <div class=\"arm\"></div>\n            <div class=\"arm arm-r\">\n            </div>\n        </div>\n    </div>\n    <div class=\"modal-content\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <h4>登陆</h4>\n                <p class=\"info-text\"></p>\n                <form  class=\"col m12\">\n                    <div class=\"row\">\n                        <div class=\"input-field col m5 offset-m3 s12 \">\n                            <i class=\"material-icons prefix\">account_box</i>\n                            <input type=\"text\" id=\"loginUser\" name=\"loginUser\" v-model=\"loginUser\" class=\"validate\">\n                            <label for=\"loginUser\">用户名/邮箱地址</label>\n                        </div>\n                        <div class=\"input-field col m5 offset-m3 s12 \">\n                            <i class=\"material-icons prefix\">vpn_key</i>\n                            <input type=\"password\" id=\"loginPw\" name=\"loginPw\" v-model=\"loginPw\" @focus=\"pwFocus\" @blur=\"pwBlur\" class=\"validate\">\n                            <label for=\"loginPw\">密码</label>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div id=\"popup-captcha\" class=\"col m5 offset-m3 s12 \"></div>\n                    </div>\n                    <div class=\"row\">\n                        <button class=\"btn col m3 offset-m2 s12 login-btn animated\" :class=\"{'flipInX':loginDone}\" >登陆</button>\n                        <button class=\"btn col m3 offset-m1 s12 findpw-btn\">忘记密码</button>\n                    </div>\n                </form>\n            </div>\n            <div class=\"modal-footer\">\n                <p>还没有账号?赶紧来注册吧</p>\n                <button :data-target=\"registerId\" class=\" modal-close btn btn-flat left modal-trigger\">注册</button>\n                <a href=\"#\" class=\"btn modal-action modal-close waves-effect waves-green btn-flat\">close</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+
+/***/ },
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(20)
-	__vue_script__ = __webpack_require__(22)
+	__webpack_require__(21)
+	__vue_script__ = __webpack_require__(23)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
@@ -13802,13 +13868,13 @@
 	})()}
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(21);
+	var content = __webpack_require__(22);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(8)(content, {});
@@ -13828,7 +13894,7 @@
 	}
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(7)();
@@ -13842,7 +13908,7 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -13851,7 +13917,7 @@
 	    value: true
 	});
 
-	var _showInfo = __webpack_require__(23);
+	var _showInfo = __webpack_require__(18);
 
 	exports.default = {
 	    data: function data() {
@@ -13971,39 +14037,6 @@
 	// <script type="text/ecmascript-6">
 
 /***/ },
-/* 23 */
-/***/ function(module, exports) {
-
-	/**
-	 * Created by soul on 2016/5/22.
-	 */
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var showInfo = function showInfo() {
-	    var timer = void 0;
-	    return function (info, time, field) {
-	        var _this = this;
-
-	        if (!timer) {
-	            timer = setTimeout(function () {
-	                _this[field] = "";
-	                clearTimeout(timer);
-	                timer = null;
-	            }, time);
-	        } else {
-	            return false;
-	        }
-	        this[field] = info;
-	    };
-	};
-
-	exports.showInfo = showInfo;
-
-/***/ },
 /* 24 */
 /***/ function(module, exports) {
 
@@ -14013,7 +14046,7 @@
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\">\n                            <div class=\"row\">\n                                <div class=\"col s12\">\n                                    <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                                </div>\n                                <div class=\"col s6\">\n                                    <p>欢迎回来 <span>Soul</span></p>\n                                </div>\n                                <div class=\"col s6\">\n                                    <div class=\"user-choose-box\">\n                                        <ul id=\"user-choose\" class=\"dropdown-content\">\n                                            <li><a href=\"#!\">one<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li><a href=\"#!\">three</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" data-activates=\"user-choose\">\n                                            <i class=\"material-icons right user-choose-arrow\">keyboard_arrow_down</i>选择与访问\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
+	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6\">\n                                    <p>欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\">one<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li ><a href=\"#!\" v-link=\"{path:'/admin'}\" >three</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>选择与访问\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
 
 /***/ },
 /* 26 */
@@ -14282,6 +14315,7 @@
 	            $("body").addClass("body-content-show");
 	        }
 	    },
+	    route: {},
 	    components: {
 	        rFooter: _rFooter2.default,
 	        rHeader: _rHeader2.default,

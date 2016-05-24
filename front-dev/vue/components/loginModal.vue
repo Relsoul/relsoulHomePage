@@ -1,5 +1,5 @@
 <template>
-    <div :id="loginId" class="modal login-modal">
+    <div :id="loginId" class="modal login-modal animated" :class="{'shake':loginFailed}">
         <div class="owl-login"  :class="passwordCls">
             <div class="hand"></div>
             <div class="hand hand-r"></div>
@@ -9,13 +9,12 @@
                 </div>
             </div>
         </div>
-
         <div class="modal-content">
             <div class="container">
                 <div class="row">
                     <h4>登陆</h4>
                     <p class="info-text"></p>
-                    <form action="" class="col m12">
+                    <form  class="col m12">
                         <div class="row">
                             <div class="input-field col m5 offset-m3 s12 ">
                                 <i class="material-icons prefix">account_box</i>
@@ -32,7 +31,7 @@
                             <div id="popup-captcha" class="col m5 offset-m3 s12 "></div>
                         </div>
                         <div class="row">
-                            <button class="btn col m3 offset-m2 s12 login-btn" >登陆</button>
+                            <button class="btn col m3 offset-m2 s12 login-btn animated" :class="{'flipInX':loginDone}" >登陆</button>
                             <button class="btn col m3 offset-m1 s12 findpw-btn">忘记密码</button>
                         </div>
                     </form>
@@ -50,6 +49,7 @@
 
 </style>
 <script type="text/ecmascript-6">
+    import {showInfo} from "../service/showInfo"
 
     export default{
         data(){
@@ -58,7 +58,9 @@
                     "password":false
                 },
                 loginUser:"",
-                loginPw:""
+                loginPw:"",
+                loginFailed:false,
+                loginDone:false,
             }
         },
         methods:{
@@ -68,9 +70,9 @@
             pwBlur(e){
                 this.passwordCls["password"]=false;
             },
+            showInfo:showInfo(),
             loginValidate(captchaObj){
                 $(".login-btn").on("click",(e)=>{
-                    e.stopPropagation();
                     var validate = captchaObj.getValidate();
                     if (!validate) {
                         alert('请先完成验证！');
@@ -90,15 +92,28 @@
                             loginType:1,
                             password:this.loginPw,
                         },
-                        success: function (result) {
-                            console.log(91,result);
-                           /* if (result == "Yes!") {
-                                $(document.body).html('<h1>登录成功</h1>');
-                            } else {
-                                $(document.body).html('<h1>登录失败</h1>');
-                            }*/
-                        }
+                        success:(data)=>{
+                            console.log(91,data);
+                            if (data.type == "true") {
+                                this.loginDone=true;
+                                //成功通知父级事件
+                                this.$dispatch("login-done");
+                                setTimeout(()=>{
+                                    this.loginDone=false;
+                                    $("#"+this.loginId).closeModal();
+                                },800);
+                                window.localStorage.setItem("token",data.result.token);
+                                window.localStorage.setItem("name",data.result.userName);
+                            }else{
+                                //登陆失败
+                                this.loginFailed=true;
+                                setTimeout(()=>{
+                                    this.loginFailed=false;
+                                },1000)
+                            }
+                        },
                     });
+                    e.stopImmediatePropagation();
                     return false;
                 });
                 captchaObj.bindOn(".login-btn");

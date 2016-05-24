@@ -1,7 +1,7 @@
 <template>
     <div class="header col s12" :class="[headerWidth,navHide]">
         <button class="btn header-btn" :class="navButton" @click="showNav"><i class="material-icons">menu</i></button>
-        <login-modal :login-id="loginModalId"></login-modal>
+        <login-modal :login-id="loginModalId" @login-done="loginDone"></login-modal>
         <register-modal :register-id="registerModalId"></register-modal>
         <div class="row no-gutters">
             <div class="navcol s12 m12 ">
@@ -11,23 +11,23 @@
                             <a href="#" class="brand-logo left">Relsoul</a>
                             <a href="#" class="nav-clear"><i class="material-icons right " @click="hideNav">clear</i></a>
                         </div>
-                        <div class="userInfo clearfix">
+                        <div class="col s12">
+                            <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+                        </div>
+                        <div class="userInfo clearfix" v-if="isLogin">
                             <div class="row">
-                                <div class="col s12">
-                                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+                                <div class="col s6">
+                                    <p>欢迎回来 <span class="green">{{loginName}}</span></p>
                                 </div>
                                 <div class="col s6">
-                                    <p>欢迎回来 <span>Soul</span></p>
-                                </div>
-                                <div class="col s6">
-                                    <div class="user-choose-box">
-                                        <ul id="user-choose" class="dropdown-content">
+                                    <div class="user-choose-box" >
+                                        <ul id="user-choose" class="dropdown-content" >
                                             <li><a href="#!">one<span class="badge">1</span></a></li>
                                             <li><a href="#!">two<span class="new badge">1</span></a></li>
-                                            <li><a href="#!">three</a></li>
+                                            <li ><a href="#!" v-link="{path:'/admin'}" >three</a></li>
                                         </ul>
-                                        <button class="btn dropdown-button user-choose-btn" data-activates="user-choose">
-                                            <i class="material-icons right user-choose-arrow">keyboard_arrow_down</i>选择与访问
+                                        <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >
+                                            <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>选择与访问
                                         </button>
                                     </div>
                                 </div>
@@ -74,7 +74,9 @@
                     "header-btn-hide":true
                 },
                 loginModalId:"loginModal",
-                registerModalId:"registerModal"
+                registerModalId:"registerModal",
+                isLogin:false,
+                loginName:""
             }
         },
         ready(){
@@ -82,6 +84,10 @@
                 $(".header nav").height($("body").height());
             }
             $(".modal-trigger").leanModal();
+            if(window.localStorage.getItem("token")&&window.localStorage.getItem("name")){
+                this.isLogin=true;
+                this.loginName=window.localStorage.getItem("name");
+            };
         },
         props:{
             headerWidth:{
@@ -89,7 +95,16 @@
                 default:"m2"
             }
         },
+        route:{
+            data(){
+
+
+            }
+        },
         methods:{
+            loginDone(){
+                this.isLogin=true;
+            },
             hideNav(e){
                 this.navHide["nav-hide"]=true;
                 this.navButton["header-btn-hide"]=false;
@@ -103,6 +118,10 @@
                 this.navButton["header-btn-hide"]=true;
                 e.preventDefault();
                 e.stopImmediatePropagation();
+            },
+            showUserMenu(e){
+                $(e.target).dropdown();
+                $(e.target).click();
             }
         },
         components:{

@@ -82,7 +82,7 @@
                         },
                         success:(result)=>{
                             console.log("register",result);
-                            this.showInfo(result.message,3000,"fromInfo")
+                            this.showInfo(result.message,3000,"fromInfo");
                             if(result.type=true){
                                 $("#"+this.registerId).closeModal();
                                 $("#"+this.loginId).openModal();

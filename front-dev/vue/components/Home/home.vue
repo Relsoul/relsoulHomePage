@@ -54,6 +54,8 @@
                 $("body").addClass("body-content-show");
             }
         },
+        route:{ 
+        },
         components:{
             rFooter,
             rHeader,

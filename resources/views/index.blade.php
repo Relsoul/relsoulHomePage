@@ -6,6 +6,7 @@
     <title>RelsoulHome</title>
     <link rel="stylesheet" href="lib/materialize/css/materialize.min.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="lib/animate.css">
     <script src="lib/jquery.min.js"></script>
     <script src="http://localhost:35729/livereload.js"></script>
     <script src="lib/materialize/js/materialize.min.js"></script>

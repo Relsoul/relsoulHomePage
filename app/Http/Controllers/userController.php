@@ -56,8 +56,8 @@ class userController extends Controller
                 $key=config("app.jwt");
                 $exp=config("app.jwtTime");
                 $token=JWT::encode(["name"=>$user[0]->name,"time"=>time(),"exp"=>time()+$exp],$key);
-                session(["token"=>$token]);
-                return response()->json(["type"=>"true","message"=>"登录成功","result"=>$token]);
+                //session(["token"=>$token]);
+                return response()->json(["type"=>"true","message"=>"登录成功","result"=>["token"=>$token,"userName"=>$user[0]->name]]);
             }
             return  response()->json(["type"=>"true","message"=>"密码不正确","code"=>"40003"]);
         }else{
