@@ -14254,10 +14254,18 @@
 	        if (!token) {
 	            return reject({ type: "false", code: "40002", "message": "无效的token" });
 	        }
+	        var contentType = true;
+	        if (data instanceof FormData) {
+	            //FormDta 为false
+	            contentType = false;
+	        }
 	        $.ajax({
 	            url: url,
 	            method: method,
 	            data: data,
+	            contentType: contentType,
+	            processData: false,
+	            cache: false,
 	            headers: { "authorization": token },
 	            success: function success(data) {
 	                if (data.type == "true") {
@@ -16812,13 +16820,16 @@
 	//                                         <input class="file-path validate col m6" type="text"  />
 	//                                         <div class="btn">
 	//                                             <span>File</span>
-	//                                             <input type="file" @change="aboutMeUpload($event)" />
+	//                                             <input type="file" @change="aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')" />
 	//                                         </div>
 	//                                     </div>
 	//                                     <div class="col m12">
 	//                                         <img :src="aboutMeImg"  class="responsive-img" alt="">
 	//                                     </div>
 	//                                 </form>
+	//                                 <div class="row">
+	//                                     <button class="btn col m3 offset-m2 s12 " @click="updateAboutMe($event,'aboutMeImgFile')">保存</button>
+	//                                 </div>
 	//                             </div>
 	//                         </div>
 	//                     </li>
@@ -16849,34 +16860,48 @@
 	            aboutMeName: "",
 	            aboutMeAge: "",
 	            aboutMeEmail: "",
-	            aboutMeUrl: ""
+	            aboutMeUrl: "",
+	            aboutMeImgFile: ""
 	        };
 	    },
 
 	    methods: {
-	        aboutMeUpload: function aboutMeUpload(e, xx) {
+	        aboutMeUpload: function aboutMeUpload(e, imgFile, imgElem) {
 	            var _this = this;
 
+	            //非按值传递
 	            var target = e.target;
-
 	            var file = target.files[0];
-
 	            var reader = new FileReader();
+
 	            if (/image/.test(file.type)) {
 	                reader.readAsDataURL(file);
 	            }
 
 	            reader.onload = function () {
-	                _this.aboutMeImg = reader.result;
+	                _this[imgElem] = reader.result;
 	                //$(target).parent().append(`<img src="${reader.result}">`);
 	            };
 
 	            var f = new FormData();
 	            f.append("file", target.files[0]);
+	            this[imgFile] = target.files[0];
 
 	            console.log(f);
 	            console.log("event", e);
 	            console.log("文件对象", target.files[0]);
+	        },
+	        updateAboutMe: function updateAboutMe(e) {
+	            e.stopImmediatePropagation();
+	            e.preventDefault();
+
+	            var f = new FormData();
+	            f.append("name", this.aboutMeName);
+	            f.append("email", this.aboutMeEmail);
+	            f.append("age", this.aboutMeAge);
+	            f.append("img", this.aboutMeImgFile);
+	            f.append("website", this.aboutMeUrl);
+	            $.tokenAjax("/admin/home/aboutme", "post", f).then(function (data) {}).catch();
 	        }
 	    },
 	    ready: function ready() {
@@ -16887,14 +16912,14 @@
 	        });
 
 	        //获取aboutme数据
+
 	        $.tokenAjax("/home/aboutme", "get").then(function (data) {
 	            var result = data.result;
 	            _this2.aboutMeName = data.result["name"] || "";
 	            _this2.aboutMeAge = data.result["age"] || 0;
 	            _this2.aboutMeEmail = data.result["email"] || "";
 	            _this2.aboutMeUrl = data.result["website"] || "";
-	            _this2.aboutMeImg = data.result["img"] || "";
-
+	            _this2.aboutMeImg = data.result["imgurl"] || "";
 	            console.log("aboutme", data);
 	        }).catch();
 	    },
@@ -16907,7 +16932,7 @@
 /* 138 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <div class=\"row\">\n                            <form class=\"col s12\" enctype=\"multipart/form-data\">\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n                                    <label for=\"admin-home-name\">姓名</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n                                    <label for=\"admin-home-age\">年龄</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n                                    <label for=\"admin-home-email\">邮箱</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n                                    <label for=\"admin-home-website\">网址</label>\n                                </div>\n                                <div class=\"file-field input-field col m12\">\n                                    <input class=\"file-path validate col m6\" type=\"text\"  />\n                                    <div class=\"btn\">\n                                        <span>File</span>\n                                        <input type=\"file\" @change=\"aboutMeUpload($event)\" />\n                                    </div>\n                                </div>\n                                <div class=\"col m12\">\n                                    <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n                                </div>\n                            </form>\n                        </div>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
+	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <div class=\"row\">\n                            <form class=\"col s12\" enctype=\"multipart/form-data\">\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n                                    <label for=\"admin-home-name\">姓名</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n                                    <label for=\"admin-home-age\">年龄</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n                                    <label for=\"admin-home-email\">邮箱</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n                                    <label for=\"admin-home-website\">网址</label>\n                                </div>\n                                <div class=\"file-field input-field col m12\">\n                                    <input class=\"file-path validate col m6\" type=\"text\"  />\n                                    <div class=\"btn\">\n                                        <span>File</span>\n                                        <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n                                    </div>\n                                </div>\n                                <div class=\"col m12\">\n                                    <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n                                </div>\n                            </form>\n                            <div class=\"row\">\n                                <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n                            </div>\n                        </div>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
 
 /***/ }
 /******/ ]);

@@ -10,11 +10,19 @@ function tokenAjax(url,method,data="") {
         if(!token){
             return reject({type:"false",code:"40002","message":"无效的token"});
         }
+        let contentType=true;
+        if(data instanceof FormData){
+            //FormDta 为false
+            contentType=false;
+        }
         $.ajax(
             {
                 url,
                 method,
                 data,
+                contentType,
+                processData: false,
+                cache : false,
                 headers: {"authorization": token},
                 success(data){
                     if(data.type=="true"){
