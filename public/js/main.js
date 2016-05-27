@@ -76,6 +76,7 @@
 
 	// 挂载tokenAjax
 	$.tokenAjax = _ajax.tokenAjax;
+	$.promiseAjax = _ajax.promiseAjax;
 
 	_vue2.default.use(_vueRouter2.default);
 
@@ -14238,7 +14239,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.tokenAjax = undefined;
+	exports.promiseAjax = exports.tokenAjax = undefined;
 
 	var _promise = __webpack_require__(33);
 
@@ -14278,7 +14279,35 @@
 	    });
 	};
 
+	function promiseAjax(url, method) {
+	    var data = arguments.length <= 2 || arguments[2] === undefined ? "" : arguments[2];
+
+	    return new _promise2.default(function (resolve, reject) {
+	        var contentType = true;
+	        if (data instanceof FormData) {
+	            //FormDta 为false
+	            contentType = false;
+	        }
+	        $.ajax({
+	            url: url,
+	            method: method,
+	            data: data,
+	            contentType: contentType,
+	            processData: false,
+	            cache: false,
+	            success: function success(data) {
+	                if (data.type == "true") {
+	                    return resolve(data);
+	                }
+	                var errorCode = data.code;
+	                return reject(data);
+	            }
+	        });
+	    });
+	}
+
 	exports.tokenAjax = tokenAjax;
+	exports.promiseAjax = promiseAjax;
 
 /***/ },
 /* 33 */
@@ -15904,7 +15933,7 @@
 	//             <div class="row no-gutters">
 	//                 <r-header  @header-show-change="headerShow" @header-hide-change="headerHide" :header-width="Headercls"></r-header>
 	//
-	//                 <div class="col s12 "  :class="Contentcls">
+	//                 <div class="col s12  "  :class="Contentcls">
 	//                     <div class=" home-content">
 	//                         <home-title></home-title>
 	//                         <home-about-me></home-about-me>
@@ -16142,7 +16171,7 @@
 /* 113 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -16161,27 +16190,29 @@
 	//                     <dl class="break-dl">
 	//                         <div class="break-list">
 	//                             <dt>Name:</dt>
-	//                             <dd>李雨伦</dd>
+	//                             <dd>{{aboutMeName}}</dd>
 	//                         </div>
 	//
 	//                         <div class="break-list">
 	//                             <dt>Age:</dt>
-	//                             <dd>18 Years</dd>
+	//                             <dd>{{aboutMeAge}} Years</dd>
 	//                         </div>
 	//
 	//                         <div class="break-list">
 	//                             <dt>Email:</dt>
-	//                             <dd>relsoul@outlook.com</dd>
+	//                             <dd>{{aboutMeEmail}}</dd>
 	//                         </div>
 	//
 	//                         <div class="break-list">
 	//                             <dt>Web:</dt>
-	//                             <dd>relsoul.com</dd>
+	//                             <dd>{{aboutMeUrl}}</dd>
 	//                         </div>
 	//
 	//                     </dl>
 	//                 </div>
-	//                 <div class="col m6"></div>
+	//                 <div class="col m6" style="padding: 25px">
+	//                     <img :src="aboutMeImg" alt="" class="responsive-img">
+	//                 </div>
 	//             </div>
 	//
 	//
@@ -16193,13 +16224,31 @@
 	// <style>
 	//
 	// </style>
-	// <script>
+	// <script type="text/ecmascript-6">
 
 	exports.default = {
 	    data: function data() {
 	        return {
-	            msg: 'hello vue'
+	            msg: 'hello vue',
+	            aboutMeName: "",
+	            aboutMeAge: "",
+	            aboutMeEmail: "",
+	            aboutMeUrl: "",
+	            aboutMeImg: ""
 	        };
+	    },
+	    ready: function ready() {
+	        var _this = this;
+
+	        $.promiseAjax("/home/aboutme", "get").then(function (data) {
+	            var result = data.result;
+	            _this.aboutMeName = data.result["name"] || "";
+	            _this.aboutMeAge = data.result["age"] || 0;
+	            _this.aboutMeEmail = data.result["email"] || "";
+	            _this.aboutMeUrl = data.result["website"] || "";
+	            _this.aboutMeImg = data.result["imgurl"] || "";
+	            console.log("aboutme", data);
+	        }).catch();
 	    },
 
 	    components: {}
@@ -16210,7 +16259,7 @@
 /* 114 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>李雨伦</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>18 Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>relsoul@outlook.com</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>relsoul.com</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6\"></div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>{{aboutMeName}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>{{aboutMeAge}} Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>{{aboutMeEmail}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>{{aboutMeUrl}}</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6\" style=\"padding: 25px\">\n                <img :src=\"aboutMeImg\" alt=\"\" class=\"responsive-img\">\n            </div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
 
 /***/ },
 /* 115 */
@@ -16554,7 +16603,7 @@
 /* 128 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home\">\n        <div class=\"row no-gutters\">\n            <r-header  @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" :header-width=\"Headercls\"></r-header>\n\n            <div class=\"col s12 \"  :class=\"Contentcls\">\n                <div class=\" home-content\">\n                    <home-title></home-title>\n                    <home-about-me></home-about-me>\n                    <time-line title=\"test time-line project\" cls=\"home-project\"></time-line>\n                    <time-line title=\"test time-line project2\" cls=\"home-project2\"></time-line>\n                    <home-skills></home-skills>\n                </div>\n            </div>\n        </div>\n        <r-footer></r-footer>\n</div>\n"
+	module.exports = "\n<div class=\"home\">\n        <div class=\"row no-gutters\">\n            <r-header  @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" :header-width=\"Headercls\"></r-header>\n\n            <div class=\"col s12  \"  :class=\"Contentcls\">\n                <div class=\" home-content\">\n                    <home-title></home-title>\n                    <home-about-me></home-about-me>\n                    <time-line title=\"test time-line project\" cls=\"home-project\"></time-line>\n                    <time-line title=\"test time-line project2\" cls=\"home-project2\"></time-line>\n                    <home-skills></home-skills>\n                </div>\n            </div>\n        </div>\n        <r-footer></r-footer>\n</div>\n"
 
 /***/ },
 /* 129 */
@@ -16783,13 +16832,95 @@
 
 /***/ },
 /* 137 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _showInfo = __webpack_require__(18);
+
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue',
+	            aboutMeImg: "",
+	            aboutMeName: "",
+	            aboutMeAge: "",
+	            aboutMeEmail: "",
+	            aboutMeUrl: "",
+	            aboutMeImgFile: "",
+	            aboutMeInfo: ""
+	        };
+	    },
+
+	    methods: {
+	        showInfo: (0, _showInfo.showInfo)(),
+	        aboutMeUpload: function aboutMeUpload(e, imgFile, imgElem) {
+	            var _this = this;
+
+	            //非按值传递
+	            var target = e.target;
+	            var file = target.files[0];
+	            var reader = new FileReader();
+
+	            if (/image/.test(file.type)) {
+	                reader.readAsDataURL(file);
+	            }
+
+	            reader.onload = function () {
+	                _this[imgElem] = reader.result;
+	                //$(target).parent().append(`<img src="${reader.result}">`);
+	            };
+
+	            var f = new FormData();
+	            f.append("file", target.files[0]);
+	            this[imgFile] = target.files[0];
+
+	            console.log(f);
+	            console.log("event", e);
+	            console.log("文件对象", target.files[0]);
+	        },
+	        updateAboutMe: function updateAboutMe(e) {
+	            var _this2 = this;
+
+	            e.stopImmediatePropagation();
+	            e.preventDefault();
+
+	            var f = new FormData();
+	            f.append("name", this.aboutMeName);
+	            f.append("email", this.aboutMeEmail);
+	            f.append("age", this.aboutMeAge);
+	            f.append("img", this.aboutMeImgFile);
+	            f.append("website", this.aboutMeUrl);
+	            $.tokenAjax("/admin/home/aboutme", "post", f).then(function (data) {
+	                _this2.showInfo(data.message, 2000, "aboutMeInfo");
+	            }).catch();
+	        }
+	    },
+	    ready: function ready() {
+	        var _this3 = this;
+
+	        $('.collapsible').collapsible({
+	            accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+	        });
+
+	        $.promiseAjax("/home/aboutme", "get").then(function (data) {
+	            var result = data.result;
+	            _this3.aboutMeName = data.result["name"] || "";
+	            _this3.aboutMeAge = data.result["age"] || 0;
+	            _this3.aboutMeEmail = data.result["email"] || "";
+	            _this3.aboutMeUrl = data.result["website"] || "";
+	            _this3.aboutMeImg = data.result["imgurl"] || "";
+	            console.log("aboutme", data);
+	        }).catch();
+	    },
+
+	    components: {}
+	};
+	// </script>
 	// <template>
 	//     <div class="admin-home">
 	//         <div class="row">
@@ -16799,6 +16930,7 @@
 	//                         <div class="collapsible-header active"><i class="material-icons">build</i>关于我</div>
 	//                         <div class="collapsible-body ">
 	//                             <div class="row">
+	//                                 <p class="info-text">{{aboutMeInfo}}</p>
 	//                                 <form class="col s12" enctype="multipart/form-data">
 	//                                     <div class="input-field col m6">
 	//                                         <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="aboutMeName" class="validate">
@@ -16852,87 +16984,11 @@
 	// </style>
 	// <script type="text/ecmascript-6">
 
-	exports.default = {
-	    data: function data() {
-	        return {
-	            msg: 'hello vue',
-	            aboutMeImg: "",
-	            aboutMeName: "",
-	            aboutMeAge: "",
-	            aboutMeEmail: "",
-	            aboutMeUrl: "",
-	            aboutMeImgFile: ""
-	        };
-	    },
-
-	    methods: {
-	        aboutMeUpload: function aboutMeUpload(e, imgFile, imgElem) {
-	            var _this = this;
-
-	            //非按值传递
-	            var target = e.target;
-	            var file = target.files[0];
-	            var reader = new FileReader();
-
-	            if (/image/.test(file.type)) {
-	                reader.readAsDataURL(file);
-	            }
-
-	            reader.onload = function () {
-	                _this[imgElem] = reader.result;
-	                //$(target).parent().append(`<img src="${reader.result}">`);
-	            };
-
-	            var f = new FormData();
-	            f.append("file", target.files[0]);
-	            this[imgFile] = target.files[0];
-
-	            console.log(f);
-	            console.log("event", e);
-	            console.log("文件对象", target.files[0]);
-	        },
-	        updateAboutMe: function updateAboutMe(e) {
-	            e.stopImmediatePropagation();
-	            e.preventDefault();
-
-	            var f = new FormData();
-	            f.append("name", this.aboutMeName);
-	            f.append("email", this.aboutMeEmail);
-	            f.append("age", this.aboutMeAge);
-	            f.append("img", this.aboutMeImgFile);
-	            f.append("website", this.aboutMeUrl);
-	            $.tokenAjax("/admin/home/aboutme", "post", f).then(function (data) {}).catch();
-	        }
-	    },
-	    ready: function ready() {
-	        var _this2 = this;
-
-	        $('.collapsible').collapsible({
-	            accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-	        });
-
-	        //获取aboutme数据
-
-	        $.tokenAjax("/home/aboutme", "get").then(function (data) {
-	            var result = data.result;
-	            _this2.aboutMeName = data.result["name"] || "";
-	            _this2.aboutMeAge = data.result["age"] || 0;
-	            _this2.aboutMeEmail = data.result["email"] || "";
-	            _this2.aboutMeUrl = data.result["website"] || "";
-	            _this2.aboutMeImg = data.result["imgurl"] || "";
-	            console.log("aboutme", data);
-	        }).catch();
-	    },
-
-	    components: {}
-	};
-	// </script>
-
 /***/ },
 /* 138 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <div class=\"row\">\n                            <form class=\"col s12\" enctype=\"multipart/form-data\">\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n                                    <label for=\"admin-home-name\">姓名</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n                                    <label for=\"admin-home-age\">年龄</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n                                    <label for=\"admin-home-email\">邮箱</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n                                    <label for=\"admin-home-website\">网址</label>\n                                </div>\n                                <div class=\"file-field input-field col m12\">\n                                    <input class=\"file-path validate col m6\" type=\"text\"  />\n                                    <div class=\"btn\">\n                                        <span>File</span>\n                                        <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n                                    </div>\n                                </div>\n                                <div class=\"col m12\">\n                                    <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n                                </div>\n                            </form>\n                            <div class=\"row\">\n                                <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n                            </div>\n                        </div>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
+	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <div class=\"row\">\n                            <p class=\"info-text\">{{aboutMeInfo}}</p>\n                            <form class=\"col s12\" enctype=\"multipart/form-data\">\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n                                    <label for=\"admin-home-name\">姓名</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n                                    <label for=\"admin-home-age\">年龄</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n                                    <label for=\"admin-home-email\">邮箱</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n                                    <label for=\"admin-home-website\">网址</label>\n                                </div>\n                                <div class=\"file-field input-field col m12\">\n                                    <input class=\"file-path validate col m6\" type=\"text\"  />\n                                    <div class=\"btn\">\n                                        <span>File</span>\n                                        <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n                                    </div>\n                                </div>\n                                <div class=\"col m12\">\n                                    <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n                                </div>\n                            </form>\n                            <div class=\"row\">\n                                <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n                            </div>\n                        </div>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
 
 /***/ }
 /******/ ]);

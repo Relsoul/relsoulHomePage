@@ -2,9 +2,10 @@
 import Vue from "vue"
 import Router from 'vue-router'
 import App from "./APP.vue"
-import {tokenAjax} from "./service/ajax"
+import {tokenAjax,promiseAjax} from "./service/ajax"
 // 挂载tokenAjax
 $.tokenAjax=tokenAjax;
+$.promiseAjax=promiseAjax;
 
 import Home from "./components/Home/home.vue"
 import Admin from "./components/Admin/admin.vue"

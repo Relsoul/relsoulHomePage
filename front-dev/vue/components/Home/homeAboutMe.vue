@@ -12,27 +12,29 @@
                     <dl class="break-dl">
                         <div class="break-list">
                             <dt>Name:</dt>
-                            <dd>李雨伦</dd>
+                            <dd>{{aboutMeName}}</dd>
                         </div>
 
                         <div class="break-list">
                             <dt>Age:</dt>
-                            <dd>18 Years</dd>
+                            <dd>{{aboutMeAge}} Years</dd>
                         </div>
 
                         <div class="break-list">
                             <dt>Email:</dt>
-                            <dd>relsoul@outlook.com</dd>
+                            <dd>{{aboutMeEmail}}</dd>
                         </div>
 
                         <div class="break-list">
                             <dt>Web:</dt>
-                            <dd>relsoul.com</dd>
+                            <dd>{{aboutMeUrl}}</dd>
                         </div>
 
                     </dl>
                 </div>
-                <div class="col m6"></div>
+                <div class="col m6" style="padding: 25px">
+                    <img :src="aboutMeImg" alt="" class="responsive-img">
+                </div>
             </div>
 
 
@@ -44,13 +46,31 @@
 <style>
 
 </style>
-<script>
+<script type="text/ecmascript-6">
 
     export default{
         data(){
             return{
-                msg:'hello vue'
+                msg:'hello vue',
+                aboutMeName:"",
+                aboutMeAge:"",
+                aboutMeEmail:"",
+                aboutMeUrl:"",
+                aboutMeImg:""
             }
+        },
+        ready(){
+            $.promiseAjax("/home/aboutme","get").then((data)=>{
+                let result=data.result;
+                this.aboutMeName=data.result["name"]||"";
+                this.aboutMeAge=data.result["age"]||0;
+                this.aboutMeEmail=data.result["email"]||"";
+                this.aboutMeUrl=data.result["website"]||"";
+                this.aboutMeImg=data.result["imgurl"]||"";
+                console.log("aboutme",data)
+            }).catch(
+
+            )
         },
         components:{
 

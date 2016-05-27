@@ -36,5 +36,33 @@ function tokenAjax(url,method,data="") {
     })
 };
 
-export {tokenAjax};
+function promiseAjax(url,method,data="") {
+    return new Promise((resolve,reject)=>{
+        let contentType=true;
+        if(data instanceof FormData){
+            //FormDta 为false
+            contentType=false;
+        }
+        $.ajax(
+            {
+                url,
+                method,
+                data,
+                contentType,
+                processData: false,
+                cache : false,
+                success(data){
+                    if(data.type=="true"){
+                        return resolve(data);
+                    }
+                    let errorCode=data.code;
+                    return reject(data);
+                }
+            }
+        )
+    })
+}
+
+
+export {tokenAjax,promiseAjax};
 

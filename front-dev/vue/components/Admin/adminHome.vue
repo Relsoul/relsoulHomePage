@@ -7,6 +7,7 @@
                         <div class="collapsible-header active"><i class="material-icons">build</i>关于我</div>
                         <div class="collapsible-body ">
                             <div class="row">
+                                <p class="info-text">{{aboutMeInfo}}</p>
                                 <form class="col s12" enctype="multipart/form-data">
                                     <div class="input-field col m6">
                                         <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="aboutMeName" class="validate">
@@ -59,6 +60,7 @@
 
 </style>
 <script type="text/ecmascript-6">
+    import {showInfo} from "../../service/showInfo"
 
     export default{
         data(){
@@ -69,10 +71,12 @@
                 aboutMeAge:"",
                 aboutMeEmail:"",
                 aboutMeUrl:"",
-                aboutMeImgFile:""
+                aboutMeImgFile:"",
+                aboutMeInfo:""
             }
         },
         methods:{
+            showInfo:showInfo(),
             aboutMeUpload(e,imgFile,imgElem){
                 //非按值传递
                 let target=e.target;
@@ -108,7 +112,7 @@
                 f.append("img",this.aboutMeImgFile);
                 f.append("website",this.aboutMeUrl);
                 $.tokenAjax("/admin/home/aboutme","post",f).then((data)=>{
-
+                    this.showInfo(data.message,2000,"aboutMeInfo");
                 }).catch()
             }
         },
@@ -117,9 +121,8 @@
                 accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             });
 
-            //获取aboutme数据
 
-            $.tokenAjax("/home/aboutme","get").then((data)=>{
+            $.promiseAjax("/home/aboutme","get").then((data)=>{
                 let result=data.result;
                 this.aboutMeName=data.result["name"]||"";
                 this.aboutMeAge=data.result["age"]||0;

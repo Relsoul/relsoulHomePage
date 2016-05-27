@@ -3,7 +3,7 @@
             <div class="row no-gutters">
                 <r-header  @header-show-change="headerShow" @header-hide-change="headerHide" :header-width="Headercls"></r-header>
 
-                <div class="col s12 "  :class="Contentcls">
+                <div class="col s12  "  :class="Contentcls">
                     <div class=" home-content">
                         <home-title></home-title>
                         <home-about-me></home-about-me>
