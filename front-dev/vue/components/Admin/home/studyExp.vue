@@ -3,7 +3,7 @@
        <p></p>
        <ul class="collapsible expcoll" data-collapsible="expandable">
            <li class="" v-for="form in formList">
-               <div class="collapsible-header "><i class="material-icons">build</i>{{form.expName?form.expName:"请填写经历名称"}}</div>
+               <div class="collapsible-header "><i class="material-icons">build</i>{{form.expName?form.expName:"请填写经历名称"}} <i class="material-icons right" @click="deleteForm($event,form)">delete</i></div>
                <div class="collapsible-body ">
                    <div class="row">
                        <form class="col s12" enctype="multipart/form-data">
@@ -63,6 +63,11 @@
                     expEndTime:"",
                     expContent:""
                 })
+            },
+            deleteForm(e,form){
+                e.stopImmediatePropagation();
+                let index=this.formList.indexOf(form);
+                this.formList.splice(index,1);
             }
         },
         components:{

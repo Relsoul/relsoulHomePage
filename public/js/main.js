@@ -17191,7 +17191,7 @@
 	//        <p></p>
 	//        <ul class="collapsible expcoll" data-collapsible="expandable">
 	//            <li class="" v-for="form in formList">
-	//                <div class="collapsible-header "><i class="material-icons">build</i>{{form.expName?form.expName:"请填写经历名称"}}</div>
+	//                <div class="collapsible-header "><i class="material-icons">build</i>{{form.expName?form.expName:"请填写经历名称"}} <i class="material-icons right" @click="deleteForm($event,form)">delete</i></div>
 	//                <div class="collapsible-body ">
 	//                    <div class="row">
 	//                        <form class="col s12" enctype="multipart/form-data">
@@ -17252,6 +17252,11 @@
 	                expEndTime: "",
 	                expContent: ""
 	            });
+	        },
+	        deleteForm: function deleteForm(e, form) {
+	            e.stopImmediatePropagation();
+	            var index = this.formList.indexOf(form);
+	            this.formList.splice(index, 1);
 	        }
 	    },
 	    components: {}
@@ -17262,7 +17267,7 @@
 /* 147 */
 /***/ function(module, exports) {
 
-	module.exports = "\n   <div class=\"row\">\n       <p></p>\n       <ul class=\"collapsible expcoll\" data-collapsible=\"expandable\">\n           <li class=\"\" v-for=\"form in formList\">\n               <div class=\"collapsible-header \"><i class=\"material-icons\">build</i>{{form.expName?form.expName:\"请填写经历名称\"}}</div>\n               <div class=\"collapsible-body \">\n                   <div class=\"row\">\n                       <form class=\"col s12\" enctype=\"multipart/form-data\">\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"form.expName\" class=\"validate\">\n                               <label for=\"admin-home-name\">经历名称</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"text\" v-model=\"form.expStartTime\" class=\"validate\">\n                               <label for=\"admin-home-age\">经历起始时间</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"text\" v-model=\"form.expEndTime\" class=\"validate\">\n                               <label for=\"admin-home-email\">经历结束时间</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"text\" v-model=\"form.expContent\" class=\"validate\">\n                               <label for=\"admin-home-website\">经历内容</label>\n                           </div>\n                       </form>\n                   </div>\n               </div>\n           </li>\n<!--           <li class=\"\">\n               <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>list2</div>\n               <div class=\"collapsible-body \">\n                2222\n               </div>\n           </li>-->\n       </ul>\n       <button class=\"btn\" @click=\"addNewExp($event)\">add</button>\n       <button class=\"btn\">保存</button>\n   </div>\n"
+	module.exports = "\n   <div class=\"row\">\n       <p></p>\n       <ul class=\"collapsible expcoll\" data-collapsible=\"expandable\">\n           <li class=\"\" v-for=\"form in formList\">\n               <div class=\"collapsible-header \"><i class=\"material-icons\">build</i>{{form.expName?form.expName:\"请填写经历名称\"}} <i class=\"material-icons right\" @click=\"deleteForm($event,form)\">delete</i></div>\n               <div class=\"collapsible-body \">\n                   <div class=\"row\">\n                       <form class=\"col s12\" enctype=\"multipart/form-data\">\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"form.expName\" class=\"validate\">\n                               <label for=\"admin-home-name\">经历名称</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"text\" v-model=\"form.expStartTime\" class=\"validate\">\n                               <label for=\"admin-home-age\">经历起始时间</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"text\" v-model=\"form.expEndTime\" class=\"validate\">\n                               <label for=\"admin-home-email\">经历结束时间</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"text\" v-model=\"form.expContent\" class=\"validate\">\n                               <label for=\"admin-home-website\">经历内容</label>\n                           </div>\n                       </form>\n                   </div>\n               </div>\n           </li>\n<!--           <li class=\"\">\n               <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>list2</div>\n               <div class=\"collapsible-body \">\n                2222\n               </div>\n           </li>-->\n       </ul>\n       <button class=\"btn\" @click=\"addNewExp($event)\">add</button>\n       <button class=\"btn\">保存</button>\n   </div>\n"
 
 /***/ },
 /* 148 */
