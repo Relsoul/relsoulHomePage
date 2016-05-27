@@ -16772,7 +16772,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\adminHome.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(138)
+	__vue_template__ = __webpack_require__(148)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -16842,6 +16842,151 @@
 
 	var _showInfo = __webpack_require__(18);
 
+	var _aboutMe = __webpack_require__(138);
+
+	var _aboutMe2 = _interopRequireDefault(_aboutMe);
+
+	var _studyExp = __webpack_require__(143);
+
+	var _studyExp2 = _interopRequireDefault(_studyExp);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue'
+	        };
+	    },
+
+	    methods: {
+	        showInfo: (0, _showInfo.showInfo)()
+	    },
+	    ready: function ready() {
+	        $('.collapsible').collapsible({
+	            accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+	        });
+	    },
+
+	    components: {
+	        adminAboutMe: _aboutMe2.default,
+	        adminStudyExp: _studyExp2.default
+	    }
+	};
+	// </script>
+	// <template>
+	//     <div class="admin-home">
+	//         <div class="row">
+	//             <div class="container">
+	//                 <ul class="collapsible popout" data-collapsible="accordion">
+	//                     <li class="">
+	//                         <div class="collapsible-header active"><i class="material-icons">build</i>关于我</div>
+	//                         <div class="collapsible-body ">
+	//                             <admin-about-me></admin-about-me>
+	//                         </div>
+	//                     </li>
+	//                     <li>
+	//                         <div class="collapsible-header"><i class="material-icons">build</i>Second</div>
+	//                         <div class="collapsible-body">
+	//                             <admin-study-exp></admin-study-exp>
+	//                         </div>
+	//                     </li>
+	//                     <li>
+	//                         <div class="collapsible-header"><i class="material-icons">build</i>Third</div>
+	//                         <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+	//                     </li>
+	//                 </ul>
+	//             </div>
+	//         </div>
+	//     </div>
+	//
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
+
+/***/ },
+/* 138 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(139)
+	__vue_script__ = __webpack_require__(141)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\home\\aboutMe.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(142)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Admin\\home\\aboutMe.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 139 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(140);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./aboutMe.vue", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./aboutMe.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 140 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 141 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _showInfo = __webpack_require__(18);
+
 	exports.default = {
 	    data: function data() {
 	        return {
@@ -16857,7 +17002,6 @@
 	    },
 
 	    methods: {
-	        showInfo: (0, _showInfo.showInfo)(),
 	        aboutMeUpload: function aboutMeUpload(e, imgFile, imgElem) {
 	            var _this = this;
 
@@ -16903,10 +17047,6 @@
 	    ready: function ready() {
 	        var _this3 = this;
 
-	        $('.collapsible').collapsible({
-	            accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-	        });
-
 	        $.promiseAjax("/home/aboutme", "get").then(function (data) {
 	            var result = data.result;
 	            _this3.aboutMeName = data.result["name"] || "";
@@ -16922,62 +17062,40 @@
 	};
 	// </script>
 	// <template>
-	//     <div class="admin-home">
-	//         <div class="row">
-	//             <div class="container">
-	//                 <ul class="collapsible popout" data-collapsible="accordion">
-	//                     <li class="">
-	//                         <div class="collapsible-header active"><i class="material-icons">build</i>关于我</div>
-	//                         <div class="collapsible-body ">
-	//                             <div class="row">
-	//                                 <p class="info-text">{{aboutMeInfo}}</p>
-	//                                 <form class="col s12" enctype="multipart/form-data">
-	//                                     <div class="input-field col m6">
-	//                                         <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="aboutMeName" class="validate">
-	//                                         <label for="admin-home-name">姓名</label>
-	//                                     </div>
-	//                                     <div class="input-field col m6">
-	//                                         <input placeholder="Placeholder" id="admin-home-age" type="number" v-model="aboutMeAge" class="validate">
-	//                                         <label for="admin-home-age">年龄</label>
-	//                                     </div>
-	//                                     <div class="input-field col m6">
-	//                                         <input placeholder="Placeholder" id="admin-home-email" type="email" v-model="aboutMeEmail" class="validate">
-	//                                         <label for="admin-home-email">邮箱</label>
-	//                                     </div>
-	//                                     <div class="input-field col m6">
-	//                                         <input placeholder="Placeholder" id="admin-home-website"  type="url" v-model="aboutMeUrl" class="validate">
-	//                                         <label for="admin-home-website">网址</label>
-	//                                     </div>
-	//                                     <div class="file-field input-field col m12">
-	//                                         <input class="file-path validate col m6" type="text"  />
-	//                                         <div class="btn">
-	//                                             <span>File</span>
-	//                                             <input type="file" @change="aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')" />
-	//                                         </div>
-	//                                     </div>
-	//                                     <div class="col m12">
-	//                                         <img :src="aboutMeImg"  class="responsive-img" alt="">
-	//                                     </div>
-	//                                 </form>
-	//                                 <div class="row">
-	//                                     <button class="btn col m3 offset-m2 s12 " @click="updateAboutMe($event,'aboutMeImgFile')">保存</button>
-	//                                 </div>
-	//                             </div>
-	//                         </div>
-	//                     </li>
-	//                     <li>
-	//                         <div class="collapsible-header"><i class="material-icons">build</i>Second</div>
-	//                         <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-	//                     </li>
-	//                     <li>
-	//                         <div class="collapsible-header"><i class="material-icons">build</i>Third</div>
-	//                         <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-	//                     </li>
-	//                 </ul>
+	//     <div class="row">
+	//         <p class="info-text">{{aboutMeInfo}}</p>
+	//         <form class="col s12" enctype="multipart/form-data">
+	//             <div class="input-field col m6">
+	//                 <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="aboutMeName" class="validate">
+	//                 <label for="admin-home-name">姓名</label>
 	//             </div>
+	//             <div class="input-field col m6">
+	//                 <input placeholder="Placeholder" id="admin-home-age" type="number" v-model="aboutMeAge" class="validate">
+	//                 <label for="admin-home-age">年龄</label>
+	//             </div>
+	//             <div class="input-field col m6">
+	//                 <input placeholder="Placeholder" id="admin-home-email" type="email" v-model="aboutMeEmail" class="validate">
+	//                 <label for="admin-home-email">邮箱</label>
+	//             </div>
+	//             <div class="input-field col m6">
+	//                 <input placeholder="Placeholder" id="admin-home-website"  type="url" v-model="aboutMeUrl" class="validate">
+	//                 <label for="admin-home-website">网址</label>
+	//             </div>
+	//             <div class="file-field input-field col m12">
+	//                 <input class="file-path validate col m6" type="text"  />
+	//                 <div class="btn">
+	//                     <span>File</span>
+	//                     <input type="file" @change="aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')" />
+	//                 </div>
+	//             </div>
+	//             <div class="col m12">
+	//                 <img :src="aboutMeImg"  class="responsive-img" alt="">
+	//             </div>
+	//         </form>
+	//         <div class="row">
+	//             <button class="btn col m3 offset-m2 s12 " @click="updateAboutMe($event,'aboutMeImgFile')">保存</button>
 	//         </div>
 	//     </div>
-	//
 	// </template>
 	// <style>
 	//
@@ -16985,10 +17103,172 @@
 	// <script type="text/ecmascript-6">
 
 /***/ },
-/* 138 */
+/* 142 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <div class=\"row\">\n                            <p class=\"info-text\">{{aboutMeInfo}}</p>\n                            <form class=\"col s12\" enctype=\"multipart/form-data\">\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n                                    <label for=\"admin-home-name\">姓名</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n                                    <label for=\"admin-home-age\">年龄</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n                                    <label for=\"admin-home-email\">邮箱</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n                                    <label for=\"admin-home-website\">网址</label>\n                                </div>\n                                <div class=\"file-field input-field col m12\">\n                                    <input class=\"file-path validate col m6\" type=\"text\"  />\n                                    <div class=\"btn\">\n                                        <span>File</span>\n                                        <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n                                    </div>\n                                </div>\n                                <div class=\"col m12\">\n                                    <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n                                </div>\n                            </form>\n                            <div class=\"row\">\n                                <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n                            </div>\n                        </div>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
+	module.exports = "\n<div class=\"row\">\n    <p class=\"info-text\">{{aboutMeInfo}}</p>\n    <form class=\"col s12\" enctype=\"multipart/form-data\">\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n            <label for=\"admin-home-name\">姓名</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n            <label for=\"admin-home-age\">年龄</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n            <label for=\"admin-home-email\">邮箱</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n            <label for=\"admin-home-website\">网址</label>\n        </div>\n        <div class=\"file-field input-field col m12\">\n            <input class=\"file-path validate col m6\" type=\"text\"  />\n            <div class=\"btn\">\n                <span>File</span>\n                <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n            </div>\n        </div>\n        <div class=\"col m12\">\n            <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n        </div>\n    </form>\n    <div class=\"row\">\n        <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n    </div>\n</div>\n"
+
+/***/ },
+/* 143 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(144)
+	__vue_script__ = __webpack_require__(146)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\home\\studyExp.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(147)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Admin\\home\\studyExp.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 144 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(145);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./studyExp.vue", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./studyExp.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 145 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 146 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// <template>
+	//    <div class="row">
+	//        <p></p>
+	//        <ul class="collapsible expcoll" data-collapsible="expandable">
+	//            <li class="" v-for="form in formList">
+	//                <div class="collapsible-header "><i class="material-icons">build</i>{{form.expName?form.expName:"请填写经历名称"}}</div>
+	//                <div class="collapsible-body ">
+	//                    <div class="row">
+	//                        <form class="col s12" enctype="multipart/form-data">
+	//                            <div class="input-field col m6">
+	//                                <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="form.expName" class="validate">
+	//                                <label for="admin-home-name">经历名称</label>
+	//                            </div>
+	//                            <div class="input-field col m6">
+	//                                <input placeholder="Placeholder" id="admin-home-age" type="text" v-model="form.expStartTime" class="validate">
+	//                                <label for="admin-home-age">经历起始时间</label>
+	//                            </div>
+	//                            <div class="input-field col m6">
+	//                                <input placeholder="Placeholder" id="admin-home-email" type="text" v-model="form.expEndTime" class="validate">
+	//                                <label for="admin-home-email">经历结束时间</label>
+	//                            </div>
+	//                            <div class="input-field col m6">
+	//                                <input placeholder="Placeholder" id="admin-home-website"  type="text" v-model="form.expContent" class="validate">
+	//                                <label for="admin-home-website">经历内容</label>
+	//                            </div>
+	//                        </form>
+	//                    </div>
+	//                </div>
+	//            </li>
+	// <!--           <li class="">
+	//                <div class="collapsible-header active"><i class="material-icons">build</i>list2</div>
+	//                <div class="collapsible-body ">
+	//                 2222
+	//                </div>
+	//            </li>-->
+	//        </ul>
+	//        <button class="btn" @click="addNewExp($event)">add</button>
+	//        <button class="btn">保存</button>
+	//    </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script>
+
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue',
+	            formList: [{
+	                expName: "",
+	                expStartTime: "",
+	                expEndTime: "",
+	                expContent: ""
+	            }]
+	        };
+	    },
+
+	    methods: {
+	        addNewExp: function addNewExp(e) {
+	            this.formList.push({
+	                expName: "",
+	                expStartTime: "",
+	                expEndTime: "",
+	                expContent: ""
+	            });
+	        }
+	    },
+	    components: {}
+	};
+	// </script>
+
+/***/ },
+/* 147 */
+/***/ function(module, exports) {
+
+	module.exports = "\n   <div class=\"row\">\n       <p></p>\n       <ul class=\"collapsible expcoll\" data-collapsible=\"expandable\">\n           <li class=\"\" v-for=\"form in formList\">\n               <div class=\"collapsible-header \"><i class=\"material-icons\">build</i>{{form.expName?form.expName:\"请填写经历名称\"}}</div>\n               <div class=\"collapsible-body \">\n                   <div class=\"row\">\n                       <form class=\"col s12\" enctype=\"multipart/form-data\">\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"form.expName\" class=\"validate\">\n                               <label for=\"admin-home-name\">经历名称</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"text\" v-model=\"form.expStartTime\" class=\"validate\">\n                               <label for=\"admin-home-age\">经历起始时间</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"text\" v-model=\"form.expEndTime\" class=\"validate\">\n                               <label for=\"admin-home-email\">经历结束时间</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"text\" v-model=\"form.expContent\" class=\"validate\">\n                               <label for=\"admin-home-website\">经历内容</label>\n                           </div>\n                       </form>\n                   </div>\n               </div>\n           </li>\n<!--           <li class=\"\">\n               <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>list2</div>\n               <div class=\"collapsible-body \">\n                2222\n               </div>\n           </li>-->\n       </ul>\n       <button class=\"btn\" @click=\"addNewExp($event)\">add</button>\n       <button class=\"btn\">保存</button>\n   </div>\n"
+
+/***/ },
+/* 148 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <admin-about-me></admin-about-me>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\">\n                        <admin-study-exp></admin-study-exp>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
 
 /***/ }
 /******/ ]);
