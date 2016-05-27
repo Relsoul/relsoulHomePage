@@ -24,7 +24,7 @@
                                         <ul id="user-choose" class="dropdown-content" >
                                             <li><a href="#!">one<span class="badge">1</span></a></li>
                                             <li><a href="#!">two<span class="new badge">1</span></a></li>
-                                            <li ><a href="#!" v-link="{path:'/admin'}" >three</a></li>
+                                            <li v-if="role>=10?true:false" ><a href="#!" v-link="{path:'/admin'}" >admin管理</a></li>
                                         </ul>
                                         <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >
                                             <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>选择与访问
@@ -59,7 +59,7 @@
 <style>
 
 </style>
-<script>
+<script type="text/ecmascript-6">
 
     import loginModal from "./loginModal.vue"
     import registerModal from "./registerModal.vue"
@@ -76,18 +76,29 @@
                 loginModalId:"loginModal",
                 registerModalId:"registerModal",
                 isLogin:false,
-                loginName:""
+                loginName:"",
+                role:false
             }
         },
         ready(){
             if($(document).width()>420){
-                $(".header nav").height($("body").height());
+                $(".header nav").height($(document).height());
             }
             $(".modal-trigger").leanModal();
             if(window.localStorage.getItem("token")&&window.localStorage.getItem("name")){
                 this.isLogin=true;
                 this.loginName=window.localStorage.getItem("name");
+                $.tokenAjax("/admin/me","get").then((data)=>{
+                    console.log(91,data);
+                    this.role=data.result.role;
+                }).catch((error)=>{
+                    this.isLogin=false;
+                    window.localStorage.removeItem("token");
+                    window.localStorage.removeItem("name");
+                    $("#"+this.loginModalId).openModal();
+                })
             };
+
         },
         props:{
             headerWidth:{
@@ -97,7 +108,6 @@
         },
         route:{
             data(){
-
 
             }
         },

@@ -18,11 +18,16 @@ Route::get('/', function () {
 });
 
 Route::group(["middleware"=>"JWTAuthToken","prefix"=>"admin"],function(){
+
+    //后台获取所有信息
     Route::get("users","Admin\\adminController@users");
 
-    //修改首页个人信息
-    Route::post("home/me","Admin\\adminHome@me");
+
+    //获取个人信息
+    Route::get("me","Admin\\adminHome@me");
 });
+
+
 
 // 用户登录验证
 Route::post("/login","userController@login");

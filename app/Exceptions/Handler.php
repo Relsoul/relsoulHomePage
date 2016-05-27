@@ -41,9 +41,18 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        $class_name=get_class($e);
 
-        if(get_class($e)=="UnexpectedValueException"||get_class($e)=="Firebase\\JWT\\SignatureInvalidException"){
-            return response()->json(["type"=>"false","message"=>"无效的token","code"=>"40402"]);
+        switch ($class_name){
+            case "UnexpectedValueException":
+            case "Firebase\\JWT\\SignatureInvalidException":
+                return response()->json(["type"=>"false","message"=>"无效的token","code"=>"40002"]);
+                break;
+            case "ErrorException":
+            case "DomainException":
+                return response()->json(["type"=>"false","message"=>"程序异常","code"=>"40008"]);
+                break;
+            
         }
 
 

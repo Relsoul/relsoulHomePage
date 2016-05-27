@@ -102,6 +102,7 @@
                                     this.loginDone=false;
                                     $("#"+this.loginId).closeModal();
                                 },800);
+                                //设置token与role
                                 window.localStorage.setItem("token",data.result.token);
                                 window.localStorage.setItem("name",data.result.userName);
                             }else{

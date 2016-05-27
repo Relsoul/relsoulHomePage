@@ -55,7 +55,7 @@ class userController extends Controller
             if(Crypt::decrypt($user[0]->password)==$password){
                 $key=config("app.jwt");
                 $exp=config("app.jwtTime");
-                $token=JWT::encode(["name"=>$user[0]->name,"time"=>time(),"exp"=>time()+$exp],$key);
+                $token=JWT::encode(["name"=>$user[0]->name,"createTime"=>time(),"tokenExp"=>time()+$exp],$key);
                 //session(["token"=>$token]);
                 return response()->json(["type"=>"true","message"=>"登录成功","result"=>["token"=>$token,"userName"=>$user[0]->name]]);
             }
@@ -96,9 +96,6 @@ class userController extends Controller
                 return response()->json(["type"=>"false","message"=>"验证码不正确","code"=>"40004"]);
             }
         }*/
-
-
-
     }
 
 
@@ -115,8 +112,6 @@ class userController extends Controller
         $result=$GtSdk->get_response_str();
         return response()->json(["type"=>"true","message"=>"获取验证码","result"=>json_decode($result)]);
     }
-
-
 
 
 }

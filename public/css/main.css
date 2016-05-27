@@ -3,10 +3,11 @@
   font-family: '微软雅黑'; }
 
 body {
-  overflow-x: hidden; }
-
-body {
+  overflow-x: hidden;
   perspective: 1500px; }
+
+html {
+  overflow-x: hidden; }
 
 .row.no-gutters {
   margin: 0; }
@@ -350,3 +351,7 @@ body {
         transform: none;
         left: 0;
         position: static; } }
+
+.admin .admin-home .collapsible-body {
+  padding: 10px 100px;
+  background: #fff; }

@@ -58,15 +58,24 @@
 
 	var _APP2 = _interopRequireDefault(_APP);
 
-	var _home = __webpack_require__(32);
+	var _ajax = __webpack_require__(32);
+
+	var _home = __webpack_require__(101);
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _admin = __webpack_require__(128);
+	var _admin = __webpack_require__(129);
 
 	var _admin2 = _interopRequireDefault(_admin);
 
+	var _adminHome = __webpack_require__(134);
+
+	var _adminHome2 = _interopRequireDefault(_adminHome);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// 挂载tokenAjax
+	$.tokenAjax = _ajax.tokenAjax;
 
 	_vue2.default.use(_vueRouter2.default);
 
@@ -78,7 +87,32 @@
 	    },
 	    "/admin": {
 	        component: _admin2.default,
-	        auth: true
+	        auth: true,
+	        subRoutes: {
+	            "/": {
+	                component: _adminHome2.default
+	            }
+	        }
+	    }
+	});
+
+	router.beforeEach(function (transition) {
+	    if (transition.to.xxx) {
+	        //判断用户是否有权限访问本页面
+	        if (window.localStorage.getItem("token") && window.localStorage.getItem("name")) {
+	            $.tokenAjax("/admin/me", "get").then(function (data) {
+	                console.log(91, data);
+	                if (data.result.role >= 10) {
+	                    transition.next();
+	                };
+	            }).catch(function (error) {
+	                transition.redirect("/");
+	            });
+	        } else {
+	            transition.redirect("/");
+	        };
+	    } else {
+	        transition.next();
 	    }
 	});
 
@@ -93,6 +127,25 @@
 	if ($(document).width() > 420) {
 	    $("body").addClass("body-content-show");
 	} else {}
+
+	$(document).on({
+	    dragleave: function dragleave(e) {
+	        //拖离
+	        e.preventDefault();
+	    },
+	    drop: function drop(e) {
+	        //拖后放
+	        e.preventDefault();
+	    },
+	    dragenter: function dragenter(e) {
+	        //拖进
+	        e.preventDefault();
+	    },
+	    dragover: function dragover(e) {
+	        //拖来拖去
+	        e.preventDefault();
+	    }
+	});
 
 /***/ },
 /* 1 */
@@ -13449,7 +13502,7 @@
 	//                                         <ul id="user-choose" class="dropdown-content" >
 	//                                             <li><a href="#!">one<span class="badge">1</span></a></li>
 	//                                             <li><a href="#!">two<span class="new badge">1</span></a></li>
-	//                                             <li ><a href="#!" v-link="{path:'/admin'}" >three</a></li>
+	//                                             <li v-if="role>=10?true:false" ><a href="#!" v-link="{path:'/admin'}" >admin管理</a></li>
 	//                                         </ul>
 	//                                         <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >
 	//                                             <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>选择与访问
@@ -13484,7 +13537,7 @@
 	// <style>
 	//
 	// </style>
-	// <script>
+	// <script type="text/ecmascript-6">
 
 	exports.default = {
 	    data: function data() {
@@ -13499,17 +13552,29 @@
 	            loginModalId: "loginModal",
 	            registerModalId: "registerModal",
 	            isLogin: false,
-	            loginName: ""
+	            loginName: "",
+	            role: false
 	        };
 	    },
 	    ready: function ready() {
+	        var _this = this;
+
 	        if ($(document).width() > 420) {
-	            $(".header nav").height($("body").height());
+	            $(".header nav").height($(document).height());
 	        }
 	        $(".modal-trigger").leanModal();
 	        if (window.localStorage.getItem("token") && window.localStorage.getItem("name")) {
 	            this.isLogin = true;
 	            this.loginName = window.localStorage.getItem("name");
+	            $.tokenAjax("/admin/me", "get").then(function (data) {
+	                console.log(91, data);
+	                _this.role = data.result.role;
+	            }).catch(function (error) {
+	                _this.isLogin = false;
+	                window.localStorage.removeItem("token");
+	                window.localStorage.removeItem("name");
+	                $("#" + _this.loginModalId).openModal();
+	            });
 	        };
 	    },
 
@@ -13688,6 +13753,7 @@
 	                                _this.loginDone = false;
 	                                $("#" + _this.loginId).closeModal();
 	                            }, 800);
+	                            //设置token与role
 	                            window.localStorage.setItem("token", data.result.token);
 	                            window.localStorage.setItem("name", data.result.userName);
 	                        } else {
@@ -14046,7 +14112,7 @@
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6\">\n                                    <p>欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\">one<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li ><a href=\"#!\" v-link=\"{path:'/admin'}\" >three</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>选择与访问\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
+	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6\">\n                                    <p>欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\">one<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li v-if=\"role>=10?true:false\" ><a href=\"#!\" v-link=\"{path:'/admin'}\" >admin管理</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>选择与访问\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
 
 /***/ },
 /* 26 */
@@ -14163,852 +14229,128 @@
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_script__, __vue_template__
-	__webpack_require__(33)
-	__vue_script__ = __webpack_require__(35)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\home.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(127)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), true)
-	  if (!hotAPI.compatible) return
-	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\home.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(34);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./home.vue", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./home.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(7)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _rFooter = __webpack_require__(26);
-
-	var _rFooter2 = _interopRequireDefault(_rFooter);
-
-	var _rHeader = __webpack_require__(10);
-
-	var _rHeader2 = _interopRequireDefault(_rHeader);
-
-	var _homeTitle = __webpack_require__(36);
-
-	var _homeTitle2 = _interopRequireDefault(_homeTitle);
-
-	var _homeAboutMe = __webpack_require__(41);
-
-	var _homeAboutMe2 = _interopRequireDefault(_homeAboutMe);
-
-	var _timeLine = __webpack_require__(46);
-
-	var _timeLine2 = _interopRequireDefault(_timeLine);
-
-	var _homeSkills = __webpack_require__(51);
-
-	var _homeSkills2 = _interopRequireDefault(_homeSkills);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// <template>
-	//     <div class="home">
-	//             <div class="row no-gutters">
-	//                 <r-header  @header-show-change="headerShow" @header-hide-change="headerHide" :header-width="Headercls"></r-header>
-	//
-	//                 <div class="col s12 "  :class="Contentcls">
-	//                     <div class=" home-content">
-	//                         <home-title></home-title>
-	//                         <home-about-me></home-about-me>
-	//                         <time-line title="test time-line project" cls="home-project"></time-line>
-	//                         <time-line title="test time-line project2" cls="home-project2"></time-line>
-	//                         <home-skills></home-skills>
-	//                     </div>
-	//                 </div>
-	//             </div>
-	//
-	//
-	//             <r-footer></r-footer>
-	//     </div>
-	// </template>
-	// <style>
-	//
-	// </style>
-	// <script>
-	exports.default = {
-	    data: function data() {
-	        return {
-	            msg: 'hello vue',
-	            Headercls: "m2",
-	            Contentcls: {
-	                "m10": true,
-	                "m12": false,
-	                "show-content": true
-	            }
-	        };
-	    },
-
-	    methods: {
-	        headerHide: function headerHide() {
-	            this.Contentcls.m10 = false;
-	            this.Contentcls.m12 = true;
-	            this.Contentcls["show-content"] = false;
-	            $("body").removeClass("body-content-show");
-	        },
-	        headerShow: function headerShow() {
-	            this.Contentcls.m10 = true;
-	            this.Contentcls.m12 = false;
-	            this.Contentcls["show-content"] = true;
-	            $("body").addClass("body-content-show");
-	        }
-	    },
-	    route: {},
-	    components: {
-	        rFooter: _rFooter2.default,
-	        rHeader: _rHeader2.default,
-	        homeTitle: _homeTitle2.default,
-	        homeAboutMe: _homeAboutMe2.default,
-	        timeLine: _timeLine2.default,
-	        homeSkills: _homeSkills2.default
-	    }
-	};
-	// </script>
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(37)
-	__vue_script__ = __webpack_require__(39)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\homeTitle.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(40)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), true)
-	  if (!hotAPI.compatible) return
-	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\homeTitle.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(38);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeTitle.vue", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeTitle.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(7)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 39 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	// <template>
-	//    <div class="home-title red lighten-2">
-	//        <div class="container">
-	//            <h1>哦~ 你找到了一个神秘的地方</h1>
-	//            <p>欢迎来到我的个人主页</p>
-	//            <a class="waves-effect waves-light btn-large"><i class=" material-icons left">group add</i>Find me</a>
-	//        </div>
-	//    </div>
-	// </template>
-	// <style>
-	//
-	// </style>
-	// <script>
-
-	exports.default = {
-	    data: function data() {
-	        return {
-	            msg: 'hello vue'
-	        };
-	    },
-
-	    components: {}
-	};
-	// </script>
-
-/***/ },
-/* 40 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"home-title red lighten-2\">\n    <div class=\"container\">\n        <h1>哦~ 你找到了一个神秘的地方</h1>\n        <p>欢迎来到我的个人主页</p>\n        <a class=\"waves-effect waves-light btn-large\"><i class=\" material-icons left\">group add</i>Find me</a>\n    </div>\n</div>\n"
-
-/***/ },
-/* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(42)
-	__vue_script__ = __webpack_require__(44)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\homeAboutMe.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(45)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), true)
-	  if (!hotAPI.compatible) return
-	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\homeAboutMe.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(43);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeAboutMe.vue", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeAboutMe.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(7)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 44 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	// <template>
-	//     <div class="home-aboutme">
-	//         <div class="container">
-	//
-	//             <div class="row">
-	//                 <div class="col m6">
-	//                     <h3 class="text_underline">关于我</h3>
-	//                     <p>
-	//                         it it me
-	//                     </p>
-	//
-	//                     <dl class="break-dl">
-	//                         <div class="break-list">
-	//                             <dt>Name:</dt>
-	//                             <dd>李雨伦</dd>
-	//                         </div>
-	//
-	//                         <div class="break-list">
-	//                             <dt>Age:</dt>
-	//                             <dd>18 Years</dd>
-	//                         </div>
-	//
-	//                         <div class="break-list">
-	//                             <dt>Email:</dt>
-	//                             <dd>relsoul@outlook.com</dd>
-	//                         </div>
-	//
-	//                         <div class="break-list">
-	//                             <dt>Web:</dt>
-	//                             <dd>relsoul.com</dd>
-	//                         </div>
-	//
-	//                     </dl>
-	//                 </div>
-	//                 <div class="col m6"></div>
-	//             </div>
-	//
-	//
-	//
-	//
-	//         </div>
-	//     </div>
-	// </template>
-	// <style>
-	//
-	// </style>
-	// <script>
-
-	exports.default = {
-	    data: function data() {
-	        return {
-	            msg: 'hello vue'
-	        };
-	    },
-
-	    components: {}
-	};
-	// </script>
-
-/***/ },
-/* 45 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>李雨伦</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>18 Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>relsoul@outlook.com</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>relsoul.com</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6\"></div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
-
-/***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(47)
-	__vue_script__ = __webpack_require__(49)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\timeLine.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(50)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), true)
-	  if (!hotAPI.compatible) return
-	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\timeLine.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(48);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./timeLine.vue", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./timeLine.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(7)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 49 */
-/***/ function(module, exports) {
+	/**
+	 * Created by soul on 2016/5/24.
+	 */
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	// <template>
-	//    <div :class="cls">
-	//        <div class="container">
-	//            <h1 class="text_underline">{{title}}</h1>
-	//            <ul class="time-line">
-	//                <li class="time-line-item">
-	//                    <div class="time-line-circle">
-	//
-	//                    </div>
-	//                    <div class="time-line-border">
-	//
-	//                    </div>
-	//                    <div class="time-line-text time-line-right">
-	//                        hello it is text
-	//                    </div>
-	//                </li>
-	//                <li class="time-line-item">
-	//                    <div class="time-line-circle">
-	//
-	//                    </div>
-	//                    <div class="time-line-border">
-	//
-	//                    </div>
-	//                    <div class="time-line-text time-line-left">
-	//                        hello it is text2
-	//                    </div>
-	//                </li>
-	//            </ul>
-	//        </div>
-	//    </div>
-	// </template>
-	// <style>
-	//
-	// </style>
-	// <script>
+	exports.tokenAjax = undefined;
 
-	exports.default = {
-	    data: function data() {
-	        return {
-	            msg: 'hello vue'
-	        };
-	    },
-
-	    props: ["cls", "title"],
-	    components: {}
-	};
-	// </script>
-
-/***/ },
-/* 50 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div :class=\"cls\">\n    <div class=\"container\">\n        <h1 class=\"text_underline\">{{title}}</h1>\n        <ul class=\"time-line\">\n            <li class=\"time-line-item\">\n                <div class=\"time-line-circle\">\n\n                </div>\n                <div class=\"time-line-border\">\n\n                </div>\n                <div class=\"time-line-text time-line-right\">\n                    hello it is text\n                </div>\n            </li>\n            <li class=\"time-line-item\">\n                <div class=\"time-line-circle\">\n\n                </div>\n                <div class=\"time-line-border\">\n\n                </div>\n                <div class=\"time-line-text time-line-left\">\n                    hello it is text2\n                </div>\n            </li>\n        </ul>\n    </div>\n</div>\n"
-
-/***/ },
-/* 51 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(52)
-	__vue_script__ = __webpack_require__(54)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\homeSkills.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(126)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), true)
-	  if (!hotAPI.compatible) return
-	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\homeSkills.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(53);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeSkills.vue", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeSkills.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 53 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(7)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 54 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _getIterator2 = __webpack_require__(55);
-
-	var _getIterator3 = _interopRequireDefault(_getIterator2);
-
-	var _promise = __webpack_require__(108);
+	var _promise = __webpack_require__(33);
 
 	var _promise2 = _interopRequireDefault(_promise);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// <template>
-	//    <div class="home-skills">
-	//         <div class="container">
-	//             <h1 class="text_underline">My Skills</h1>
-	//             <div class="row">
-	//
-	//                 <!--
-	//                 for  生成
-	//                 -->
-	//                 <div class="col m6" v-for="skill in skills">
-	//                     <div class="skills-content">
-	//                         <h2>{{skill.name}}</h2>
-	//                         <div class="col m10">
-	//                             <div class="progress">
-	//                                 <div class="determinate" :style="{width:skill.startWidth+'%'}"></div>
-	//                             </div>
-	//                         </div>
-	//                         <div class="col m2">
-	//                             <span class="skills-value">
-	//                                 {{skill.startWidth+'%'}}
-	//                             </span>
-	//                         </div>
-	//                     </div>
-	//                 </div>
-	//
-	//             </div>
-	//
-	//         </div>
-	//    </div>
-	// </template>
-	// <style>
-	//
-	// </style>
-	// <script type="text/ecmascript-6">
+	function tokenAjax(url, method) {
+	    var data = arguments.length <= 2 || arguments[2] === undefined ? "" : arguments[2];
 
-	exports.default = {
-	    data: function data() {
-	        return {
-	            skills: [{ name: "test1", startWidth: 0, endWidth: 30 }, { name: "test2", startWidth: 0, endWidth: 60 }]
-	        };
-	    },
-	    ready: function ready() {
-	        var runnSkill = function runnSkill(i) {
-	            return new _promise2.default(function (resolve, reject) {
-	                var timer = setInterval(function () {
-	                    if (i.startWidth >= i.endWidth) {
-	                        resolve(timer);
-	                        return false;
-	                    }
-	                    i.startWidth++;
-	                }, 60);
-	            });
-	        };
-	        var _iteratorNormalCompletion = true;
-	        var _didIteratorError = false;
-	        var _iteratorError = undefined;
-
-	        try {
-	            for (var _iterator = (0, _getIterator3.default)(this.skills), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                var i = _step.value;
-
-	                runnSkill(i).then(function (timer) {
-	                    clearInterval(timer);
-	                });
-	            }
-	        } catch (err) {
-	            _didIteratorError = true;
-	            _iteratorError = err;
-	        } finally {
-	            try {
-	                if (!_iteratorNormalCompletion && _iterator.return) {
-	                    _iterator.return();
-	                }
-	            } finally {
-	                if (_didIteratorError) {
-	                    throw _iteratorError;
-	                }
-	            }
+	    return new _promise2.default(function (resolve, reject) {
+	        var token = window.localStorage.getItem("token");
+	        if (!token) {
+	            return reject({ type: "false", code: "40002", "message": "无效的token" });
 	        }
-	    },
-
-	    components: {}
+	        $.ajax({
+	            url: url,
+	            method: method,
+	            data: data,
+	            headers: { "authorization": token },
+	            success: function success(data) {
+	                if (data.type == "true") {
+	                    return resolve(data);
+	                }
+	                var errorCode = data.code;
+	                return reject(data);
+	            }
+	        });
+	    });
 	};
-	// </script>
+
+	exports.tokenAjax = tokenAjax;
 
 /***/ },
-/* 55 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(56), __esModule: true };
+	module.exports = { "default": __webpack_require__(34), __esModule: true };
 
 /***/ },
-/* 56 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(57);
-	__webpack_require__(103);
-	module.exports = __webpack_require__(105);
+	__webpack_require__(35);
+	__webpack_require__(36);
+	__webpack_require__(80);
+	__webpack_require__(84);
+	module.exports = __webpack_require__(44).Promise;
 
 /***/ },
-/* 57 */
-/***/ function(module, exports, __webpack_require__) {
+/* 35 */
+/***/ function(module, exports) {
 
-	__webpack_require__(58);
-	var global        = __webpack_require__(69)
-	  , hide          = __webpack_require__(73)
-	  , Iterators     = __webpack_require__(61)
-	  , TO_STRING_TAG = __webpack_require__(100)('toStringTag');
-
-	for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
-	  var NAME       = collections[i]
-	    , Collection = global[NAME]
-	    , proto      = Collection && Collection.prototype;
-	  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
-	  Iterators[NAME] = Iterators.Array;
-	}
+	
 
 /***/ },
-/* 58 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var addToUnscopables = __webpack_require__(59)
-	  , step             = __webpack_require__(60)
-	  , Iterators        = __webpack_require__(61)
-	  , toIObject        = __webpack_require__(62);
+	var $at  = __webpack_require__(37)(true);
 
-	// 22.1.3.4 Array.prototype.entries()
-	// 22.1.3.13 Array.prototype.keys()
-	// 22.1.3.29 Array.prototype.values()
-	// 22.1.3.30 Array.prototype[@@iterator]()
-	module.exports = __webpack_require__(66)(Array, 'Array', function(iterated, kind){
-	  this._t = toIObject(iterated); // target
-	  this._i = 0;                   // next index
-	  this._k = kind;                // kind
-	// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+	// 21.1.3.27 String.prototype[@@iterator]()
+	__webpack_require__(40)(String, 'String', function(iterated){
+	  this._t = String(iterated); // target
+	  this._i = 0;                // next index
+	// 21.1.5.2.1 %StringIteratorPrototype%.next()
 	}, function(){
 	  var O     = this._t
-	    , kind  = this._k
-	    , index = this._i++;
-	  if(!O || index >= O.length){
-	    this._t = undefined;
-	    return step(1);
-	  }
-	  if(kind == 'keys'  )return step(0, index);
-	  if(kind == 'values')return step(0, O[index]);
-	  return step(0, [index, O[index]]);
-	}, 'values');
-
-	// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
-	Iterators.Arguments = Iterators.Array;
-
-	addToUnscopables('keys');
-	addToUnscopables('values');
-	addToUnscopables('entries');
+	    , index = this._i
+	    , point;
+	  if(index >= O.length)return {value: undefined, done: true};
+	  point = $at(O, index);
+	  this._i += point.length;
+	  return {value: point, done: false};
+	});
 
 /***/ },
-/* 59 */
-/***/ function(module, exports) {
-
-	module.exports = function(){ /* empty */ };
-
-/***/ },
-/* 60 */
-/***/ function(module, exports) {
-
-	module.exports = function(done, value){
-	  return {value: value, done: !!done};
-	};
-
-/***/ },
-/* 61 */
-/***/ function(module, exports) {
-
-	module.exports = {};
-
-/***/ },
-/* 62 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __webpack_require__(63)
-	  , defined = __webpack_require__(65);
-	module.exports = function(it){
-	  return IObject(defined(it));
+	var toInteger = __webpack_require__(38)
+	  , defined   = __webpack_require__(39);
+	// true  -> String#at
+	// false -> String#codePointAt
+	module.exports = function(TO_STRING){
+	  return function(that, pos){
+	    var s = String(defined(that))
+	      , i = toInteger(pos)
+	      , l = s.length
+	      , a, b;
+	    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+	    a = s.charCodeAt(i);
+	    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+	      ? TO_STRING ? s.charAt(i) : a
+	      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+	  };
 	};
 
 /***/ },
-/* 63 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-	var cof = __webpack_require__(64);
-	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
-	  return cof(it) == 'String' ? it.split('') : Object(it);
-	};
-
-/***/ },
-/* 64 */
+/* 38 */
 /***/ function(module, exports) {
 
-	var toString = {}.toString;
-
+	// 7.1.4 ToInteger
+	var ceil  = Math.ceil
+	  , floor = Math.floor;
 	module.exports = function(it){
-	  return toString.call(it).slice(8, -1);
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 	};
 
 /***/ },
-/* 65 */
+/* 39 */
 /***/ function(module, exports) {
 
 	// 7.2.1 RequireObjectCoercible(argument)
@@ -15018,20 +14360,20 @@
 	};
 
 /***/ },
-/* 66 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var LIBRARY        = __webpack_require__(67)
-	  , $export        = __webpack_require__(68)
-	  , redefine       = __webpack_require__(83)
-	  , hide           = __webpack_require__(73)
-	  , has            = __webpack_require__(84)
-	  , Iterators      = __webpack_require__(61)
-	  , $iterCreate    = __webpack_require__(85)
-	  , setToStringTag = __webpack_require__(99)
-	  , getPrototypeOf = __webpack_require__(101)
-	  , ITERATOR       = __webpack_require__(100)('iterator')
+	var LIBRARY        = __webpack_require__(41)
+	  , $export        = __webpack_require__(42)
+	  , redefine       = __webpack_require__(57)
+	  , hide           = __webpack_require__(47)
+	  , has            = __webpack_require__(58)
+	  , Iterators      = __webpack_require__(59)
+	  , $iterCreate    = __webpack_require__(60)
+	  , setToStringTag = __webpack_require__(76)
+	  , getPrototypeOf = __webpack_require__(78)
+	  , ITERATOR       = __webpack_require__(77)('iterator')
 	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
 	  , FF_ITERATOR    = '@@iterator'
 	  , KEYS           = 'keys'
@@ -15093,19 +14435,19 @@
 	};
 
 /***/ },
-/* 67 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = true;
 
 /***/ },
-/* 68 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global    = __webpack_require__(69)
-	  , core      = __webpack_require__(70)
-	  , ctx       = __webpack_require__(71)
-	  , hide      = __webpack_require__(73)
+	var global    = __webpack_require__(43)
+	  , core      = __webpack_require__(44)
+	  , ctx       = __webpack_require__(45)
+	  , hide      = __webpack_require__(47)
 	  , PROTOTYPE = 'prototype';
 
 	var $export = function(type, name, source){
@@ -15165,7 +14507,7 @@
 	module.exports = $export;
 
 /***/ },
-/* 69 */
+/* 43 */
 /***/ function(module, exports) {
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -15174,18 +14516,18 @@
 	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 
 /***/ },
-/* 70 */
+/* 44 */
 /***/ function(module, exports) {
 
 	var core = module.exports = {version: '2.4.0'};
 	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
-/* 71 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(72);
+	var aFunction = __webpack_require__(46);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -15206,7 +14548,7 @@
 	};
 
 /***/ },
-/* 72 */
+/* 46 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -15215,12 +14557,12 @@
 	};
 
 /***/ },
-/* 73 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dP         = __webpack_require__(74)
-	  , createDesc = __webpack_require__(82);
-	module.exports = __webpack_require__(78) ? function(object, key, value){
+	var dP         = __webpack_require__(48)
+	  , createDesc = __webpack_require__(56);
+	module.exports = __webpack_require__(52) ? function(object, key, value){
 	  return dP.f(object, key, createDesc(1, value));
 	} : function(object, key, value){
 	  object[key] = value;
@@ -15228,15 +14570,15 @@
 	};
 
 /***/ },
-/* 74 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var anObject       = __webpack_require__(75)
-	  , IE8_DOM_DEFINE = __webpack_require__(77)
-	  , toPrimitive    = __webpack_require__(81)
+	var anObject       = __webpack_require__(49)
+	  , IE8_DOM_DEFINE = __webpack_require__(51)
+	  , toPrimitive    = __webpack_require__(55)
 	  , dP             = Object.defineProperty;
 
-	exports.f = __webpack_require__(78) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+	exports.f = __webpack_require__(52) ? Object.defineProperty : function defineProperty(O, P, Attributes){
 	  anObject(O);
 	  P = toPrimitive(P, true);
 	  anObject(Attributes);
@@ -15249,17 +14591,17 @@
 	};
 
 /***/ },
-/* 75 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(76);
+	var isObject = __webpack_require__(50);
 	module.exports = function(it){
 	  if(!isObject(it))throw TypeError(it + ' is not an object!');
 	  return it;
 	};
 
 /***/ },
-/* 76 */
+/* 50 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -15267,24 +14609,24 @@
 	};
 
 /***/ },
-/* 77 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = !__webpack_require__(78) && !__webpack_require__(79)(function(){
-	  return Object.defineProperty(__webpack_require__(80)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+	module.exports = !__webpack_require__(52) && !__webpack_require__(53)(function(){
+	  return Object.defineProperty(__webpack_require__(54)('div'), 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 78 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Thank's IE8 for his funny defineProperty
-	module.exports = !__webpack_require__(79)(function(){
+	module.exports = !__webpack_require__(53)(function(){
 	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 79 */
+/* 53 */
 /***/ function(module, exports) {
 
 	module.exports = function(exec){
@@ -15296,11 +14638,11 @@
 	};
 
 /***/ },
-/* 80 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(76)
-	  , document = __webpack_require__(69).document
+	var isObject = __webpack_require__(50)
+	  , document = __webpack_require__(43).document
 	  // in old IE typeof document.createElement is 'object'
 	  , is = isObject(document) && isObject(document.createElement);
 	module.exports = function(it){
@@ -15308,11 +14650,11 @@
 	};
 
 /***/ },
-/* 81 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.1 ToPrimitive(input [, PreferredType])
-	var isObject = __webpack_require__(76);
+	var isObject = __webpack_require__(50);
 	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
 	// and the second argument - flag - preferred type is a string
 	module.exports = function(it, S){
@@ -15325,7 +14667,7 @@
 	};
 
 /***/ },
-/* 82 */
+/* 56 */
 /***/ function(module, exports) {
 
 	module.exports = function(bitmap, value){
@@ -15338,13 +14680,13 @@
 	};
 
 /***/ },
-/* 83 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(73);
+	module.exports = __webpack_require__(47);
 
 /***/ },
-/* 84 */
+/* 58 */
 /***/ function(module, exports) {
 
 	var hasOwnProperty = {}.hasOwnProperty;
@@ -15353,17 +14695,23 @@
 	};
 
 /***/ },
-/* 85 */
+/* 59 */
+/***/ function(module, exports) {
+
+	module.exports = {};
+
+/***/ },
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var create         = __webpack_require__(86)
-	  , descriptor     = __webpack_require__(82)
-	  , setToStringTag = __webpack_require__(99)
+	var create         = __webpack_require__(61)
+	  , descriptor     = __webpack_require__(56)
+	  , setToStringTag = __webpack_require__(76)
 	  , IteratorPrototype = {};
 
 	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-	__webpack_require__(73)(IteratorPrototype, __webpack_require__(100)('iterator'), function(){ return this; });
+	__webpack_require__(47)(IteratorPrototype, __webpack_require__(77)('iterator'), function(){ return this; });
 
 	module.exports = function(Constructor, NAME, next){
 	  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -15371,26 +14719,26 @@
 	};
 
 /***/ },
-/* 86 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	var anObject    = __webpack_require__(75)
-	  , dPs         = __webpack_require__(87)
-	  , enumBugKeys = __webpack_require__(97)
-	  , IE_PROTO    = __webpack_require__(94)('IE_PROTO')
+	var anObject    = __webpack_require__(49)
+	  , dPs         = __webpack_require__(62)
+	  , enumBugKeys = __webpack_require__(74)
+	  , IE_PROTO    = __webpack_require__(71)('IE_PROTO')
 	  , Empty       = function(){ /* empty */ }
 	  , PROTOTYPE   = 'prototype';
 
 	// Create object with fake `null` prototype: use iframe Object with cleared prototype
 	var createDict = function(){
 	  // Thrash, waste and sodomy: IE GC bug
-	  var iframe = __webpack_require__(80)('iframe')
+	  var iframe = __webpack_require__(54)('iframe')
 	    , i      = enumBugKeys.length
 	    , gt     = '>'
 	    , iframeDocument;
 	  iframe.style.display = 'none';
-	  __webpack_require__(98).appendChild(iframe);
+	  __webpack_require__(75).appendChild(iframe);
 	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
 	  // createDict = iframe.contentWindow.Object;
 	  // html.removeChild(iframe);
@@ -15416,14 +14764,14 @@
 	};
 
 /***/ },
-/* 87 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dP       = __webpack_require__(74)
-	  , anObject = __webpack_require__(75)
-	  , getKeys  = __webpack_require__(88);
+	var dP       = __webpack_require__(48)
+	  , anObject = __webpack_require__(49)
+	  , getKeys  = __webpack_require__(63);
 
-	module.exports = __webpack_require__(78) ? Object.defineProperties : function defineProperties(O, Properties){
+	module.exports = __webpack_require__(52) ? Object.defineProperties : function defineProperties(O, Properties){
 	  anObject(O);
 	  var keys   = getKeys(Properties)
 	    , length = keys.length
@@ -15434,25 +14782,25 @@
 	};
 
 /***/ },
-/* 88 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-	var $keys       = __webpack_require__(89)
-	  , enumBugKeys = __webpack_require__(97);
+	var $keys       = __webpack_require__(64)
+	  , enumBugKeys = __webpack_require__(74);
 
 	module.exports = Object.keys || function keys(O){
 	  return $keys(O, enumBugKeys);
 	};
 
 /***/ },
-/* 89 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var has          = __webpack_require__(84)
-	  , toIObject    = __webpack_require__(62)
-	  , arrayIndexOf = __webpack_require__(90)(false)
-	  , IE_PROTO     = __webpack_require__(94)('IE_PROTO');
+	var has          = __webpack_require__(58)
+	  , toIObject    = __webpack_require__(65)
+	  , arrayIndexOf = __webpack_require__(68)(false)
+	  , IE_PROTO     = __webpack_require__(71)('IE_PROTO');
 
 	module.exports = function(object, names){
 	  var O      = toIObject(object)
@@ -15468,14 +14816,45 @@
 	};
 
 /***/ },
-/* 90 */
+/* 65 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// to indexed object, toObject with fallback for non-array-like ES3 strings
+	var IObject = __webpack_require__(66)
+	  , defined = __webpack_require__(39);
+	module.exports = function(it){
+	  return IObject(defined(it));
+	};
+
+/***/ },
+/* 66 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// fallback for non-array-like ES3 and non-enumerable old V8 strings
+	var cof = __webpack_require__(67);
+	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+	  return cof(it) == 'String' ? it.split('') : Object(it);
+	};
+
+/***/ },
+/* 67 */
+/***/ function(module, exports) {
+
+	var toString = {}.toString;
+
+	module.exports = function(it){
+	  return toString.call(it).slice(8, -1);
+	};
+
+/***/ },
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// false -> Array#indexOf
 	// true  -> Array#includes
-	var toIObject = __webpack_require__(62)
-	  , toLength  = __webpack_require__(91)
-	  , toIndex   = __webpack_require__(93);
+	var toIObject = __webpack_require__(65)
+	  , toLength  = __webpack_require__(69)
+	  , toIndex   = __webpack_require__(70);
 	module.exports = function(IS_INCLUDES){
 	  return function($this, el, fromIndex){
 	    var O      = toIObject($this)
@@ -15494,32 +14873,21 @@
 	};
 
 /***/ },
-/* 91 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
-	var toInteger = __webpack_require__(92)
+	var toInteger = __webpack_require__(38)
 	  , min       = Math.min;
 	module.exports = function(it){
 	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 	};
 
 /***/ },
-/* 92 */
-/***/ function(module, exports) {
-
-	// 7.1.4 ToInteger
-	var ceil  = Math.ceil
-	  , floor = Math.floor;
-	module.exports = function(it){
-	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-	};
-
-/***/ },
-/* 93 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(92)
+	var toInteger = __webpack_require__(38)
 	  , max       = Math.max
 	  , min       = Math.min;
 	module.exports = function(index, length){
@@ -15528,20 +14896,20 @@
 	};
 
 /***/ },
-/* 94 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var shared = __webpack_require__(95)('keys')
-	  , uid    = __webpack_require__(96);
+	var shared = __webpack_require__(72)('keys')
+	  , uid    = __webpack_require__(73);
 	module.exports = function(key){
 	  return shared[key] || (shared[key] = uid(key));
 	};
 
 /***/ },
-/* 95 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global = __webpack_require__(69)
+	var global = __webpack_require__(43)
 	  , SHARED = '__core-js_shared__'
 	  , store  = global[SHARED] || (global[SHARED] = {});
 	module.exports = function(key){
@@ -15549,7 +14917,7 @@
 	};
 
 /***/ },
-/* 96 */
+/* 73 */
 /***/ function(module, exports) {
 
 	var id = 0
@@ -15559,7 +14927,7 @@
 	};
 
 /***/ },
-/* 97 */
+/* 74 */
 /***/ function(module, exports) {
 
 	// IE 8- don't enum bug keys
@@ -15568,30 +14936,30 @@
 	).split(',');
 
 /***/ },
-/* 98 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(69).document && document.documentElement;
+	module.exports = __webpack_require__(43).document && document.documentElement;
 
 /***/ },
-/* 99 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var def = __webpack_require__(74).f
-	  , has = __webpack_require__(84)
-	  , TAG = __webpack_require__(100)('toStringTag');
+	var def = __webpack_require__(48).f
+	  , has = __webpack_require__(58)
+	  , TAG = __webpack_require__(77)('toStringTag');
 
 	module.exports = function(it, tag, stat){
 	  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
 	};
 
 /***/ },
-/* 100 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var store      = __webpack_require__(95)('wks')
-	  , uid        = __webpack_require__(96)
-	  , Symbol     = __webpack_require__(69).Symbol
+	var store      = __webpack_require__(72)('wks')
+	  , uid        = __webpack_require__(73)
+	  , Symbol     = __webpack_require__(43).Symbol
 	  , USE_SYMBOL = typeof Symbol == 'function';
 
 	var $exports = module.exports = function(name){
@@ -15602,13 +14970,13 @@
 	$exports.store = store;
 
 /***/ },
-/* 101 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-	var has         = __webpack_require__(84)
-	  , toObject    = __webpack_require__(102)
-	  , IE_PROTO    = __webpack_require__(94)('IE_PROTO')
+	var has         = __webpack_require__(58)
+	  , toObject    = __webpack_require__(79)
+	  , IE_PROTO    = __webpack_require__(71)('IE_PROTO')
 	  , ObjectProto = Object.prototype;
 
 	module.exports = Object.getPrototypeOf || function(O){
@@ -15620,153 +14988,105 @@
 	};
 
 /***/ },
-/* 102 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.13 ToObject(argument)
-	var defined = __webpack_require__(65);
+	var defined = __webpack_require__(39);
 	module.exports = function(it){
 	  return Object(defined(it));
 	};
 
 /***/ },
-/* 103 */
+/* 80 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(81);
+	var global        = __webpack_require__(43)
+	  , hide          = __webpack_require__(47)
+	  , Iterators     = __webpack_require__(59)
+	  , TO_STRING_TAG = __webpack_require__(77)('toStringTag');
+
+	for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
+	  var NAME       = collections[i]
+	    , Collection = global[NAME]
+	    , proto      = Collection && Collection.prototype;
+	  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
+	  Iterators[NAME] = Iterators.Array;
+	}
+
+/***/ },
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $at  = __webpack_require__(104)(true);
+	var addToUnscopables = __webpack_require__(82)
+	  , step             = __webpack_require__(83)
+	  , Iterators        = __webpack_require__(59)
+	  , toIObject        = __webpack_require__(65);
 
-	// 21.1.3.27 String.prototype[@@iterator]()
-	__webpack_require__(66)(String, 'String', function(iterated){
-	  this._t = String(iterated); // target
-	  this._i = 0;                // next index
-	// 21.1.5.2.1 %StringIteratorPrototype%.next()
+	// 22.1.3.4 Array.prototype.entries()
+	// 22.1.3.13 Array.prototype.keys()
+	// 22.1.3.29 Array.prototype.values()
+	// 22.1.3.30 Array.prototype[@@iterator]()
+	module.exports = __webpack_require__(40)(Array, 'Array', function(iterated, kind){
+	  this._t = toIObject(iterated); // target
+	  this._i = 0;                   // next index
+	  this._k = kind;                // kind
+	// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
 	}, function(){
 	  var O     = this._t
-	    , index = this._i
-	    , point;
-	  if(index >= O.length)return {value: undefined, done: true};
-	  point = $at(O, index);
-	  this._i += point.length;
-	  return {value: point, done: false};
-	});
+	    , kind  = this._k
+	    , index = this._i++;
+	  if(!O || index >= O.length){
+	    this._t = undefined;
+	    return step(1);
+	  }
+	  if(kind == 'keys'  )return step(0, index);
+	  if(kind == 'values')return step(0, O[index]);
+	  return step(0, [index, O[index]]);
+	}, 'values');
+
+	// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+	Iterators.Arguments = Iterators.Array;
+
+	addToUnscopables('keys');
+	addToUnscopables('values');
+	addToUnscopables('entries');
 
 /***/ },
-/* 104 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var toInteger = __webpack_require__(92)
-	  , defined   = __webpack_require__(65);
-	// true  -> String#at
-	// false -> String#codePointAt
-	module.exports = function(TO_STRING){
-	  return function(that, pos){
-	    var s = String(defined(that))
-	      , i = toInteger(pos)
-	      , l = s.length
-	      , a, b;
-	    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
-	    a = s.charCodeAt(i);
-	    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-	      ? TO_STRING ? s.charAt(i) : a
-	      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-	  };
-	};
-
-/***/ },
-/* 105 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var anObject = __webpack_require__(75)
-	  , get      = __webpack_require__(106);
-	module.exports = __webpack_require__(70).getIterator = function(it){
-	  var iterFn = get(it);
-	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
-	  return anObject(iterFn.call(it));
-	};
-
-/***/ },
-/* 106 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var classof   = __webpack_require__(107)
-	  , ITERATOR  = __webpack_require__(100)('iterator')
-	  , Iterators = __webpack_require__(61);
-	module.exports = __webpack_require__(70).getIteratorMethod = function(it){
-	  if(it != undefined)return it[ITERATOR]
-	    || it['@@iterator']
-	    || Iterators[classof(it)];
-	};
-
-/***/ },
-/* 107 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __webpack_require__(64)
-	  , TAG = __webpack_require__(100)('toStringTag')
-	  // ES3 wrong here
-	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
-
-	// fallback for IE11 Script Access Denied error
-	var tryGet = function(it, key){
-	  try {
-	    return it[key];
-	  } catch(e){ /* empty */ }
-	};
-
-	module.exports = function(it){
-	  var O, T, B;
-	  return it === undefined ? 'Undefined' : it === null ? 'Null'
-	    // @@toStringTag case
-	    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-	    // builtinTag case
-	    : ARG ? cof(O)
-	    // ES3 arguments fallback
-	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-	};
-
-/***/ },
-/* 108 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(109), __esModule: true };
-
-/***/ },
-/* 109 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(110);
-	__webpack_require__(103);
-	__webpack_require__(57);
-	__webpack_require__(111);
-	module.exports = __webpack_require__(70).Promise;
-
-/***/ },
-/* 110 */
+/* 82 */
 /***/ function(module, exports) {
 
-	
+	module.exports = function(){ /* empty */ };
 
 /***/ },
-/* 111 */
+/* 83 */
+/***/ function(module, exports) {
+
+	module.exports = function(done, value){
+	  return {value: value, done: !!done};
+	};
+
+/***/ },
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var LIBRARY            = __webpack_require__(67)
-	  , global             = __webpack_require__(69)
-	  , ctx                = __webpack_require__(71)
-	  , classof            = __webpack_require__(107)
-	  , $export            = __webpack_require__(68)
-	  , isObject           = __webpack_require__(76)
-	  , anObject           = __webpack_require__(75)
-	  , aFunction          = __webpack_require__(72)
-	  , anInstance         = __webpack_require__(112)
-	  , forOf              = __webpack_require__(113)
-	  , setProto           = __webpack_require__(116).set
-	  , speciesConstructor = __webpack_require__(119)
-	  , task               = __webpack_require__(120).set
-	  , microtask          = __webpack_require__(122)()
+	var LIBRARY            = __webpack_require__(41)
+	  , global             = __webpack_require__(43)
+	  , ctx                = __webpack_require__(45)
+	  , classof            = __webpack_require__(85)
+	  , $export            = __webpack_require__(42)
+	  , isObject           = __webpack_require__(50)
+	  , anObject           = __webpack_require__(49)
+	  , aFunction          = __webpack_require__(46)
+	  , anInstance         = __webpack_require__(86)
+	  , forOf              = __webpack_require__(87)
+	  , setProto           = __webpack_require__(91).set
+	  , speciesConstructor = __webpack_require__(94)
+	  , task               = __webpack_require__(95).set
+	  , microtask          = __webpack_require__(97)()
 	  , PROMISE            = 'Promise'
 	  , TypeError          = global.TypeError
 	  , process            = global.process
@@ -15780,7 +15100,7 @@
 	  try {
 	    // correct subclassing with @@species support
 	    var promise     = $Promise.resolve(1)
-	      , FakePromise = (promise.constructor = {})[__webpack_require__(100)('species')] = function(exec){ exec(empty, empty); };
+	      , FakePromise = (promise.constructor = {})[__webpack_require__(77)('species')] = function(exec){ exec(empty, empty); };
 	    // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
 	    return (isNode || typeof PromiseRejectionEvent == 'function') && promise.then(empty) instanceof FakePromise;
 	  } catch(e){ /* empty */ }
@@ -15958,7 +15278,7 @@
 	    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
 	    this._n = false;          // <- notify
 	  };
-	  Internal.prototype = __webpack_require__(123)($Promise.prototype, {
+	  Internal.prototype = __webpack_require__(98)($Promise.prototype, {
 	    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
 	    then: function then(onFulfilled, onRejected){
 	      var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
@@ -15984,9 +15304,9 @@
 	}
 
 	$export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: $Promise});
-	__webpack_require__(99)($Promise, PROMISE);
-	__webpack_require__(124)(PROMISE);
-	Wrapper = __webpack_require__(70)[PROMISE];
+	__webpack_require__(76)($Promise, PROMISE);
+	__webpack_require__(99)(PROMISE);
+	Wrapper = __webpack_require__(44)[PROMISE];
 
 	// statics
 	$export($export.S + $export.F * !USE_NATIVE, PROMISE, {
@@ -16009,7 +15329,7 @@
 	    return capability.promise;
 	  }
 	});
-	$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(125)(function(iter){
+	$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(100)(function(iter){
 	  $Promise.all(iter)['catch'](empty);
 	})), PROMISE, {
 	  // 25.4.4.1 Promise.all(iterable)
@@ -16055,7 +15375,35 @@
 	});
 
 /***/ },
-/* 112 */
+/* 85 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// getting tag from 19.1.3.6 Object.prototype.toString()
+	var cof = __webpack_require__(67)
+	  , TAG = __webpack_require__(77)('toStringTag')
+	  // ES3 wrong here
+	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+
+	// fallback for IE11 Script Access Denied error
+	var tryGet = function(it, key){
+	  try {
+	    return it[key];
+	  } catch(e){ /* empty */ }
+	};
+
+	module.exports = function(it){
+	  var O, T, B;
+	  return it === undefined ? 'Undefined' : it === null ? 'Null'
+	    // @@toStringTag case
+	    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+	    // builtinTag case
+	    : ARG ? cof(O)
+	    // ES3 arguments fallback
+	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+	};
+
+/***/ },
+/* 86 */
 /***/ function(module, exports) {
 
 	module.exports = function(it, Constructor, name, forbiddenField){
@@ -16065,15 +15413,15 @@
 	};
 
 /***/ },
-/* 113 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ctx         = __webpack_require__(71)
-	  , call        = __webpack_require__(114)
-	  , isArrayIter = __webpack_require__(115)
-	  , anObject    = __webpack_require__(75)
-	  , toLength    = __webpack_require__(91)
-	  , getIterFn   = __webpack_require__(106)
+	var ctx         = __webpack_require__(45)
+	  , call        = __webpack_require__(88)
+	  , isArrayIter = __webpack_require__(89)
+	  , anObject    = __webpack_require__(49)
+	  , toLength    = __webpack_require__(69)
+	  , getIterFn   = __webpack_require__(90)
 	  , BREAK       = {}
 	  , RETURN      = {};
 	var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
@@ -16095,11 +15443,11 @@
 	exports.RETURN = RETURN;
 
 /***/ },
-/* 114 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
-	var anObject = __webpack_require__(75);
+	var anObject = __webpack_require__(49);
 	module.exports = function(iterator, fn, value, entries){
 	  try {
 	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -16112,12 +15460,12 @@
 	};
 
 /***/ },
-/* 115 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
-	var Iterators  = __webpack_require__(61)
-	  , ITERATOR   = __webpack_require__(100)('iterator')
+	var Iterators  = __webpack_require__(59)
+	  , ITERATOR   = __webpack_require__(77)('iterator')
 	  , ArrayProto = Array.prototype;
 
 	module.exports = function(it){
@@ -16125,13 +15473,26 @@
 	};
 
 /***/ },
-/* 116 */
+/* 90 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var classof   = __webpack_require__(85)
+	  , ITERATOR  = __webpack_require__(77)('iterator')
+	  , Iterators = __webpack_require__(59);
+	module.exports = __webpack_require__(44).getIteratorMethod = function(it){
+	  if(it != undefined)return it[ITERATOR]
+	    || it['@@iterator']
+	    || Iterators[classof(it)];
+	};
+
+/***/ },
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Works with __proto__ only. Old v8 can't work with null proto objects.
 	/* eslint-disable no-proto */
-	var isObject = __webpack_require__(76)
-	  , anObject = __webpack_require__(75);
+	var isObject = __webpack_require__(50)
+	  , anObject = __webpack_require__(49);
 	var check = function(O, proto){
 	  anObject(O);
 	  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
@@ -16140,7 +15501,7 @@
 	  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
 	    function(test, buggy, set){
 	      try {
-	        set = __webpack_require__(71)(Function.call, __webpack_require__(117).f(Object.prototype, '__proto__').set, 2);
+	        set = __webpack_require__(45)(Function.call, __webpack_require__(92).f(Object.prototype, '__proto__').set, 2);
 	        set(test, []);
 	        buggy = !(test instanceof Array);
 	      } catch(e){ buggy = true; }
@@ -16155,18 +15516,18 @@
 	};
 
 /***/ },
-/* 117 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pIE            = __webpack_require__(118)
-	  , createDesc     = __webpack_require__(82)
-	  , toIObject      = __webpack_require__(62)
-	  , toPrimitive    = __webpack_require__(81)
-	  , has            = __webpack_require__(84)
-	  , IE8_DOM_DEFINE = __webpack_require__(77)
+	var pIE            = __webpack_require__(93)
+	  , createDesc     = __webpack_require__(56)
+	  , toIObject      = __webpack_require__(65)
+	  , toPrimitive    = __webpack_require__(55)
+	  , has            = __webpack_require__(58)
+	  , IE8_DOM_DEFINE = __webpack_require__(51)
 	  , gOPD           = Object.getOwnPropertyDescriptor;
 
-	exports.f = __webpack_require__(78) ? gOPD : function getOwnPropertyDescriptor(O, P){
+	exports.f = __webpack_require__(52) ? gOPD : function getOwnPropertyDescriptor(O, P){
 	  O = toIObject(O);
 	  P = toPrimitive(P, true);
 	  if(IE8_DOM_DEFINE)try {
@@ -16176,33 +15537,33 @@
 	};
 
 /***/ },
-/* 118 */
+/* 93 */
 /***/ function(module, exports) {
 
 	exports.f = {}.propertyIsEnumerable;
 
 /***/ },
-/* 119 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.3.20 SpeciesConstructor(O, defaultConstructor)
-	var anObject  = __webpack_require__(75)
-	  , aFunction = __webpack_require__(72)
-	  , SPECIES   = __webpack_require__(100)('species');
+	var anObject  = __webpack_require__(49)
+	  , aFunction = __webpack_require__(46)
+	  , SPECIES   = __webpack_require__(77)('species');
 	module.exports = function(O, D){
 	  var C = anObject(O).constructor, S;
 	  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
 	};
 
 /***/ },
-/* 120 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ctx                = __webpack_require__(71)
-	  , invoke             = __webpack_require__(121)
-	  , html               = __webpack_require__(98)
-	  , cel                = __webpack_require__(80)
-	  , global             = __webpack_require__(69)
+	var ctx                = __webpack_require__(45)
+	  , invoke             = __webpack_require__(96)
+	  , html               = __webpack_require__(75)
+	  , cel                = __webpack_require__(54)
+	  , global             = __webpack_require__(43)
 	  , process            = global.process
 	  , setTask            = global.setImmediate
 	  , clearTask          = global.clearImmediate
@@ -16237,7 +15598,7 @@
 	    delete queue[id];
 	  };
 	  // Node.js 0.8-
-	  if(__webpack_require__(64)(process) == 'process'){
+	  if(__webpack_require__(67)(process) == 'process'){
 	    defer = function(id){
 	      process.nextTick(ctx(run, id, 1));
 	    };
@@ -16275,7 +15636,7 @@
 	};
 
 /***/ },
-/* 121 */
+/* 96 */
 /***/ function(module, exports) {
 
 	// fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -16296,15 +15657,15 @@
 	};
 
 /***/ },
-/* 122 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global    = __webpack_require__(69)
-	  , macrotask = __webpack_require__(120).set
+	var global    = __webpack_require__(43)
+	  , macrotask = __webpack_require__(95).set
 	  , Observer  = global.MutationObserver || global.WebKitMutationObserver
 	  , process   = global.process
 	  , Promise   = global.Promise
-	  , isNode    = __webpack_require__(64)(process) == 'process';
+	  , isNode    = __webpack_require__(67)(process) == 'process';
 
 	module.exports = function(){
 	  var head, last, notify;
@@ -16369,10 +15730,10 @@
 	};
 
 /***/ },
-/* 123 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var hide = __webpack_require__(73);
+	var hide = __webpack_require__(47);
 	module.exports = function(target, src, safe){
 	  for(var key in src){
 	    if(safe && target[key])target[key] = src[key];
@@ -16381,15 +15742,15 @@
 	};
 
 /***/ },
-/* 124 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var global      = __webpack_require__(69)
-	  , core        = __webpack_require__(70)
-	  , dP          = __webpack_require__(74)
-	  , DESCRIPTORS = __webpack_require__(78)
-	  , SPECIES     = __webpack_require__(100)('species');
+	var global      = __webpack_require__(43)
+	  , core        = __webpack_require__(44)
+	  , dP          = __webpack_require__(48)
+	  , DESCRIPTORS = __webpack_require__(52)
+	  , SPECIES     = __webpack_require__(77)('species');
 
 	module.exports = function(KEY){
 	  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
@@ -16400,10 +15761,10 @@
 	};
 
 /***/ },
-/* 125 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ITERATOR     = __webpack_require__(100)('iterator')
+	var ITERATOR     = __webpack_require__(77)('iterator')
 	  , SAFE_CLOSING = false;
 
 	try {
@@ -16426,29 +15787,779 @@
 	};
 
 /***/ },
-/* 126 */
+/* 101 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(102)
+	__vue_script__ = __webpack_require__(104)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\home.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(128)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\home.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 102 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(103);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./home.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./home.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 103 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 104 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _rFooter = __webpack_require__(26);
+
+	var _rFooter2 = _interopRequireDefault(_rFooter);
+
+	var _rHeader = __webpack_require__(10);
+
+	var _rHeader2 = _interopRequireDefault(_rHeader);
+
+	var _homeTitle = __webpack_require__(105);
+
+	var _homeTitle2 = _interopRequireDefault(_homeTitle);
+
+	var _homeAboutMe = __webpack_require__(110);
+
+	var _homeAboutMe2 = _interopRequireDefault(_homeAboutMe);
+
+	var _timeLine = __webpack_require__(115);
+
+	var _timeLine2 = _interopRequireDefault(_timeLine);
+
+	var _homeSkills = __webpack_require__(120);
+
+	var _homeSkills2 = _interopRequireDefault(_homeSkills);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// <template>
+	//     <div class="home">
+	//             <div class="row no-gutters">
+	//                 <r-header  @header-show-change="headerShow" @header-hide-change="headerHide" :header-width="Headercls"></r-header>
+	//
+	//                 <div class="col s12 "  :class="Contentcls">
+	//                     <div class=" home-content">
+	//                         <home-title></home-title>
+	//                         <home-about-me></home-about-me>
+	//                         <time-line title="test time-line project" cls="home-project"></time-line>
+	//                         <time-line title="test time-line project2" cls="home-project2"></time-line>
+	//                         <home-skills></home-skills>
+	//                     </div>
+	//                 </div>
+	//             </div>
+	//             <r-footer></r-footer>
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script>
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue',
+	            Headercls: "m2",
+	            Contentcls: {
+	                "m10": true,
+	                "m12": false,
+	                "show-content": true
+	            }
+	        };
+	    },
+
+	    methods: {
+	        headerHide: function headerHide() {
+	            this.Contentcls.m10 = false;
+	            this.Contentcls.m12 = true;
+	            this.Contentcls["show-content"] = false;
+	            $("body").removeClass("body-content-show");
+	        },
+	        headerShow: function headerShow() {
+	            this.Contentcls.m10 = true;
+	            this.Contentcls.m12 = false;
+	            this.Contentcls["show-content"] = true;
+	            $("body").addClass("body-content-show");
+	        }
+	    },
+	    route: {},
+	    components: {
+	        rFooter: _rFooter2.default,
+	        rHeader: _rHeader2.default,
+	        homeTitle: _homeTitle2.default,
+	        homeAboutMe: _homeAboutMe2.default,
+	        timeLine: _timeLine2.default,
+	        homeSkills: _homeSkills2.default
+	    }
+	};
+	// </script>
+
+/***/ },
+/* 105 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(106)
+	__vue_script__ = __webpack_require__(108)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\homeTitle.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(109)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\homeTitle.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 106 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(107);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeTitle.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeTitle.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 107 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 108 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home-skills\">\n     <div class=\"container\">\n         <h1 class=\"text_underline\">My Skills</h1>\n         <div class=\"row\">\n\n             <!--\n             for  生成\n             -->\n             <div class=\"col m6\" v-for=\"skill in skills\">\n                 <div class=\"skills-content\">\n                     <h2>{{skill.name}}</h2>\n                     <div class=\"col m10\">\n                         <div class=\"progress\">\n                             <div class=\"determinate\" :style=\"{width:skill.startWidth+'%'}\"></div>\n                         </div>\n                     </div>\n                     <div class=\"col m2\">\n                         <span class=\"skills-value\">\n                             {{skill.startWidth+'%'}}\n                         </span>\n                     </div>\n                 </div>\n             </div>\n\n         </div>\n\n     </div>\n</div>\n"
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// <template>
+	//    <div class="home-title red lighten-2">
+	//        <div class="container">
+	//            <h1>哦~ 你找到了一个神秘的地方</h1>
+	//            <p>欢迎来到我的个人主页</p>
+	//            <a class="waves-effect waves-light btn-large"><i class=" material-icons left">group add</i>Find me</a>
+	//        </div>
+	//    </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script>
+
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue'
+	        };
+	    },
+
+	    components: {}
+	};
+	// </script>
+
+/***/ },
+/* 109 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"home-title red lighten-2\">\n    <div class=\"container\">\n        <h1>哦~ 你找到了一个神秘的地方</h1>\n        <p>欢迎来到我的个人主页</p>\n        <a class=\"waves-effect waves-light btn-large\"><i class=\" material-icons left\">group add</i>Find me</a>\n    </div>\n</div>\n"
+
+/***/ },
+/* 110 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(111)
+	__vue_script__ = __webpack_require__(113)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\homeAboutMe.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(114)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\homeAboutMe.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 111 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(112);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeAboutMe.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeAboutMe.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 112 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 113 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// <template>
+	//     <div class="home-aboutme">
+	//         <div class="container">
+	//
+	//             <div class="row">
+	//                 <div class="col m6">
+	//                     <h3 class="text_underline">关于我</h3>
+	//                     <p>
+	//                         it it me
+	//                     </p>
+	//
+	//                     <dl class="break-dl">
+	//                         <div class="break-list">
+	//                             <dt>Name:</dt>
+	//                             <dd>李雨伦</dd>
+	//                         </div>
+	//
+	//                         <div class="break-list">
+	//                             <dt>Age:</dt>
+	//                             <dd>18 Years</dd>
+	//                         </div>
+	//
+	//                         <div class="break-list">
+	//                             <dt>Email:</dt>
+	//                             <dd>relsoul@outlook.com</dd>
+	//                         </div>
+	//
+	//                         <div class="break-list">
+	//                             <dt>Web:</dt>
+	//                             <dd>relsoul.com</dd>
+	//                         </div>
+	//
+	//                     </dl>
+	//                 </div>
+	//                 <div class="col m6"></div>
+	//             </div>
+	//
+	//
+	//
+	//
+	//         </div>
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script>
+
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue'
+	        };
+	    },
+
+	    components: {}
+	};
+	// </script>
+
+/***/ },
+/* 114 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>李雨伦</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>18 Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>relsoul@outlook.com</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>relsoul.com</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6\"></div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
+
+/***/ },
+/* 115 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(116)
+	__vue_script__ = __webpack_require__(118)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\timeLine.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(119)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\timeLine.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 116 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(117);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./timeLine.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./timeLine.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 117 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 118 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// <template>
+	//    <div :class="cls">
+	//        <div class="container">
+	//            <h1 class="text_underline">{{title}}</h1>
+	//            <ul class="time-line">
+	//                <li class="time-line-item">
+	//                    <div class="time-line-circle">
+	//
+	//                    </div>
+	//                    <div class="time-line-border">
+	//
+	//                    </div>
+	//                    <div class="time-line-text time-line-right">
+	//                        hello it is text
+	//                    </div>
+	//                </li>
+	//                <li class="time-line-item">
+	//                    <div class="time-line-circle">
+	//
+	//                    </div>
+	//                    <div class="time-line-border">
+	//
+	//                    </div>
+	//                    <div class="time-line-text time-line-left">
+	//                        hello it is text2
+	//                    </div>
+	//                </li>
+	//            </ul>
+	//        </div>
+	//    </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script>
+
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue'
+	        };
+	    },
+
+	    props: ["cls", "title"],
+	    components: {}
+	};
+	// </script>
+
+/***/ },
+/* 119 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div :class=\"cls\">\n    <div class=\"container\">\n        <h1 class=\"text_underline\">{{title}}</h1>\n        <ul class=\"time-line\">\n            <li class=\"time-line-item\">\n                <div class=\"time-line-circle\">\n\n                </div>\n                <div class=\"time-line-border\">\n\n                </div>\n                <div class=\"time-line-text time-line-right\">\n                    hello it is text\n                </div>\n            </li>\n            <li class=\"time-line-item\">\n                <div class=\"time-line-circle\">\n\n                </div>\n                <div class=\"time-line-border\">\n\n                </div>\n                <div class=\"time-line-text time-line-left\">\n                    hello it is text2\n                </div>\n            </li>\n        </ul>\n    </div>\n</div>\n"
+
+/***/ },
+/* 120 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(121)
+	__vue_script__ = __webpack_require__(123)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Home\\homeSkills.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(127)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Home\\homeSkills.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 121 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(122);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeSkills.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./homeSkills.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 122 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 123 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _getIterator2 = __webpack_require__(124);
+
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+	var _promise = __webpack_require__(33);
+
+	var _promise2 = _interopRequireDefault(_promise);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// <template>
+	//    <div class="home-skills">
+	//         <div class="container">
+	//             <h1 class="text_underline">My Skills</h1>
+	//             <div class="row">
+	//
+	//                 <!--
+	//                 for  生成
+	//                 -->
+	//                 <div class="col m6" v-for="skill in skills">
+	//                     <div class="skills-content">
+	//                         <h2>{{skill.name}}</h2>
+	//                         <div class="col m10">
+	//                             <div class="progress">
+	//                                 <div class="determinate" :style="{width:skill.startWidth+'%'}"></div>
+	//                             </div>
+	//                         </div>
+	//                         <div class="col m2">
+	//                             <span class="skills-value">
+	//                                 {{skill.startWidth+'%'}}
+	//                             </span>
+	//                         </div>
+	//                     </div>
+	//                 </div>
+	//
+	//             </div>
+	//
+	//         </div>
+	//    </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
+
+	exports.default = {
+	    data: function data() {
+	        return {
+	            skills: [{ name: "test1", startWidth: 0, endWidth: 30 }, { name: "test2", startWidth: 0, endWidth: 60 }]
+	        };
+	    },
+	    ready: function ready() {
+	        var runnSkill = function runnSkill(i) {
+	            return new _promise2.default(function (resolve, reject) {
+	                var timer = setInterval(function () {
+	                    if (i.startWidth >= i.endWidth) {
+	                        resolve(timer);
+	                        return false;
+	                    }
+	                    i.startWidth++;
+	                }, 60);
+	            });
+	        };
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	            for (var _iterator = (0, _getIterator3.default)(this.skills), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                var i = _step.value;
+
+	                runnSkill(i).then(function (timer) {
+	                    clearInterval(timer);
+	                });
+	            }
+	        } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion && _iterator.return) {
+	                    _iterator.return();
+	                }
+	            } finally {
+	                if (_didIteratorError) {
+	                    throw _iteratorError;
+	                }
+	            }
+	        }
+	    },
+
+	    components: {}
+	};
+	// </script>
+
+/***/ },
+/* 124 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(125), __esModule: true };
+
+/***/ },
+/* 125 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(80);
+	__webpack_require__(36);
+	module.exports = __webpack_require__(126);
+
+/***/ },
+/* 126 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var anObject = __webpack_require__(49)
+	  , get      = __webpack_require__(90);
+	module.exports = __webpack_require__(44).getIterator = function(it){
+	  var iterFn = get(it);
+	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
+	  return anObject(iterFn.call(it));
+	};
 
 /***/ },
 /* 127 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home\">\n        <div class=\"row no-gutters\">\n            <r-header  @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" :header-width=\"Headercls\"></r-header>\n\n            <div class=\"col s12 \"  :class=\"Contentcls\">\n                <div class=\" home-content\">\n                    <home-title></home-title>\n                    <home-about-me></home-about-me>\n                    <time-line title=\"test time-line project\" cls=\"home-project\"></time-line>\n                    <time-line title=\"test time-line project2\" cls=\"home-project2\"></time-line>\n                    <home-skills></home-skills>\n                </div>\n            </div>\n        </div>\n\n\n        <r-footer></r-footer>\n</div>\n"
+	module.exports = "\n<div class=\"home-skills\">\n     <div class=\"container\">\n         <h1 class=\"text_underline\">My Skills</h1>\n         <div class=\"row\">\n\n             <!--\n             for  生成\n             -->\n             <div class=\"col m6\" v-for=\"skill in skills\">\n                 <div class=\"skills-content\">\n                     <h2>{{skill.name}}</h2>\n                     <div class=\"col m10\">\n                         <div class=\"progress\">\n                             <div class=\"determinate\" :style=\"{width:skill.startWidth+'%'}\"></div>\n                         </div>\n                     </div>\n                     <div class=\"col m2\">\n                         <span class=\"skills-value\">\n                             {{skill.startWidth+'%'}}\n                         </span>\n                     </div>\n                 </div>\n             </div>\n\n         </div>\n\n     </div>\n</div>\n"
 
 /***/ },
 /* 128 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"home\">\n        <div class=\"row no-gutters\">\n            <r-header  @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" :header-width=\"Headercls\"></r-header>\n\n            <div class=\"col s12 \"  :class=\"Contentcls\">\n                <div class=\" home-content\">\n                    <home-title></home-title>\n                    <home-about-me></home-about-me>\n                    <time-line title=\"test time-line project\" cls=\"home-project\"></time-line>\n                    <time-line title=\"test time-line project2\" cls=\"home-project2\"></time-line>\n                    <home-skills></home-skills>\n                </div>\n            </div>\n        </div>\n        <r-footer></r-footer>\n</div>\n"
+
+/***/ },
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(129)
-	__vue_script__ = __webpack_require__(131)
+	__webpack_require__(130)
+	__vue_script__ = __webpack_require__(132)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\admin.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(132)
+	__vue_template__ = __webpack_require__(133)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -16467,13 +16578,13 @@
 	})()}
 
 /***/ },
-/* 129 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(130);
+	var content = __webpack_require__(131);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(8)(content, {});
@@ -16493,7 +16604,7 @@
 	}
 
 /***/ },
-/* 130 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(7)();
@@ -16507,7 +16618,7 @@
 
 
 /***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16554,8 +16665,30 @@
 	//
 	//             <r-header @header-show-change="headerShow" @header-hide-change="headerHide" ></r-header>
 	//             <div class="col s12 m10" :class="[Contentcls]">
+	//                 <nav style="transition:all 0.5s;">
+	//                     <div class="nav-wrapper">
+	//                         <a href="#" v-link="{path:'/admin'}" class="brand-logo">Relsoul后台管理</a>
+	//                         <ul id="nav-mobile" class="right hide-on-med-and-down">
+	//                             <li><a href="badges">首页</a></li>
+	//                             <li><a href="buttons">用户</a></li>
+	//                             <li><a href="footer">项目与文章</a></li>
+	//                         </ul>
+	//                     </div>
+	//                 </nav>
 	//                 444555666
+	//                 <router-view></router-view>
 	//             </div>
+	// <!--            <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+	//                 <a class="btn-floating btn-large red">
+	//                     <i class="large mdi-editor-mode-edit"></i>
+	//                 </a>
+	//                 <ul>
+	//                     <li><a class="btn-floating red"><i class="large mdi-editor-insert-chart"></i></a></li>
+	//                     <li><a class="btn-floating yellow darken-1"><i class="large mdi-editor-format-quote"></i></a></li>
+	//                     <li><a class="btn-floating green"><i class="large mdi-editor-publish"></i></a></li>
+	//                     <li><a class="btn-floating blue"><i class="large mdi-editor-attach-file"></i></a></li>
+	//                 </ul>
+	//             </div>-->
 	//         </div>
 	//
 	//     </div>
@@ -16566,10 +16699,197 @@
 	// <script>
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"admin\">\n    <div class=\"row no-gutters\">\n\n        <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n        <div class=\"col s12 m10\" :class=\"[Contentcls]\">\n            444555666\n        </div>\n    </div>\n\n</div>\n"
+	module.exports = "\n    <div class=\"admin\">\n        <div class=\"row no-gutters\">\n\n            <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n            <div class=\"col s12 m10\" :class=\"[Contentcls]\">\n                <nav style=\"transition:all 0.5s;\">\n                    <div class=\"nav-wrapper\">\n                        <a href=\"#\" v-link=\"{path:'/admin'}\" class=\"brand-logo\">Relsoul后台管理</a>\n                        <ul id=\"nav-mobile\" class=\"right hide-on-med-and-down\">\n                            <li><a href=\"badges\">首页</a></li>\n                            <li><a href=\"buttons\">用户</a></li>\n                            <li><a href=\"footer\">项目与文章</a></li>\n                        </ul>\n                    </div>\n                </nav>\n                444555666\n                <router-view></router-view>\n            </div>\n<!--            <div class=\"fixed-action-btn\" style=\"bottom: 45px; right: 24px;\">\n                <a class=\"btn-floating btn-large red\">\n                    <i class=\"large mdi-editor-mode-edit\"></i>\n                </a>\n                <ul>\n                    <li><a class=\"btn-floating red\"><i class=\"large mdi-editor-insert-chart\"></i></a></li>\n                    <li><a class=\"btn-floating yellow darken-1\"><i class=\"large mdi-editor-format-quote\"></i></a></li>\n                    <li><a class=\"btn-floating green\"><i class=\"large mdi-editor-publish\"></i></a></li>\n                    <li><a class=\"btn-floating blue\"><i class=\"large mdi-editor-attach-file\"></i></a></li>\n                </ul>\n            </div>-->\n        </div>\n\n    </div>\n"
+
+/***/ },
+/* 134 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(135)
+	__vue_script__ = __webpack_require__(137)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\adminHome.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(138)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Admin\\adminHome.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 135 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(136);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./adminHome.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./adminHome.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 136 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 137 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// <template>
+	//     <div class="admin-home">
+	//         <div class="row">
+	//             <div class="container">
+	//                 <ul class="collapsible popout" data-collapsible="accordion">
+	//                     <li class="">
+	//                         <div class="collapsible-header active"><i class="material-icons">build</i>关于我</div>
+	//                         <div class="collapsible-body ">
+	//                             <div class="row">
+	//                                 <form class="col s12" enctype="multipart/form-data">
+	//                                     <div class="input-field col m6">
+	//                                         <input placeholder="Placeholder" id="admin-home-name" type="text" class="validate">
+	//                                         <label for="admin-home-name">姓名</label>
+	//                                     </div>
+	//                                     <div class="input-field col m6">
+	//                                         <input placeholder="Placeholder" id="admin-home-age" type="number" class="validate">
+	//                                         <label for="admin-home-age">年龄</label>
+	//                                     </div>
+	//                                     <div class="input-field col m6">
+	//                                         <input placeholder="Placeholder" id="admin-home-email" type="email" class="validate">
+	//                                         <label for="admin-home-email">邮箱</label>
+	//                                     </div>
+	//                                     <div class="input-field col m6">
+	//                                         <input placeholder="Placeholder" id="admin-home-website"  type="url" class="validate">
+	//                                         <label for="admin-home-website">网址</label>
+	//                                     </div>
+	//                                     <div class="file-field input-field col m12">
+	//                                         <input class="file-path validate col m6" type="text"  />
+	//                                         <div class="btn">
+	//                                             <span>File</span>
+	//                                             <input type="file" @change="aboutMeUpload($event)" />
+	//                                         </div>
+	//                                     </div>
+	//                                     <div class="col m12">
+	//                                         <img :src="aboutMeImg"  class="responsive-img" alt="">
+	//                                     </div>
+	//                                 </form>
+	//                             </div>
+	//                         </div>
+	//                     </li>
+	//                     <li>
+	//                         <div class="collapsible-header"><i class="material-icons">build</i>Second</div>
+	//                         <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+	//                     </li>
+	//                     <li>
+	//                         <div class="collapsible-header"><i class="material-icons">build</i>Third</div>
+	//                         <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+	//                     </li>
+	//                 </ul>
+	//             </div>
+	//         </div>
+	//     </div>
+	//
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
+
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue',
+	            aboutMeImg: ""
+	        };
+	    },
+
+	    methods: {
+	        aboutMeUpload: function aboutMeUpload(e, xx) {
+	            var _this = this;
+
+	            var target = e.target;
+
+	            var file = target.files[0];
+
+	            var reader = new FileReader();
+	            if (/image/.test(file.type)) {
+	                reader.readAsDataURL(file);
+	            }
+
+	            reader.onload = function () {
+	                _this.aboutMeImg = reader.result;
+	                //$(target).parent().append(`<img src="${reader.result}">`);
+	            };
+
+	            var f = new FormData();
+	            f.append("file", target.files[0]);
+
+	            console.log(f);
+	            console.log("event", e);
+	            console.log("文件对象", target.files[0]);
+	        }
+	    },
+	    ready: function ready() {
+	        $('.collapsible').collapsible({
+	            accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+	        });
+	    },
+
+	    components: {}
+	};
+	// </script>
+
+/***/ },
+/* 138 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <div class=\"row\">\n                            <form class=\"col s12\" enctype=\"multipart/form-data\">\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" class=\"validate\">\n                                    <label for=\"admin-home-name\">姓名</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" class=\"validate\">\n                                    <label for=\"admin-home-age\">年龄</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" class=\"validate\">\n                                    <label for=\"admin-home-email\">邮箱</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" class=\"validate\">\n                                    <label for=\"admin-home-website\">网址</label>\n                                </div>\n                                <div class=\"file-field input-field col m12\">\n                                    <input class=\"file-path validate col m6\" type=\"text\"  />\n                                    <div class=\"btn\">\n                                        <span>File</span>\n                                        <input type=\"file\" @change=\"aboutMeUpload($event)\" />\n                                    </div>\n                                </div>\n                                <div class=\"col m12\">\n                                    <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n                                </div>\n                            </form>\n                        </div>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
 
 /***/ }
 /******/ ]);

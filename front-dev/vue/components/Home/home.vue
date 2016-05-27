@@ -13,8 +13,6 @@
                     </div>
                 </div>
             </div>
-
-
             <r-footer></r-footer>
     </div>
 </template>
@@ -54,7 +52,7 @@
                 $("body").addClass("body-content-show");
             }
         },
-        route:{ 
+        route:{
         },
         components:{
             rFooter,

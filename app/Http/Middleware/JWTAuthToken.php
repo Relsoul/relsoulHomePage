@@ -34,7 +34,7 @@ class JWTAuthToken
         }
         //捕捉不到错误,在服务层错误进行处理
         $users=JWT::decode($authorization,config("app.jwt"),['HS256']);
-        if($users->exp<=time()){
+        if($users->tokenExp<=time()){
             return  response()->json(["type"=>"false","message"=>"token已经过期,请重新登陆","code"=>"40001"]);
         }
         $request->users=$users;
