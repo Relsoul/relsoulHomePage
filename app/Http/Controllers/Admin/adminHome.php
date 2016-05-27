@@ -12,21 +12,35 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\User;
+use App\Models\Home;
+use Illuminate\Support\Facades\DB;
 
 class adminHome extends  Controller
 {
 
 
-    public function me(Request $request){
-        $name=$request->users->name;
-
-        $userInfo=User::where("name",$name)->get();
-        if(!$userInfo){
-            return response()->json(["type"=>"false","message"=>"token无效或过期,用户获取失败","code"=>"40007"]);
+    public function getAboutMe(Request $request){
+        $data=Home::select('option_name', 'option_value')
+            ->orWhere("option_name","name")
+            ->orWhere("option_name","age")
+            ->orWhere("option_name","website")
+            ->orWhere("option_name","email")
+            ->groupBy("option_name")
+            ->get();
+        $aboutMe=[];
+        foreach ($data as $key=>$val){
+            $aboutMe[$val->option_name]=$val->option_value;
         }
-        
-        return response()->json(["type"=>"true","message"=>"获取权限成功","result"=>["role"=>$userInfo[0]->role]]);
+
+        return response()->json(["type"=>"true","message"=>"登录成功","result"=>$aboutMe]);
+
     }
+
+    public function updateAboutMe(Request $request){
+
+
+    }
+
+
 
 }

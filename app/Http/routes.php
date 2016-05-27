@@ -24,7 +24,11 @@ Route::group(["middleware"=>"JWTAuthToken","prefix"=>"admin"],function(){
 
 
     //获取个人信息
-    Route::get("me","Admin\\adminHome@me");
+    Route::get("me","Admin\\adminController@me");
+
+
+    //更新首页-关于我
+    Route::post("home/aboutme","Admin\\adminHome@updateAboutMe");
 });
 
 
@@ -34,5 +38,8 @@ Route::post("/login","userController@login");
 Route::get("/login","userController@initGeeTest");
 
 
-
 Route::post("/register","userController@register");
+
+
+//获取首页-关于我
+Route::get("/home/aboutme","Admin\\adminHome@getAboutMe");

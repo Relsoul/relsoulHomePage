@@ -16793,19 +16793,19 @@
 	//                             <div class="row">
 	//                                 <form class="col s12" enctype="multipart/form-data">
 	//                                     <div class="input-field col m6">
-	//                                         <input placeholder="Placeholder" id="admin-home-name" type="text" class="validate">
+	//                                         <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="aboutMeName" class="validate">
 	//                                         <label for="admin-home-name">姓名</label>
 	//                                     </div>
 	//                                     <div class="input-field col m6">
-	//                                         <input placeholder="Placeholder" id="admin-home-age" type="number" class="validate">
+	//                                         <input placeholder="Placeholder" id="admin-home-age" type="number" v-model="aboutMeAge" class="validate">
 	//                                         <label for="admin-home-age">年龄</label>
 	//                                     </div>
 	//                                     <div class="input-field col m6">
-	//                                         <input placeholder="Placeholder" id="admin-home-email" type="email" class="validate">
+	//                                         <input placeholder="Placeholder" id="admin-home-email" type="email" v-model="aboutMeEmail" class="validate">
 	//                                         <label for="admin-home-email">邮箱</label>
 	//                                     </div>
 	//                                     <div class="input-field col m6">
-	//                                         <input placeholder="Placeholder" id="admin-home-website"  type="url" class="validate">
+	//                                         <input placeholder="Placeholder" id="admin-home-website"  type="url" v-model="aboutMeUrl" class="validate">
 	//                                         <label for="admin-home-website">网址</label>
 	//                                     </div>
 	//                                     <div class="file-field input-field col m12">
@@ -16845,7 +16845,11 @@
 	    data: function data() {
 	        return {
 	            msg: 'hello vue',
-	            aboutMeImg: ""
+	            aboutMeImg: "",
+	            aboutMeName: "",
+	            aboutMeAge: "",
+	            aboutMeEmail: "",
+	            aboutMeUrl: ""
 	        };
 	    },
 
@@ -16876,9 +16880,23 @@
 	        }
 	    },
 	    ready: function ready() {
+	        var _this2 = this;
+
 	        $('.collapsible').collapsible({
 	            accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
 	        });
+
+	        //获取aboutme数据
+	        $.tokenAjax("/home/aboutme", "get").then(function (data) {
+	            var result = data.result;
+	            _this2.aboutMeName = data.result["name"] || "";
+	            _this2.aboutMeAge = data.result["age"] || 0;
+	            _this2.aboutMeEmail = data.result["email"] || "";
+	            _this2.aboutMeUrl = data.result["website"] || "";
+	            _this2.aboutMeImg = data.result["img"] || "";
+
+	            console.log("aboutme", data);
+	        }).catch();
 	    },
 
 	    components: {}
@@ -16889,7 +16907,7 @@
 /* 138 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <div class=\"row\">\n                            <form class=\"col s12\" enctype=\"multipart/form-data\">\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" class=\"validate\">\n                                    <label for=\"admin-home-name\">姓名</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" class=\"validate\">\n                                    <label for=\"admin-home-age\">年龄</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" class=\"validate\">\n                                    <label for=\"admin-home-email\">邮箱</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" class=\"validate\">\n                                    <label for=\"admin-home-website\">网址</label>\n                                </div>\n                                <div class=\"file-field input-field col m12\">\n                                    <input class=\"file-path validate col m6\" type=\"text\"  />\n                                    <div class=\"btn\">\n                                        <span>File</span>\n                                        <input type=\"file\" @change=\"aboutMeUpload($event)\" />\n                                    </div>\n                                </div>\n                                <div class=\"col m12\">\n                                    <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n                                </div>\n                            </form>\n                        </div>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
+	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <div class=\"row\">\n                            <form class=\"col s12\" enctype=\"multipart/form-data\">\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n                                    <label for=\"admin-home-name\">姓名</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n                                    <label for=\"admin-home-age\">年龄</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n                                    <label for=\"admin-home-email\">邮箱</label>\n                                </div>\n                                <div class=\"input-field col m6\">\n                                    <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n                                    <label for=\"admin-home-website\">网址</label>\n                                </div>\n                                <div class=\"file-field input-field col m12\">\n                                    <input class=\"file-path validate col m6\" type=\"text\"  />\n                                    <div class=\"btn\">\n                                        <span>File</span>\n                                        <input type=\"file\" @change=\"aboutMeUpload($event)\" />\n                                    </div>\n                                </div>\n                                <div class=\"col m12\">\n                                    <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n                                </div>\n                            </form>\n                        </div>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
 
 /***/ }
 /******/ ]);

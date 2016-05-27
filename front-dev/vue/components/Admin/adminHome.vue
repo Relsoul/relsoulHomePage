@@ -9,19 +9,19 @@
                             <div class="row">
                                 <form class="col s12" enctype="multipart/form-data">
                                     <div class="input-field col m6">
-                                        <input placeholder="Placeholder" id="admin-home-name" type="text" class="validate">
+                                        <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="aboutMeName" class="validate">
                                         <label for="admin-home-name">姓名</label>
                                     </div>
                                     <div class="input-field col m6">
-                                        <input placeholder="Placeholder" id="admin-home-age" type="number" class="validate">
+                                        <input placeholder="Placeholder" id="admin-home-age" type="number" v-model="aboutMeAge" class="validate">
                                         <label for="admin-home-age">年龄</label>
                                     </div>
                                     <div class="input-field col m6">
-                                        <input placeholder="Placeholder" id="admin-home-email" type="email" class="validate">
+                                        <input placeholder="Placeholder" id="admin-home-email" type="email" v-model="aboutMeEmail" class="validate">
                                         <label for="admin-home-email">邮箱</label>
                                     </div>
                                     <div class="input-field col m6">
-                                        <input placeholder="Placeholder" id="admin-home-website"  type="url" class="validate">
+                                        <input placeholder="Placeholder" id="admin-home-website"  type="url" v-model="aboutMeUrl" class="validate">
                                         <label for="admin-home-website">网址</label>
                                     </div>
                                     <div class="file-field input-field col m12">
@@ -61,7 +61,11 @@
         data(){
             return{
                 msg:'hello vue',
-                aboutMeImg:""
+                aboutMeImg:"",
+                aboutMeName:"",
+                aboutMeAge:"",
+                aboutMeEmail:"",
+                aboutMeUrl:""
             }
         },
         methods:{
@@ -93,6 +97,22 @@
             $('.collapsible').collapsible({
                 accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             });
+
+            //获取aboutme数据
+            $.tokenAjax("/home/aboutme","get").then((data)=>{
+                let result=data.result;
+                this.aboutMeName=data.result["name"]||"";
+                this.aboutMeAge=data.result["age"]||0;
+                this.aboutMeEmail=data.result["email"]||"";
+                this.aboutMeUrl=data.result["website"]||"";
+                this.aboutMeImg=data.result["img"]||"";
+
+                console.log("aboutme",data)
+
+            }).catch(
+
+            )
+
         },
         components:{
 

@@ -3,6 +3,10 @@
 - https://dash.readme.io/login 密码登陆框
 
 
+
+
+
+
 # restful返回信息与错误代码
 restfulAPI返回的格式为
 
@@ -45,3 +49,18 @@ restfulAPI返回的格式为
 ```
 login与register可以传递两个值 register-id与login-id 类型为String 如果不传递默认的值为
 login-id:"loginModal",register-id:"registerId"
+
+
+
+# 后台更新首页
+
+更新需要在头部附加token与进行role验证
+
+| 说明 | URL | 附加参数 | 成功返回说明 |
+| --- | :---: | :---: | :---:|
+| 获取abouteMe | /home/aboutme |  |result(name,age,email,website,img) |
+
+
+
+
+
