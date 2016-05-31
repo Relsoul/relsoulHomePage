@@ -98,6 +98,17 @@
     opacity: 0;
   }
 
+  @media all and (max-width: $pc) {
+    .col.user-hello-wrap,.col.user-choose-box-wrap{
+      float: none;
+      width: 100%;
+      padding-left: 2rem;
+    }
+
+
+  }
+
+
 
 
 

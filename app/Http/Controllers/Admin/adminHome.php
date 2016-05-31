@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Home;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use App\Models\homeExp;
 
 class adminHome extends  Controller
 {
@@ -34,7 +35,7 @@ class adminHome extends  Controller
             $aboutMe[$val->option_name]=$val->option_value;
         }
 
-        return response()->json(["type"=>"true","message"=>"登录成功","result"=>$aboutMe]);
+        return response()->json(["type"=>"true","message"=>"获取个人信息成功","result"=>$aboutMe]);
 
     }
 
@@ -78,7 +79,74 @@ class adminHome extends  Controller
         return response()->json(["type"=>"true","message"=>"更新成功","result"=>
             ["name"=>$request->name,"age"=>$request->age,"website"=>$request->website,"imgurl"=>$request->imgurl,"email"=>$request->email]
         ]);
+    }
 
+    public function getStudyExp(Request $request){
+        $data=homeExp::all();
+        return response()->json(["type"=>"true","message"=>"获取成功","result"=>$data]);
+    }
+
+    public function updateStudyExp(Request $request){
+        $list=$request->input("list");
+        $data=[];
+        if($list&&is_array($list)){
+            foreach ($list as $key=>$value){
+                //如果存在exp_id那么则判断为老数据
+                if(array_key_exists("exp_id",$value)){
+                    $value["exp_id"]=(int)$value["exp_id"];
+                    $tryData=homeExp::where("exp_id",$value["exp_id"])->get();
+                    if($tryData[0]){
+                        homeExp::where("exp_id",$value["exp_id"])
+                            ->update([
+                                "exp_name"=>$value["exp_name"],
+                                "exp_content"=>$value["exp_content"],
+                                "exp_start_time"=>$value["exp_start_time"],
+                                "exp_end_time"=>$value["exp_end_time"],
+                                "exp_img"=>$value["exp_img"]?$value["exp_img"]:""
+                            ]);
+
+                    }else{
+                        return response()->json(["type"=>"false","message"=>"更新失败","code"=>"40009"]);
+                    }
+                }else{
+                    //新数据
+                    $exp=homeExp::insertGetId(
+                        [
+                            "exp_name"=>$value["exp_name"],
+                            "exp_content"=>$value["exp_content"],
+                            "exp_start_time"=>$value["exp_start_time"],
+                            "exp_end_time"=>$value["exp_end_time"],
+                            "exp_img"=>array_key_exists("exp_img",$value)?$value["exp_img"]:""
+                        ]
+                    );
+                   /* $exp->exp_name = $value["exp_name"];
+                    $exp->exp_content=$value["exp_content"];
+                    $exp->exp_start_time=$value["exp_start_time"];
+                    $exp->exp_end_time=$value["exp_end_time"];
+                    $exp->exp_img=array_key_exists("exp_img",$value)?$value["exp_img"]:"";
+                    $newData=$exp->save();*/
+                    array_push($data,$exp);
+                }
+            }
+        }
+        /*dd(homeExp::where("exp_name","test1")->get());*/
+        return response()->json(["type"=>"true","message"=>"更新成功","result"=>$data]);
+    }
+
+    public function deleteStudyExp(Request $request){
+
+        $exp_id=$request->input("exp_id");
+        if(!$exp_id){
+            return response()->json(["type"=>"false","message"=>"删除失败,数据不正确","code"=>"40009"]);
+        }
+        $exp_id=(int) $exp_id;
+        $tryData=homeExp::where("exp_id",$exp_id)->get();
+        if($tryData[0]){
+            homeExp::where("exp_id",$exp_id)->delete();
+            return response()->json(["type"=>"true","message"=>"删除成功","result"=>$tryData]);
+        }else{
+            return response()->json(["type"=>"false","message"=>"删除失败","code"=>"40009"]);
+        }
 
     }
 

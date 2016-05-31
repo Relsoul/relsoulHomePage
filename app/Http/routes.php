@@ -29,6 +29,11 @@ Route::group(["middleware"=>"JWTAuthToken","prefix"=>"admin"],function(){
 
     //更新首页-关于我
     Route::post("home/aboutme","Admin\\adminHome@updateAboutMe");
+
+    //更新首页-studyExp
+    Route::post("home/studyexp","Admin\\adminHome@updateStudyExp");
+    //删除首页-studyExp
+    Route::delete("home/studyexp","Admin\\adminHome@deleteStudyExp");
 });
 
 
@@ -43,3 +48,6 @@ Route::post("/register","userController@register");
 
 //获取首页-关于我
 Route::get("/home/aboutme","Admin\\adminHome@getAboutMe");
+
+//获取首页-studyExp
+Route::get("/home/studyexp","Admin\\adminHome@getStudyExp");

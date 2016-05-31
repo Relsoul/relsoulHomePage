@@ -16,18 +16,18 @@
                         </div>
                         <div class="userInfo clearfix" v-if="isLogin">
                             <div class="row">
-                                <div class="col s6">
-                                    <p>欢迎回来 <span class="green">{{loginName}}</span></p>
+                                <div class="col s6 user-hello-wrap">
+                                    <p class="user-hello">欢迎回来 <span class="green">{{loginName}}</span></p>
                                 </div>
-                                <div class="col s6">
+                                <div class="col s6 user-choose-box-wrap">
                                     <div class="user-choose-box" >
                                         <ul id="user-choose" class="dropdown-content" >
                                             <li><a href="#!">one<span class="badge">1</span></a></li>
                                             <li><a href="#!">two<span class="new badge">1</span></a></li>
                                             <li v-if="role>=10?true:false" ><a href="#!" v-link="{path:'/admin'}" >admin管理</a></li>
                                         </ul>
-                                        <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >
-                                            <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>选择与访问
+                                        <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >选择与访问
+                                            <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>
                                         </button>
                                     </div>
                                 </div>

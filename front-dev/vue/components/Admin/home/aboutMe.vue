@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <p class="info-text">{{aboutMeInfo}}</p>
+        <p class="info-text">{{msg}}</p>
         <form class="col s12" enctype="multipart/form-data">
             <div class="input-field col m6">
                 <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="aboutMeName" class="validate">
@@ -43,14 +43,14 @@
     export default{
         data(){
             return{
-                msg:'hello vue',
+                msg:'',
                 aboutMeImg:"",
                 aboutMeName:"",
                 aboutMeAge:"",
                 aboutMeEmail:"",
                 aboutMeUrl:"",
                 aboutMeImgFile:"",
-                aboutMeInfo:""
+                aboutMeInfo:"",
             }
         },
         methods:{
@@ -91,17 +91,19 @@
                 $.tokenAjax("/admin/home/aboutme","post",f).then((data)=>{
                     this.showInfo(data.message,2000,"aboutMeInfo");
                 }).catch()
-            }
+            },
+            showInfo:showInfo()
         },
         ready(){
             $.promiseAjax("/home/aboutme","get").then((data)=>{
                 let result=data.result;
-            this.aboutMeName=data.result["name"]||"";
-            this.aboutMeAge=data.result["age"]||0;
-            this.aboutMeEmail=data.result["email"]||"";
-            this.aboutMeUrl=data.result["website"]||"";
-            this.aboutMeImg=data.result["imgurl"]||"";
-            console.log("aboutme",data)
+                this.aboutMeName=data.result["name"]||"";
+                this.aboutMeAge=data.result["age"]||0;
+                this.aboutMeEmail=data.result["email"]||"";
+                this.aboutMeUrl=data.result["website"]||"";
+                this.aboutMeImg=data.result["imgurl"]||"";
+                console.log("aboutme",data);
+                this.showInfo(data.message,2000,"msg")
         }).catch(
 
             )

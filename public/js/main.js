@@ -13495,18 +13495,18 @@
 	//                         </div>
 	//                         <div class="userInfo clearfix" v-if="isLogin">
 	//                             <div class="row">
-	//                                 <div class="col s6">
-	//                                     <p>欢迎回来 <span class="green">{{loginName}}</span></p>
+	//                                 <div class="col s6 user-hello-wrap">
+	//                                     <p class="user-hello">欢迎回来 <span class="green">{{loginName}}</span></p>
 	//                                 </div>
-	//                                 <div class="col s6">
+	//                                 <div class="col s6 user-choose-box-wrap">
 	//                                     <div class="user-choose-box" >
 	//                                         <ul id="user-choose" class="dropdown-content" >
 	//                                             <li><a href="#!">one<span class="badge">1</span></a></li>
 	//                                             <li><a href="#!">two<span class="new badge">1</span></a></li>
 	//                                             <li v-if="role>=10?true:false" ><a href="#!" v-link="{path:'/admin'}" >admin管理</a></li>
 	//                                         </ul>
-	//                                         <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >
-	//                                             <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>选择与访问
+	//                                         <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >选择与访问
+	//                                             <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>
 	//                                         </button>
 	//                                     </div>
 	//                                 </div>
@@ -14113,7 +14113,7 @@
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6\">\n                                    <p>欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\">one<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li v-if=\"role>=10?true:false\" ><a href=\"#!\" v-link=\"{path:'/admin'}\" >admin管理</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>选择与访问\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
+	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6 user-hello-wrap\">\n                                    <p class=\"user-hello\">欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6 user-choose-box-wrap\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\">one<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li v-if=\"role>=10?true:false\" ><a href=\"#!\" v-link=\"{path:'/admin'}\" >admin管理</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >选择与访问\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
 
 /***/ },
 /* 26 */
@@ -14255,17 +14255,19 @@
 	        if (!token) {
 	            return reject({ type: "false", code: "40002", "message": "无效的token" });
 	        }
-	        var contentType = true;
+	        var contentType = "application/x-www-form-urlencoded";
+	        var processData = true;
 	        if (data instanceof FormData) {
 	            //FormDta 为false
 	            contentType = false;
+	            processData = false;
 	        }
 	        $.ajax({
 	            url: url,
 	            method: method,
 	            data: data,
 	            contentType: contentType,
-	            processData: false,
+	            processData: processData,
 	            cache: false,
 	            headers: { "authorization": token },
 	            success: function success(data) {
@@ -16772,7 +16774,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\adminHome.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(148)
+	__vue_template__ = __webpack_require__(155)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -16990,7 +16992,7 @@
 	exports.default = {
 	    data: function data() {
 	        return {
-	            msg: 'hello vue',
+	            msg: '',
 	            aboutMeImg: "",
 	            aboutMeName: "",
 	            aboutMeAge: "",
@@ -17042,7 +17044,9 @@
 	            $.tokenAjax("/admin/home/aboutme", "post", f).then(function (data) {
 	                _this2.showInfo(data.message, 2000, "aboutMeInfo");
 	            }).catch();
-	        }
+	        },
+
+	        showInfo: (0, _showInfo.showInfo)()
 	    },
 	    ready: function ready() {
 	        var _this3 = this;
@@ -17055,6 +17059,7 @@
 	            _this3.aboutMeUrl = data.result["website"] || "";
 	            _this3.aboutMeImg = data.result["imgurl"] || "";
 	            console.log("aboutme", data);
+	            _this3.showInfo(data.message, 2000, "msg");
 	        }).catch();
 	    },
 
@@ -17063,7 +17068,7 @@
 	// </script>
 	// <template>
 	//     <div class="row">
-	//         <p class="info-text">{{aboutMeInfo}}</p>
+	//         <p class="info-text">{{msg}}</p>
 	//         <form class="col s12" enctype="multipart/form-data">
 	//             <div class="input-field col m6">
 	//                 <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="aboutMeName" class="validate">
@@ -17106,7 +17111,7 @@
 /* 142 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"row\">\n    <p class=\"info-text\">{{aboutMeInfo}}</p>\n    <form class=\"col s12\" enctype=\"multipart/form-data\">\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n            <label for=\"admin-home-name\">姓名</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n            <label for=\"admin-home-age\">年龄</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n            <label for=\"admin-home-email\">邮箱</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n            <label for=\"admin-home-website\">网址</label>\n        </div>\n        <div class=\"file-field input-field col m12\">\n            <input class=\"file-path validate col m6\" type=\"text\"  />\n            <div class=\"btn\">\n                <span>File</span>\n                <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n            </div>\n        </div>\n        <div class=\"col m12\">\n            <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n        </div>\n    </form>\n    <div class=\"row\">\n        <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"row\">\n    <p class=\"info-text\">{{msg}}</p>\n    <form class=\"col s12\" enctype=\"multipart/form-data\">\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n            <label for=\"admin-home-name\">姓名</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n            <label for=\"admin-home-age\">年龄</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n            <label for=\"admin-home-email\">邮箱</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n            <label for=\"admin-home-website\">网址</label>\n        </div>\n        <div class=\"file-field input-field col m12\">\n            <input class=\"file-path validate col m6\" type=\"text\"  />\n            <div class=\"btn\">\n                <span>File</span>\n                <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n            </div>\n        </div>\n        <div class=\"col m12\">\n            <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n        </div>\n    </form>\n    <div class=\"row\">\n        <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n    </div>\n</div>\n"
 
 /***/ },
 /* 143 */
@@ -17119,7 +17124,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\home\\studyExp.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(147)
+	__vue_template__ = __webpack_require__(154)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -17179,98 +17184,296 @@
 
 /***/ },
 /* 146 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _stringify = __webpack_require__(147);
+
+	var _stringify2 = _interopRequireDefault(_stringify);
+
+	var _findNewValue = __webpack_require__(149);
+
+	var _showInfo = __webpack_require__(18);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	// <template>
-	//    <div class="row">
-	//        <p></p>
-	//        <ul class="collapsible expcoll" data-collapsible="expandable">
-	//            <li class="" v-for="form in formList">
-	//                <div class="collapsible-header "><i class="material-icons">build</i>{{form.expName?form.expName:"请填写经历名称"}} <i class="material-icons right" @click="deleteForm($event,form)">delete</i></div>
-	//                <div class="collapsible-body ">
-	//                    <div class="row">
-	//                        <form class="col s12" enctype="multipart/form-data">
-	//                            <div class="input-field col m6">
-	//                                <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="form.expName" class="validate">
-	//                                <label for="admin-home-name">经历名称</label>
+	//     <div class="row">
+	//         <p>{{msg}}</p>
+	//         <ul class="collapsible expcoll" data-collapsible="expandable">
+	//             <li class="" v-for="form in formList">
+	//                 <div class="collapsible-header "><i class="material-icons">build</i>{{form.exp_name?form.exp_name:"请填写经历名称"}} <i class="material-icons right" @click="deleteForm($event,form)">delete</i></div>
+	//                 <div class="collapsible-body ">
+	//                     <div class="row">
+	//                         <form class="col s12" enctype="multipart/form-data">
+	//                             <div class="input-field col m6">
+	//                                 <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="form.exp_name" class="validate">
+	//                                 <label for="admin-home-name">经历名称</label>
+	//                             </div>
+	//                             <div class="input-field col m6">
+	//                                 <input placeholder="Placeholder" id="admin-home-age" type="text" v-model="form.exp_start_time" class="validate">
+	//                                 <label for="admin-home-age">经历起始时间</label>
+	//                             </div>
+	//                             <div class="input-field col m6">
+	//                                 <input placeholder="Placeholder" id="admin-home-email" type="text" v-model="form.exp_end_time" class="validate">
+	//                                 <label for="admin-home-email">经历结束时间</label>
+	//                             </div>
+	//                             <div class="input-field col m6">
+	//                                 <input placeholder="Placeholder" id="admin-home-website"  type="text" v-model="form.exp_content" class="validate">
+	//                                 <label for="admin-home-website">经历内容</label>
+	//                             </div>
+	//                         </form>
+	//                     </div>
+	//                 </div>
+	//             </li>
+	//             <!--           <li class="">
+	//                            <div class="collapsible-header active"><i class="material-icons">build</i>list2</div>
+	//                            <div class="collapsible-body ">
+	//                             2222
 	//                            </div>
-	//                            <div class="input-field col m6">
-	//                                <input placeholder="Placeholder" id="admin-home-age" type="text" v-model="form.expStartTime" class="validate">
-	//                                <label for="admin-home-age">经历起始时间</label>
-	//                            </div>
-	//                            <div class="input-field col m6">
-	//                                <input placeholder="Placeholder" id="admin-home-email" type="text" v-model="form.expEndTime" class="validate">
-	//                                <label for="admin-home-email">经历结束时间</label>
-	//                            </div>
-	//                            <div class="input-field col m6">
-	//                                <input placeholder="Placeholder" id="admin-home-website"  type="text" v-model="form.expContent" class="validate">
-	//                                <label for="admin-home-website">经历内容</label>
-	//                            </div>
-	//                        </form>
-	//                    </div>
-	//                </div>
-	//            </li>
-	// <!--           <li class="">
-	//                <div class="collapsible-header active"><i class="material-icons">build</i>list2</div>
-	//                <div class="collapsible-body ">
-	//                 2222
-	//                </div>
-	//            </li>-->
-	//        </ul>
-	//        <button class="btn" @click="addNewExp($event)">add</button>
-	//        <button class="btn">保存</button>
-	//    </div>
+	//                        </li>-->
+	//         </ul>
+	//         <button class="btn" @click="addNewExp($event)">add</button>
+	//         <button class="btn" @click="saveExp($event)">保存</button>
+	//     </div>
 	// </template>
 	// <style>
 	//
 	// </style>
-	// <script>
-
+	// <script type="text/ecmascript-6">
 	exports.default = {
 	    data: function data() {
 	        return {
-	            msg: 'hello vue',
-	            formList: [{
-	                expName: "",
-	                expStartTime: "",
-	                expEndTime: "",
-	                expContent: ""
-	            }]
+	            msg: '',
+	            formList: [],
+	            formUpdateList: [],
+	            test: []
 	        };
 	    },
 
 	    methods: {
 	        addNewExp: function addNewExp(e) {
+
 	            this.formList.push({
-	                expName: "",
-	                expStartTime: "",
-	                expEndTime: "",
-	                expContent: ""
+	                exp_name: "",
+	                exp_start_time: "",
+	                exp_end_time: "",
+	                exp_content: ""
 	            });
 	        },
 	        deleteForm: function deleteForm(e, form) {
+	            var _this = this;
+
 	            e.stopImmediatePropagation();
 	            var index = this.formList.indexOf(form);
-	            this.formList.splice(index, 1);
-	        }
+	            var deleteList = this.formList.splice(index, 1);
+	            //已经在findNewValue判断了
+	            /*let oldIndex=this.formUpdateList.indexOf(form);*/
+	            /*if(!!~oldIndex){
+	                this.formUpdateList.splice(oldIndex,1);
+	            }*/
+	            if ("exp_id" in deleteList[0]) {
+	                $.tokenAjax("/admin/home/studyexp", "delete", { "exp_id": deleteList[0]["exp_id"] }).then(function (data) {
+	                    console.log("删除消息", data);
+	                    _this.showInfo(data.message, 3000, "msg");
+	                }).catch();
+	            }
+	        },
+	        saveExp: function saveExp(e) {
+	            var _this2 = this;
+
+	            //对比数据
+	            console.log(79, this.formList);
+	            var result = (0, _findNewValue.findNewValue)(this.formList, this.formUpdateList);
+
+	            console.log("result", result);
+	            $.tokenAjax("/admin/home/studyexp", "post", { "list": result }).then(function (data) {
+	                _this2.showInfo(data.message, 3000, "msg");
+
+	                result.forEach(function (e, i) {
+	                    //更新原有数据 添加exp_id
+	                    var newIndex = _this2.formList.indexOf(e);
+	                    var oldIndex = _this2.formUpdateList.indexOf(e);
+
+	                    if (!! ~newIndex && !! ~oldIndex) {
+	                        _this2.formUpdateList[oldIndex]["exp_id"] = data.result[i];
+	                        _this2.formList[newIndex]["exp_id"] = data.result[i];
+	                    } else {
+	                        console.log(104, "刷新");
+	                    }
+	                });
+	            }).catch();
+	        },
+
+	        showInfo: (0, _showInfo.showInfo)()
 	    },
+	    watch: {},
+	    ready: function ready() {
+	        var _this3 = this;
+
+	        //获取数据
+	        $.promiseAjax("/home/studyexp", "get").then(function (data) {
+	            var initObj = [{
+	                exp_name: "",
+	                exp_start_time: "",
+	                exp_end_time: "",
+	                exp_content: ""
+	            }];
+	            var result = data.result.length ? data.result : initObj;
+	            _this3.formList = result;
+	            _this3.formUpdateList = JSON.parse((0, _stringify2.default)(result));
+	            console.log("studyexp", data.result.length);
+	            _this3.showInfo(data.message, 3000, "msg");
+	        }).catch();
+	    },
+
 	    components: {}
 	};
 	// </script>
 
 /***/ },
 /* 147 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "\n   <div class=\"row\">\n       <p></p>\n       <ul class=\"collapsible expcoll\" data-collapsible=\"expandable\">\n           <li class=\"\" v-for=\"form in formList\">\n               <div class=\"collapsible-header \"><i class=\"material-icons\">build</i>{{form.expName?form.expName:\"请填写经历名称\"}} <i class=\"material-icons right\" @click=\"deleteForm($event,form)\">delete</i></div>\n               <div class=\"collapsible-body \">\n                   <div class=\"row\">\n                       <form class=\"col s12\" enctype=\"multipart/form-data\">\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"form.expName\" class=\"validate\">\n                               <label for=\"admin-home-name\">经历名称</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"text\" v-model=\"form.expStartTime\" class=\"validate\">\n                               <label for=\"admin-home-age\">经历起始时间</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"text\" v-model=\"form.expEndTime\" class=\"validate\">\n                               <label for=\"admin-home-email\">经历结束时间</label>\n                           </div>\n                           <div class=\"input-field col m6\">\n                               <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"text\" v-model=\"form.expContent\" class=\"validate\">\n                               <label for=\"admin-home-website\">经历内容</label>\n                           </div>\n                       </form>\n                   </div>\n               </div>\n           </li>\n<!--           <li class=\"\">\n               <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>list2</div>\n               <div class=\"collapsible-body \">\n                2222\n               </div>\n           </li>-->\n       </ul>\n       <button class=\"btn\" @click=\"addNewExp($event)\">add</button>\n       <button class=\"btn\">保存</button>\n   </div>\n"
+	module.exports = { "default": __webpack_require__(148), __esModule: true };
 
 /***/ },
 /* 148 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var core  = __webpack_require__(44)
+	  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+	module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+	  return $JSON.stringify.apply($JSON, arguments);
+	};
+
+/***/ },
+/* 149 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by soul on 2016/5/30.
+	 */
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.findNewValue = undefined;
+
+	var _getIterator2 = __webpack_require__(124);
+
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+	var _keys = __webpack_require__(150);
+
+	var _keys2 = _interopRequireDefault(_keys);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function findNewValue(newV, oldV) {
+	    return newV.filter(function (v, i) {
+	        var keys = (0, _keys2.default)(v);
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	            for (var _iterator = (0, _getIterator3.default)(keys), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                var k = _step.value;
+
+	                var value = v[k];
+	                var oldObject = oldV[i];
+	                //如果是新添加的
+	                if (!oldObject) {
+	                    //给初始列表添加最新的
+	                    oldV.push(v);
+	                    return true;
+	                }
+	                //console.log(86,oldObject);
+	                //如果旧值中不存在新添加的key
+	                if (!oldObject.hasOwnProperty(k)) {
+	                    return true;
+	                }
+	                var oldValue = oldObject[k];
+	                //如果旧值不等于新值
+	                if (oldValue !== value) {
+	                    return true;
+	                }
+	            }
+	        } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion && _iterator.return) {
+	                    _iterator.return();
+	                }
+	            } finally {
+	                if (_didIteratorError) {
+	                    throw _iteratorError;
+	                }
+	            }
+	        }
+	    });
+	}
+	exports.findNewValue = findNewValue;
+
+/***/ },
+/* 150 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(151), __esModule: true };
+
+/***/ },
+/* 151 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(152);
+	module.exports = __webpack_require__(44).Object.keys;
+
+/***/ },
+/* 152 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.14 Object.keys(O)
+	var toObject = __webpack_require__(79)
+	  , $keys    = __webpack_require__(63);
+
+	__webpack_require__(153)('keys', function(){
+	  return function keys(it){
+	    return $keys(toObject(it));
+	  };
+	});
+
+/***/ },
+/* 153 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// most Object methods by ES6 should accept primitives
+	var $export = __webpack_require__(42)
+	  , core    = __webpack_require__(44)
+	  , fails   = __webpack_require__(53);
+	module.exports = function(KEY, exec){
+	  var fn  = (core.Object || {})[KEY] || Object[KEY]
+	    , exp = {};
+	  exp[KEY] = exec(fn);
+	  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+	};
+
+/***/ },
+/* 154 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"row\">\n    <p>{{msg}}</p>\n    <ul class=\"collapsible expcoll\" data-collapsible=\"expandable\">\n        <li class=\"\" v-for=\"form in formList\">\n            <div class=\"collapsible-header \"><i class=\"material-icons\">build</i>{{form.exp_name?form.exp_name:\"请填写经历名称\"}} <i class=\"material-icons right\" @click=\"deleteForm($event,form)\">delete</i></div>\n            <div class=\"collapsible-body \">\n                <div class=\"row\">\n                    <form class=\"col s12\" enctype=\"multipart/form-data\">\n                        <div class=\"input-field col m6\">\n                            <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"form.exp_name\" class=\"validate\">\n                            <label for=\"admin-home-name\">经历名称</label>\n                        </div>\n                        <div class=\"input-field col m6\">\n                            <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"text\" v-model=\"form.exp_start_time\" class=\"validate\">\n                            <label for=\"admin-home-age\">经历起始时间</label>\n                        </div>\n                        <div class=\"input-field col m6\">\n                            <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"text\" v-model=\"form.exp_end_time\" class=\"validate\">\n                            <label for=\"admin-home-email\">经历结束时间</label>\n                        </div>\n                        <div class=\"input-field col m6\">\n                            <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"text\" v-model=\"form.exp_content\" class=\"validate\">\n                            <label for=\"admin-home-website\">经历内容</label>\n                        </div>\n                    </form>\n                </div>\n            </div>\n        </li>\n        <!--           <li class=\"\">\n                       <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>list2</div>\n                       <div class=\"collapsible-body \">\n                        2222\n                       </div>\n                   </li>-->\n    </ul>\n    <button class=\"btn\" @click=\"addNewExp($event)\">add</button>\n    <button class=\"btn\" @click=\"saveExp($event)\">保存</button>\n</div>\n"
+
+/***/ },
+/* 155 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <admin-about-me></admin-about-me>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\">\n                        <admin-study-exp></admin-study-exp>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\"><p>Lorem ipsum dolor sit amet.</p></div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"

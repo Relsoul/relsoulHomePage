@@ -139,6 +139,11 @@ html {
     left: 0; }
   .header .header-btn.header-btn-hide {
     opacity: 0; }
+  @media all and (max-width: 1370px) {
+    .header .col.user-hello-wrap, .header .col.user-choose-box-wrap {
+      float: none;
+      width: 100%;
+      padding-left: 2rem; } }
   .header .login-modal {
     overflow: visible; }
     .header .login-modal .owl-login {
