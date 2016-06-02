@@ -21,5 +21,21 @@ module.exports={
             js:"babel",
             html: 'raw'
         }
-    }
+    },
+    devtool: 'source-map',
+    plugins: [
+        //压缩打包的文件
+       /* new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                //supresses warnings, usually from module minification
+                warnings: false
+            }
+        }),*/
+/*        //允许错误不打断程序
+        new webpack.NoErrorsPlugin(),
+        //把指定文件夹xia的文件复制到指定的目录
+        new TransferWebpackPlugin([
+            {from: 'www'}
+        ], path.resolve(__dirname,"src"))*/
+    ]
 };

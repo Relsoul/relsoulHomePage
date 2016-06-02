@@ -7,8 +7,8 @@
                     <div class=" home-content">
                         <home-title></home-title>
                         <home-about-me></home-about-me>
-                        <time-line title="test time-line project" cls="home-project"></time-line>
-                        <time-line title="test time-line project2" cls="home-project2"></time-line>
+                        <time-line title="学习经历" cls="home-project" get-url="/home/studyexp/" ></time-line>
+                        <time-line title="test time-line project2" cls="home-project2" ></time-line>
                         <home-skills></home-skills>
                     </div>
                 </div>

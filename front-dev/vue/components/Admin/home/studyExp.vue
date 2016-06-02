@@ -9,19 +9,19 @@
                         <form class="col s12" enctype="multipart/form-data">
                             <div class="input-field col m6">
                                 <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="form.exp_name" class="validate">
-                                <label for="admin-home-name">经历名称</label>
+                                <label for="admin-home-name" class="active">经历名称</label>
                             </div>
                             <div class="input-field col m6">
                                 <input placeholder="Placeholder" id="admin-home-age" type="text" v-model="form.exp_start_time" class="validate">
-                                <label for="admin-home-age">经历起始时间</label>
+                                <label for="admin-home-age"  class="active">经历起始时间</label>
                             </div>
                             <div class="input-field col m6">
                                 <input placeholder="Placeholder" id="admin-home-email" type="text" v-model="form.exp_end_time" class="validate">
-                                <label for="admin-home-email">经历结束时间</label>
+                                <label for="admin-home-email"  class="active">经历结束时间</label>
                             </div>
                             <div class="input-field col m6">
                                 <input placeholder="Placeholder" id="admin-home-website"  type="text" v-model="form.exp_content" class="validate">
-                                <label for="admin-home-website">经历内容</label>
+                                <label for="admin-home-website"  class="active">经历内容</label>
                             </div>
                         </form>
                     </div>

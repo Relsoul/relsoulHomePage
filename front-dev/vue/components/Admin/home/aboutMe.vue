@@ -4,19 +4,19 @@
         <form class="col s12" enctype="multipart/form-data">
             <div class="input-field col m6">
                 <input placeholder="Placeholder" id="admin-home-name" type="text" v-model="aboutMeName" class="validate">
-                <label for="admin-home-name">姓名</label>
+                <label for="admin-home-name"  class="active">姓名</label>
             </div>
             <div class="input-field col m6">
                 <input placeholder="Placeholder" id="admin-home-age" type="number" v-model="aboutMeAge" class="validate">
-                <label for="admin-home-age">年龄</label>
+                <label for="admin-home-age"  class="active">年龄</label>
             </div>
             <div class="input-field col m6">
                 <input placeholder="Placeholder" id="admin-home-email" type="email" v-model="aboutMeEmail" class="validate">
-                <label for="admin-home-email">邮箱</label>
+                <label for="admin-home-email"  class="active">邮箱</label>
             </div>
             <div class="input-field col m6">
                 <input placeholder="Placeholder" id="admin-home-website"  type="url" v-model="aboutMeUrl" class="validate">
-                <label for="admin-home-website">网址</label>
+                <label for="admin-home-website"  class="active">网址</label>
             </div>
             <div class="file-field input-field col m12">
                 <input class="file-path validate col m6" type="text"  />

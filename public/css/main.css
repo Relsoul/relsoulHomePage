@@ -283,6 +283,7 @@ html {
       width: 2px;
       background: #000; }
     .home .time-line .time-line-item .time-line-text {
+      padding: 1rem;
       width: 45%;
       height: 110px;
       left: 0;
@@ -304,6 +305,13 @@ html {
         left: -20px;
         background: linear-gradient(135deg, transparent 50%, #353541 0);
         transform: rotateX(180deg); }
+      .home .time-line .time-line-item .time-line-text h2, .home .time-line .time-line-item .time-line-text h3, .home .time-line .time-line-item .time-line-text p {
+        font-size: 0.9rem;
+        margin: 0;
+        padding: 0; }
+      .home .time-line .time-line-item .time-line-text h3 {
+        margin: 1rem 0;
+        color: #fb6470; }
     .home .time-line .time-line-item .time-line-text.time-line-left {
       left: 50%;
       transform: translateX(-100%);
