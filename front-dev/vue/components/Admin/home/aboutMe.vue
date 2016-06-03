@@ -28,6 +28,10 @@
             <div class="col m12">
                 <img :src="aboutMeImg"  class="responsive-img" alt="">
             </div>
+            <div class=" input-field col m12">
+                <textarea id="textarea1" class="materialize-textarea" v-model="aboutMeContent" length="120"></textarea>
+                <label for="textarea1">简介/支持markdown</label>
+            </div>
         </form>
         <div class="row">
             <button class="btn col m3 offset-m2 s12 " @click="updateAboutMe($event,'aboutMeImgFile')">保存</button>
@@ -51,6 +55,7 @@
                 aboutMeUrl:"",
                 aboutMeImgFile:"",
                 aboutMeInfo:"",
+                aboutMeContent:""
             }
         },
         methods:{
@@ -88,6 +93,7 @@
                 f.append("age",this.aboutMeAge);
                 f.append("img",this.aboutMeImgFile);
                 f.append("website",this.aboutMeUrl);
+                f.append("about_content",this.aboutMeContent);
                 $.tokenAjax("/admin/home/aboutme","post",f).then((data)=>{
                     this.showInfo(data.message,2000,"aboutMeInfo");
                 }).catch()
@@ -102,6 +108,7 @@
                 this.aboutMeEmail=data.result["email"]||"";
                 this.aboutMeUrl=data.result["website"]||"";
                 this.aboutMeImg=data.result["imgurl"]||"";
+                this.aboutMeContent=data.result["content"]||"";
                 console.log("aboutme",data);
                 this.showInfo(data.message,2000,"msg")
         }).catch(

@@ -28,6 +28,7 @@ class adminHome extends  Controller
             ->orWhere("option_name","website")
             ->orWhere("option_name","email")
             ->orWhere("option_name","imgurl")
+            ->orWhere("option_name","content")
             ->groupBy("option_name")
             ->get();
         $aboutMe=[];
@@ -55,6 +56,9 @@ class adminHome extends  Controller
             //开发环境要把url换成url
             $host=config("app.url");
             $aboutMeImgUrl=$host."/storage/uploads/".$newName;
+            //更新ImgUrl
+            Home::where("option_name","imgurl")
+                ->update(["option_value"=>$aboutMeImgUrl]);
         }
 
         //更新name
@@ -69,16 +73,16 @@ class adminHome extends  Controller
         Home::where("option_name","website")
             ->update(["option_value"=>$request->website]);
 
-        //更新ImgUrl
-        Home::where("option_name","imgurl")
-            ->update(["option_value"=>$aboutMeImgUrl]);
-
         //更新website
         Home::where("option_name","email")
             ->update(["option_value"=>$request->email]);
 
+        //更新content
+        Home::where("option_name","content")
+            ->update(["option_value"=>$request->about_content]);
+
         return response()->json(["type"=>"true","message"=>"更新成功","result"=>
-            ["name"=>$request->name,"age"=>$request->age,"website"=>$request->website,"imgurl"=>$request->imgurl,"email"=>$request->email]
+            ["name"=>$request->name,"age"=>$request->age,"website"=>$request->website,"imgurl"=>$request->imgurl,"email"=>$request->email,"content"=>$request->about_content]
         ]);
     }
 

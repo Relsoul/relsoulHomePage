@@ -16223,6 +16223,11 @@
 	//                 <div class="col m6" style="padding: 25px">
 	//                     <img :src="aboutMeImg" alt="" class="responsive-img">
 	//                 </div>
+	//                 <div class="col m12">
+	//                     <p>
+	//                         {{aboutMeContent}}
+	//                     </p>
+	//                 </div>
 	//             </div>
 	//
 	//
@@ -16270,7 +16275,7 @@
 /* 114 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>{{aboutMeName}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>{{aboutMeAge}} Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>{{aboutMeEmail}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>{{aboutMeUrl}}</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6\" style=\"padding: 25px\">\n                <img :src=\"aboutMeImg\" alt=\"\" class=\"responsive-img\">\n            </div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>{{aboutMeName}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>{{aboutMeAge}} Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>{{aboutMeEmail}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>{{aboutMeUrl}}</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6\" style=\"padding: 25px\">\n                <img :src=\"aboutMeImg\" alt=\"\" class=\"responsive-img\">\n            </div>\n            <div class=\"col m12\">\n                <p>\n                    {{aboutMeContent}}\n                </p>\n            </div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
 
 /***/ },
 /* 115 */
@@ -17034,7 +17039,8 @@
 	            aboutMeEmail: "",
 	            aboutMeUrl: "",
 	            aboutMeImgFile: "",
-	            aboutMeInfo: ""
+	            aboutMeInfo: "",
+	            aboutMeContent: ""
 	        };
 	    },
 	
@@ -17076,6 +17082,7 @@
 	            f.append("age", this.aboutMeAge);
 	            f.append("img", this.aboutMeImgFile);
 	            f.append("website", this.aboutMeUrl);
+	            f.append("about_content", this.aboutMeContent);
 	            $.tokenAjax("/admin/home/aboutme", "post", f).then(function (data) {
 	                _this2.showInfo(data.message, 2000, "aboutMeInfo");
 	            }).catch();
@@ -17093,6 +17100,7 @@
 	            _this3.aboutMeEmail = data.result["email"] || "";
 	            _this3.aboutMeUrl = data.result["website"] || "";
 	            _this3.aboutMeImg = data.result["imgurl"] || "";
+	            _this3.aboutMeContent = data.result["content"] || "";
 	            console.log("aboutme", data);
 	            _this3.showInfo(data.message, 2000, "msg");
 	        }).catch();
@@ -17132,6 +17140,10 @@
 	//             <div class="col m12">
 	//                 <img :src="aboutMeImg"  class="responsive-img" alt="">
 	//             </div>
+	//             <div class=" input-field col m12">
+	//                 <textarea id="textarea1" class="materialize-textarea" v-model="aboutMeContent" length="120"></textarea>
+	//                 <label for="textarea1">简介/支持markdown</label>
+	//             </div>
 	//         </form>
 	//         <div class="row">
 	//             <button class="btn col m3 offset-m2 s12 " @click="updateAboutMe($event,'aboutMeImgFile')">保存</button>
@@ -17147,7 +17159,7 @@
 /* 142 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"row\">\n    <p class=\"info-text\">{{msg}}</p>\n    <form class=\"col s12\" enctype=\"multipart/form-data\">\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n            <label for=\"admin-home-name\"  class=\"active\">姓名</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n            <label for=\"admin-home-age\"  class=\"active\">年龄</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n            <label for=\"admin-home-email\"  class=\"active\">邮箱</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n            <label for=\"admin-home-website\"  class=\"active\">网址</label>\n        </div>\n        <div class=\"file-field input-field col m12\">\n            <input class=\"file-path validate col m6\" type=\"text\"  />\n            <div class=\"btn\">\n                <span>File</span>\n                <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n            </div>\n        </div>\n        <div class=\"col m12\">\n            <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n        </div>\n    </form>\n    <div class=\"row\">\n        <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"row\">\n    <p class=\"info-text\">{{msg}}</p>\n    <form class=\"col s12\" enctype=\"multipart/form-data\">\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n            <label for=\"admin-home-name\"  class=\"active\">姓名</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n            <label for=\"admin-home-age\"  class=\"active\">年龄</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n            <label for=\"admin-home-email\"  class=\"active\">邮箱</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n            <label for=\"admin-home-website\"  class=\"active\">网址</label>\n        </div>\n        <div class=\"file-field input-field col m12\">\n            <input class=\"file-path validate col m6\" type=\"text\"  />\n            <div class=\"btn\">\n                <span>File</span>\n                <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n            </div>\n        </div>\n        <div class=\"col m12\">\n            <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n        </div>\n        <div class=\" input-field col m12\">\n            <textarea id=\"textarea1\" class=\"materialize-textarea\" v-model=\"aboutMeContent\" length=\"120\"></textarea>\n            <label for=\"textarea1\">简介/支持markdown</label>\n        </div>\n    </form>\n    <div class=\"row\">\n        <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n    </div>\n</div>\n"
 
 /***/ },
 /* 143 */

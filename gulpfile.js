@@ -22,6 +22,8 @@ gulp.task("watch",function(){
 gulp.task("build:file",function () {
     gulp.src("node_modules/materialize-css/dist/**/*.*").pipe(gulp.dest("front-dev/lib/materialize"));
     gulp.src("node_modules/jquery/dist/jquery.min.js").pipe(gulp.dest("front-dev/lib/"));
+    gulp.src("node_modules/jquery/dist/jquery.min.js").pipe(gulp.dest("front-dev/lib/"));
+    gulp.src("node_modules/markdown/lib/markdown.js").pipe(gulp.dest("front-dev/lib/"))
 });
 
 gulp.task("copy",function(){

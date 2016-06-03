@@ -35,6 +35,11 @@
                 <div class="col m6" style="padding: 25px">
                     <img :src="aboutMeImg" alt="" class="responsive-img">
                 </div>
+                <div class="col m12">
+                    <p>
+                        {{aboutMeContent}}
+                    </p>
+                </div>
             </div>
 
 
