@@ -29,6 +29,7 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        "JWTAuthToken"=>\App\Http\Middleware\JWTAuthToken::class
+        "JWTAuthToken"=>\App\Http\Middleware\JWTAuthToken::class,
+        "AdminRole"=>\App\Http\Middleware\AdminRole::class,
     ];
 }

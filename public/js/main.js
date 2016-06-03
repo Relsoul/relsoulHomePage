@@ -87,6 +87,7 @@
 	        component: _home2.default
 	    },
 	    "/admin": {
+	        name: 'admin',
 	        component: _admin2.default,
 	        auth: true,
 	        subRoutes: {
@@ -17322,19 +17323,21 @@
 	            console.log("result", result);
 	            $.tokenAjax("/admin/home/studyexp", "post", { "list": result }).then(function (data) {
 	                _this2.showInfo(data.message, 3000, "msg");
+	                setTimeout(function () {
+	                    location.reload();
+	                }, 2000);
 	
-	                result.forEach(function (e, i) {
+	                /*result.forEach((e,i)=>{
 	                    //更新原有数据 添加exp_id
-	                    var newIndex = _this2.formList.indexOf(e);
-	                    var oldIndex = _this2.formUpdateList.indexOf(e);
-	
-	                    if (!! ~newIndex && !! ~oldIndex) {
-	                        _this2.formUpdateList[oldIndex]["exp_id"] = data.result[i];
-	                        _this2.formList[newIndex]["exp_id"] = data.result[i];
-	                    } else {
-	                        console.log(104, "刷新");
+	                    let newIndex=this.formList.indexOf(e);
+	                    let oldIndex=this.formUpdateList.indexOf(e);
+	                     if(!!~newIndex&&!!~oldIndex){
+	                        this.formUpdateList[oldIndex]["exp_id"]=data.result[i];
+	                        this.formList[newIndex]["exp_id"]=data.result[i];
+	                    }else{
+	                        console.log(104,"刷新")
 	                    }
-	                });
+	                })*/
 	            }).catch();
 	        },
 	

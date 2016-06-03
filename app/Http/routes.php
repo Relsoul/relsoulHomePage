@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::group(["middleware"=>"JWTAuthToken","prefix"=>"admin"],function(){
+Route::group(["middleware"=>["JWTAuthToken","AdminRole"],"prefix"=>"admin"],function(){
 
     //后台获取所有信息
     Route::get("users","Admin\\adminController@users");
@@ -34,6 +34,12 @@ Route::group(["middleware"=>"JWTAuthToken","prefix"=>"admin"],function(){
     Route::post("home/studyexp","Admin\\adminHome@updateStudyExp");
     //删除首页-studyExp
     Route::delete("home/studyexp","Admin\\adminHome@deleteStudyExp");
+
+    //更新首页-skill
+    Route::post("/home/skill","Admin\\adminHome@updateSkill");
+    //删除首页-skill
+    Route::get("/home/skill","Admin\\adminHome@deleteSkill");
+
 });
 
 
@@ -51,3 +57,6 @@ Route::get("/home/aboutme","Admin\\adminHome@getAboutMe");
 
 //获取首页-studyExp
 Route::get("/home/studyexp","Admin\\adminHome@getStudyExp");
+
+//获取首页-skill
+Route::get("/home/skill","Admin\\adminHome@getSkill");

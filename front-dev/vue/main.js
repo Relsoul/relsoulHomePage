@@ -21,6 +21,7 @@ router.map({
         component: Home
     },
     "/admin":{
+        name: 'admin',
         component:Admin,
         auth:true,
         subRoutes:{

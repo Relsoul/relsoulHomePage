@@ -31,6 +31,7 @@ class adminHome extends  Controller
             ->groupBy("option_name")
             ->get();
         $aboutMe=[];
+        //更改数据json顺序
         foreach ($data as $key=>$val){
             $aboutMe[$val->option_name]=$val->option_value;
         }
@@ -95,7 +96,7 @@ class adminHome extends  Controller
                 if(array_key_exists("exp_id",$value)){
                     $value["exp_id"]=(int)$value["exp_id"];
                     $tryData=homeExp::where("exp_id",$value["exp_id"])->get();
-                    if($tryData[0]){
+                    if(!empty($tryData)){
                         homeExp::where("exp_id",$value["exp_id"])
                             ->update([
                                 "exp_name"=>$value["exp_name"],
@@ -128,25 +129,76 @@ class adminHome extends  Controller
                     array_push($data,$exp);
                 }
             }
+            return response()->json(["type"=>"true","message"=>"更新成功","result"=>$data]);
+        }else{
+            return response()->json(["type"=>"false","message"=>"请传递合法参数","code"=>"40009"]);
         }
         /*dd(homeExp::where("exp_name","test1")->get());*/
-        return response()->json(["type"=>"true","message"=>"更新成功","result"=>$data]);
+
     }
 
     public function deleteStudyExp(Request $request){
 
         $exp_id=$request->input("exp_id");
-        if(!$exp_id){
+        //是否存在$exp_id这个值
+        if(!empty($exp_id)){
             return response()->json(["type"=>"false","message"=>"删除失败,数据不正确","code"=>"40009"]);
         }
         $exp_id=(int) $exp_id;
         $tryData=homeExp::where("exp_id",$exp_id)->get();
-        if($tryData[0]){
+        //是否存在$exp_id对应的数据
+        if(!empty($tryData)){
             homeExp::where("exp_id",$exp_id)->delete();
             return response()->json(["type"=>"true","message"=>"删除成功","result"=>$tryData]);
         }else{
             return response()->json(["type"=>"false","message"=>"删除失败","code"=>"40009"]);
         }
+
+    }
+
+    public function getSkill(Request $request){
+        $data=DB::select("SELECT * FROM skill");
+        return response()->json(["type"=>"true","message"=>"获取skill成功","result"=>$data]);
+    }
+
+    public function updateSkill(Request $request){
+        $list=$request->input("list");
+        $data=[];
+        if($list&&is_array($list)){
+            foreach ($list as $key=>$value){
+                //如果存在skill_id那么则判断为老数据
+                if(array_key_exists("skill_id",$value)){
+                    $value["skill_id"]=(int)$value["skill_id"];
+                    $tryData=homeExp::where("skill_id",$value["skill_id"])->get();
+                    if(!empty($tryData)){
+                        DB::table("skill")->where("skill_id",$value["skill_id"])
+                            ->update([
+                                "skill_name"=>$value["skill_name"],
+                                "start_exp"=>$value["start_exp"],
+                                "end_exp"=>$value["end_exp"],
+                            ]);
+
+                    }else{
+                        return response()->json(["type"=>"false","message"=>"更新skill失败","code"=>"40009"]);
+                    }
+                }else{
+                    //新数据
+                    $exp=DB::table("skill")->insertGetId(
+                        [
+                            "skill_name"=>$value["skill_name"],
+                            "start_exp"=>$value["start_exp"],
+                            "end_exp"=>$value["end_exp"]
+                        ]
+                    );
+                    array_push($data,$exp);
+                }
+            }
+            return response()->json(["type"=>"true","message"=>"更新skill成功","result"=>$data]);
+        }else{
+            return response()->json(["type"=>"false","message"=>"请传递合法参数","code"=>"40009"]);
+        }
+        /*dd(homeExp::where("exp_name","test1")->get());*/
+
 
     }
 

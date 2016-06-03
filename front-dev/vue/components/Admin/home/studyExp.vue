@@ -89,8 +89,12 @@
                 console.log("result",result);
                 $.tokenAjax("/admin/home/studyexp","post",{"list":result}).then((data)=>{
                     this.showInfo(data.message,3000,"msg");
+                    setTimeout(()=>{
+                        location.reload();
+                    },2000);
 
-                    result.forEach((e,i)=>{
+
+                    /*result.forEach((e,i)=>{
                         //更新原有数据 添加exp_id
                         let newIndex=this.formList.indexOf(e);
                         let oldIndex=this.formUpdateList.indexOf(e);
@@ -101,7 +105,7 @@
                         }else{
                             console.log(104,"刷新")
                         }
-                    })
+                    })*/
                 }).catch()
             },
             showInfo:showInfo()
