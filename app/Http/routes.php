@@ -39,6 +39,8 @@ Route::group(["middleware"=>["JWTAuthToken","AdminRole"],"prefix"=>"admin"],func
     Route::post("/home/skill","Admin\\adminHome@updateSkill");
     //删除首页-skill
     Route::get("/home/skill","Admin\\adminHome@deleteSkill");
+    //删除首页-skill
+    Route::delete("home/skill","Admin\\adminHome@deleteSkill");
 
 });
 

@@ -89,6 +89,7 @@ class adminHome extends  Controller
 
     public function updateStudyExp(Request $request){
         $list=$request->input("list");
+        dd($list);
         $data=[];
         if($list&&is_array($list)){
             foreach ($list as $key=>$value){
@@ -141,7 +142,7 @@ class adminHome extends  Controller
 
         $exp_id=$request->input("exp_id");
         //是否存在$exp_id这个值
-        if(!empty($exp_id)){
+        if(empty($exp_id)){
             return response()->json(["type"=>"false","message"=>"删除失败,数据不正确","code"=>"40009"]);
         }
         $exp_id=(int) $exp_id;
@@ -169,15 +170,16 @@ class adminHome extends  Controller
                 //如果存在skill_id那么则判断为老数据
                 if(array_key_exists("skill_id",$value)){
                     $value["skill_id"]=(int)$value["skill_id"];
-                    $tryData=homeExp::where("skill_id",$value["skill_id"])->get();
+                    $tryData=DB::table("skill")->where("skill_id",$value["skill_id"])->get();
                     if(!empty($tryData)){
-                        DB::table("skill")->where("skill_id",$value["skill_id"])
-                            ->update([
-                                "skill_name"=>$value["skill_name"],
-                                "start_exp"=>$value["start_exp"],
-                                "end_exp"=>$value["end_exp"],
-                            ]);
 
+                        $t=DB::table("skill")->where("skill_id",$value["skill_id"])
+                            ->update([
+                                "skill_name"=>(int)$value["skill_name"],
+                                "start_exp"=>(int) $value["start_exp"],
+                                "end_exp"=>(int) $value["end_exp"],
+                                "updated_at"=>time()
+                            ]);
                     }else{
                         return response()->json(["type"=>"false","message"=>"更新skill失败","code"=>"40009"]);
                     }
@@ -185,9 +187,11 @@ class adminHome extends  Controller
                     //新数据
                     $exp=DB::table("skill")->insertGetId(
                         [
-                            "skill_name"=>$value["skill_name"],
-                            "start_exp"=>$value["start_exp"],
-                            "end_exp"=>$value["end_exp"]
+                            "skill_name"=>(int)$value["skill_name"],
+                            "start_exp"=>(int)$value["start_exp"],
+                            "end_exp"=>(int)$value["end_exp"],
+                            "created_at"=>time(),
+                            "updated_at"=>time()
                         ]
                     );
                     array_push($data,$exp);
@@ -198,8 +202,24 @@ class adminHome extends  Controller
             return response()->json(["type"=>"false","message"=>"请传递合法参数","code"=>"40009"]);
         }
         /*dd(homeExp::where("exp_name","test1")->get());*/
+    }
 
+    public function deleteSkill(Request $request){
+        $skill_id=$request->input("skill_id");
+        //是否存在$skill_id这个值
+        if(empty($skill_id)){
+            return response()->json(["type"=>"false","message"=>"删除失败,数据不正确","code"=>"40009"]);
+        }
+        $skill_id=(int) $skill_id;
+        $tryData=DB::table("skill")->where("skill_id",$skill_id)->get();
 
+        //是否存在$skill_id对应的数据
+        if(!empty($tryData)){
+            DB::table("skill")->where("skill_id",$skill_id)->delete();
+            return response()->json(["type"=>"true","message"=>"删除成功","result"=>$tryData]);
+        }else{
+            return response()->json(["type"=>"false","message"=>"删除失败","code"=>"40009"]);
+        }
     }
 
 

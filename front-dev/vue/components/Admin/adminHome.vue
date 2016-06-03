@@ -17,7 +17,9 @@
                     </li>
                     <li>
                         <div class="collapsible-header"><i class="material-icons">build</i>Third</div>
-                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                        <div class="collapsible-body">
+                            <admin-skill></admin-skill>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -32,6 +34,7 @@
     import {showInfo} from "../../service/showInfo"
     import adminAboutMe from "./home/aboutMe.vue"
     import adminStudyExp from "./home/studyExp.vue"
+    import adminSkill from "./home/Skill.vue"
 
     export default{
         data(){
@@ -49,7 +52,8 @@
         },
         components:{
             adminAboutMe,
-            adminStudyExp
+            adminStudyExp,
+            adminSkill
         }
     }
 </script>

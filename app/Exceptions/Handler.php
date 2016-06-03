@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
             case "ErrorException":
             case "DomainException":
 
-                return response()->json(["type"=>"false","message"=>"程序异常","code"=>"40008"]);
+                return response()->json(["type"=>"false","message"=>"程序异常".$e->getMessage(),"code"=>"40008"]);
                 break;
             
         }

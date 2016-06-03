@@ -75,7 +75,6 @@
                 }*/
                 if("exp_id" in deleteList[0]){
                     $.tokenAjax("/admin/home/studyexp","delete",{"exp_id":deleteList[0]["exp_id"]}).then((data)=>{
-                        console.log("删除消息",data);
                         this.showInfo(data.message,3000,"msg")
                     }).catch()
                 }
@@ -85,8 +84,6 @@
                 //对比数据
                 console.log(79,this.formList);
                 let result=findNewValue(this.formList,this.formUpdateList);
-
-                console.log("result",result);
                 $.tokenAjax("/admin/home/studyexp","post",{"list":result}).then((data)=>{
                     this.showInfo(data.message,3000,"msg");
                     setTimeout(()=>{
@@ -125,7 +122,6 @@
                 let result=data.result.length?data.result:initObj;
                 this.formList=result;
                 this.formUpdateList=JSON.parse(JSON.stringify(result));
-                console.log("studyexp",data.result.length);
                 this.showInfo(data.message,3000,"msg")
             }).catch()
         },
