@@ -16223,10 +16223,22 @@
 	//                 <div class="col m6" style="padding: 25px">
 	//                     <img :src="aboutMeImg" alt="" class="responsive-img">
 	//                 </div>
-	//                 <div class="col m12">
-	//                     <p>
-	//                         {{aboutMeContent}}
-	//                     </p>
+	//                 <div class="col s6 m6">
+	//                     <ul class="tabs">
+	//                         <li class="tab col s6">
+	//                             <a href="#normal-html">markdown</a>
+	//                         </li>
+	//                         <li class="tab col s6">
+	//                             <a href="#normal-markdown">html</a>
+	//                         </li>
+	//                     </ul>
+	//
+	//                 </div>
+	//                 <div id="normal-html" class="col s12 m12 markdown">
+	//                     {{{aboutMeContent}}}
+	//                 </div>
+	//                 <div id="normal-markdown" class="col s12 m12 markdown-body">
+	//                     {{{aboutMeContent}}}
 	//                 </div>
 	//             </div>
 	//
@@ -16249,7 +16261,8 @@
 	            aboutMeAge: "",
 	            aboutMeEmail: "",
 	            aboutMeUrl: "",
-	            aboutMeImg: ""
+	            aboutMeImg: "",
+	            aboutMeContent: ""
 	        };
 	    },
 	    ready: function ready() {
@@ -16262,6 +16275,7 @@
 	            _this.aboutMeEmail = data.result["email"] || "";
 	            _this.aboutMeUrl = data.result["website"] || "";
 	            _this.aboutMeImg = data.result["imgurl"] || "";
+	            _this.aboutMeContent = markdown.toHTML(data.result["content"]);
 	            console.log("aboutme", data);
 	        }).catch();
 	    },
@@ -16275,7 +16289,7 @@
 /* 114 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>{{aboutMeName}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>{{aboutMeAge}} Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>{{aboutMeEmail}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>{{aboutMeUrl}}</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6\" style=\"padding: 25px\">\n                <img :src=\"aboutMeImg\" alt=\"\" class=\"responsive-img\">\n            </div>\n            <div class=\"col m12\">\n                <p>\n                    {{aboutMeContent}}\n                </p>\n            </div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>{{aboutMeName}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>{{aboutMeAge}} Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>{{aboutMeEmail}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>{{aboutMeUrl}}</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6\" style=\"padding: 25px\">\n                <img :src=\"aboutMeImg\" alt=\"\" class=\"responsive-img\">\n            </div>\n            <div class=\"col s6 m6\">\n                <ul class=\"tabs\">\n                    <li class=\"tab col s6\">\n                        <a href=\"#normal-html\">markdown</a>\n                    </li>\n                    <li class=\"tab col s6\">\n                        <a href=\"#normal-markdown\">html</a>\n                    </li>\n                </ul>\n\n            </div>\n            <div id=\"normal-html\" class=\"col s12 m12 markdown\">\n                {{{aboutMeContent}}}\n            </div>\n            <div id=\"normal-markdown\" class=\"col s12 m12 markdown-body\">\n                {{{aboutMeContent}}}\n            </div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
 
 /***/ },
 /* 115 */

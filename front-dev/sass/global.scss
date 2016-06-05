@@ -1,5 +1,10 @@
 
 $pc:1370px;
+$mobile:420px;
+
+
+@import "markdown";
+@import "githubMarkdown";
 
 *{
   font-family: '微软雅黑';

@@ -93,7 +93,6 @@ class adminHome extends  Controller
 
     public function updateStudyExp(Request $request){
         $list=$request->input("list");
-        dd($list);
         $data=[];
         if($list&&is_array($list)){
             foreach ($list as $key=>$value){

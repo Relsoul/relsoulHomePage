@@ -32,7 +32,7 @@
       position: absolute;
       top:50px;
       left: 50%;
-      height: ceil(100%-30);
+      height: calc(100% - 50px);
       width: 2px;
       background: #000;
     }
@@ -40,13 +40,15 @@
     .time-line-text{
       padding: 1rem;
 
+      p{
+        word-break: break-all;
+      }
+
       @media all and(max-width: 420px) {
         width: 37%;
       }
 
-
       width: 45%;
-      height: 110px;
       left:0;
       margin-left: 20px;
       position: relative;
@@ -83,9 +85,12 @@
     .time-line-text.time-line-left{
 
       left: 50%;
-      transform: translateX(-100%);
+      transform: translateX(-100%)  translateY(-100%);
       margin-left: -50px;
-      top: -110px;
+
+      @media all and (max-width: $mobile) {
+
+      }
 
 
       &::before{
@@ -97,6 +102,7 @@
 
     }
 
+    //文本
     .time-line-text.time-line-right{
       left: 50%;
       margin-left: 50px;
