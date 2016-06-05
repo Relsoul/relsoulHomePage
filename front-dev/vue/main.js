@@ -16,6 +16,21 @@ Vue.use(Router);
 
 var router = new Router();
 
+
+setInterval(function () {
+    if($(document).width()>420){
+        let dH=$(document).height();
+        let rH=$(".right-content").height()+20;
+        if(rH<window.screen.height){
+            $(".header nav").height(window.screen.height);
+        }else{
+            $(".header nav").height(rH);
+        }
+
+
+    }
+},250);
+
 router.map({
     '/': {
         component: Home

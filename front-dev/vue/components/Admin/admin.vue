@@ -3,7 +3,7 @@
         <div class="row no-gutters">
 
             <r-header @header-show-change="headerShow" @header-hide-change="headerHide" ></r-header>
-            <div class="col s12 m10" :class="[Contentcls]">
+            <div class="col s12 m10 right-content" :class="[Contentcls]">
                 <nav style="transition:all 0.5s;">
                     <div class="nav-wrapper">
                         <a href="#" v-link="{path:'/admin'}" class="brand-logo">Relsoul后台管理</a>

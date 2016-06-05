@@ -63,6 +63,7 @@
 
     import loginModal from "./loginModal.vue"
     import registerModal from "./registerModal.vue"
+    import {setHeaderWidth} from "./../service/setHeaderWidth"
     export default{
         data(){
             return{
@@ -81,9 +82,7 @@
             }
         },
         ready(){
-            if($(document).width()>420){
-                $(".header nav").height($(document).height());
-            }
+            setHeaderWidth();
             $(".modal-trigger").leanModal();
             if(window.localStorage.getItem("token")&&window.localStorage.getItem("name")){
                 this.isLogin=true;
@@ -116,6 +115,7 @@
                 this.isLogin=true;
             },
             hideNav(e){
+                setHeaderWidth();
                 this.navHide["nav-hide"]=true;
                 this.navButton["header-btn-hide"]=false;
                 this.$dispatch("header-hide-change");
@@ -123,6 +123,8 @@
                 e.preventDefault();
             },
             showNav(e){
+                //hack.. 先这样处理吧
+                setHeaderWidth();
                 this.$dispatch("header-show-change");
                 this.navHide["nav-hide"]=false;
                 this.navButton["header-btn-hide"]=true;

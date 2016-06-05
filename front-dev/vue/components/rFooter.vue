@@ -1,5 +1,5 @@
 <template>
-    <div class="footer">
+    <div class="footer" style="height: 150px;background: black">
 
     </div>
 </template>

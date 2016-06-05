@@ -7,6 +7,7 @@ const livereload=require("gulp-livereload");
 const gulpif = require('gulp-if');
 const sprity=require("sprity");
 const rename=require("gulp-rename");
+const sourcemaps = require('gulp-sourcemaps');
 //const nodemon=require("gulp-nodemon");
 
 gulp.task("default",["watch"]);
@@ -42,7 +43,9 @@ gulp.task("copy",function(){
 
 gulp.task("sass:compile",function(){
     gulp.src("front-dev/sass/main.scss")
+        .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest('public/css'))
         .pipe(livereload());
 });

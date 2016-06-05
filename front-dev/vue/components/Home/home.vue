@@ -4,7 +4,7 @@
                 <r-header  @header-show-change="headerShow" @header-hide-change="headerHide" :header-width="Headercls"></r-header>
 
                 <div class="col s12  "  :class="Contentcls">
-                    <div class=" home-content">
+                    <div class=" home-content right-content" >
                         <home-title></home-title>
                         <home-about-me></home-about-me>
                         <time-line title="学习经历" cls="home-project" get-url="/home/studyexp/" ></time-line>
