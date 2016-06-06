@@ -41,12 +41,7 @@ restfulAPI返回的格式为
 | 说明 | URL | 附加参数 | 成功返回说明 |
 | --- | :---: | :---: | :---:|
 | 注册 | /register | name,password,email |result(username) |
-| 登录 | /login | name(email or username )
-,geetest_challenge(验证码参数一),
-geetest_validate(验证码参数二),
-geetest_seccode(验证码参数三),
-password,
-loginType(1:userName登录,2:email登录)|result:{token,userName}|
+| 登录 | /login | name(email or username ),geetest_challenge(验证码参数一),geetest_validate(验证码参数二),geetest_seccode(验证码参数三),password,loginType(1:userName登录,2:email登录)|result:{token,userName}|
 
 
 

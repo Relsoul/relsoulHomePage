@@ -51,8 +51,8 @@
         <entry file="file://$PROJECT_DIR$/readme.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="344">
-                <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+              <first_editor relative-caret-position="254">
+                <caret line="43" column="40" selection-start-line="43" selection-start-column="40" selection-end-line="43" selection-end-column="40" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -814,12 +814,12 @@
       <workItem from="1464927148643" duration="13419000" />
       <workItem from="1464971785354" duration="1571000" />
       <workItem from="1465108598965" duration="12628000" />
-      <workItem from="1465187010392" duration="1554000" />
+      <workItem from="1465187010392" duration="1634000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="233270000" />
+    <option name="totallyTimeSpent" value="233350000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1297,8 +1297,8 @@
     <entry file="file://$PROJECT_DIR$/readme.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="344">
-            <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+          <first_editor relative-caret-position="254">
+            <caret line="43" column="40" selection-start-line="43" selection-start-column="40" selection-end-line="43" selection-end-column="40" />
             <folding />
           </first_editor>
           <second_editor />
