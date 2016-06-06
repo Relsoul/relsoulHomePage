@@ -44,8 +44,8 @@ gulp.task("copy",function(){
 gulp.task("sass:compile",function(){
     gulp.src("front-dev/sass/main.scss")
         .pipe(sourcemaps.init())
-        .pipe(sass().on('error', sass.logError))
-        .pipe(sourcemaps.write())
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(sourcemaps.write("/"))
         .pipe(gulp.dest('public/css'))
         .pipe(livereload());
 });

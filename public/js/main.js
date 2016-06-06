@@ -82,9 +82,9 @@
 	
 	var router = new _vueRouter2.default();
 	
+	//动态监听和改变宽度
 	setInterval(function () {
 	    if ($(document).width() > 420) {
-	        var dH = $(document).height();
 	        var rH = $(".right-content").height() + 20;
 	        if (rH < window.screen.height) {
 	            $(".header nav").height(window.screen.height);
@@ -16573,7 +16573,7 @@
 	//                 -->
 	//                 <div class="col m6 s12" v-for="skill in skills">
 	//                     <div class="skills-content">
-	//                         <h2>{{skill.name}}</h2>
+	//                         <h2>{{skill.skill_name}}</h2>
 	//                         <div class="col m10 s10">
 	//                             <div class="progress">
 	//                                 <div class="determinate" :style="{width:skill.start_exp+'%'}"></div>
@@ -16600,10 +16600,12 @@
 	exports.default = {
 	    data: function data() {
 	        return {
-	            skills: [{ name: "test1", start_exp: 0, end_exp: 30 }, { name: "test2", start_exp: 0, end_exp: 60 }]
+	            skills: []
 	        };
 	    },
 	    ready: function ready() {
+	        var _this = this;
+	
 	        var runnSkill = function runnSkill(i) {
 	            return new _promise2.default(function (resolve, reject) {
 	                var timer = setInterval(function () {
@@ -16615,32 +16617,36 @@
 	                }, 60);
 	            });
 	        };
-	        var _iteratorNormalCompletion = true;
-	        var _didIteratorError = false;
-	        var _iteratorError = undefined;
 	
-	        try {
-	            for (var _iterator = (0, _getIterator3.default)(this.skills), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                var i = _step.value;
+	        $.promiseAjax("/home/skill").then(function (data) {
+	            _this.skills = data.result;
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
 	
-	                runnSkill(i).then(function (timer) {
-	                    clearInterval(timer);
-	                });
-	            }
-	        } catch (err) {
-	            _didIteratorError = true;
-	            _iteratorError = err;
-	        } finally {
 	            try {
-	                if (!_iteratorNormalCompletion && _iterator.return) {
-	                    _iterator.return();
+	                for (var _iterator = (0, _getIterator3.default)(_this.skills), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var i = _step.value;
+	
+	                    runnSkill(i).then(function (timer) {
+	                        clearInterval(timer);
+	                    });
 	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
 	            } finally {
-	                if (_didIteratorError) {
-	                    throw _iteratorError;
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
 	                }
 	            }
-	        }
+	        }).catch();
 	    },
 	
 	    components: {}
@@ -16678,7 +16684,7 @@
 /* 128 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home-skills\">\n     <div class=\"container\">\n         <h1 class=\"text_underline\">My Skills</h1>\n         <div class=\"row\">\n\n             <!--\n             for  生成\n             -->\n             <div class=\"col m6 s12\" v-for=\"skill in skills\">\n                 <div class=\"skills-content\">\n                     <h2>{{skill.name}}</h2>\n                     <div class=\"col m10 s10\">\n                         <div class=\"progress\">\n                             <div class=\"determinate\" :style=\"{width:skill.start_exp+'%'}\"></div>\n                         </div>\n                     </div>\n                     <div class=\"col m2 s2\">\n                         <span class=\"skills-value\">\n                             {{skill.start_exp+'%'}}\n                         </span>\n                     </div>\n                 </div>\n             </div>\n\n         </div>\n\n     </div>\n</div>\n"
+	module.exports = "\n<div class=\"home-skills\">\n     <div class=\"container\">\n         <h1 class=\"text_underline\">My Skills</h1>\n         <div class=\"row\">\n\n             <!--\n             for  生成\n             -->\n             <div class=\"col m6 s12\" v-for=\"skill in skills\">\n                 <div class=\"skills-content\">\n                     <h2>{{skill.skill_name}}</h2>\n                     <div class=\"col m10 s10\">\n                         <div class=\"progress\">\n                             <div class=\"determinate\" :style=\"{width:skill.start_exp+'%'}\"></div>\n                         </div>\n                     </div>\n                     <div class=\"col m2 s2\">\n                         <span class=\"skills-value\">\n                             {{skill.start_exp+'%'}}\n                         </span>\n                     </div>\n                 </div>\n             </div>\n\n         </div>\n\n     </div>\n</div>\n"
 
 /***/ },
 /* 129 */

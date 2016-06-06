@@ -9,7 +9,7 @@
                 -->
                 <div class="col m6 s12" v-for="skill in skills">
                     <div class="skills-content">
-                        <h2>{{skill.name}}</h2>
+                        <h2>{{skill.skill_name}}</h2>
                         <div class="col m10 s10">
                             <div class="progress">
                                 <div class="determinate" :style="{width:skill.start_exp+'%'}"></div>
@@ -36,7 +36,7 @@
     export default{
         data(){
             return{
-                skills:[{name:"test1",start_exp:0,end_exp:30},{name:"test2",start_exp:0,end_exp:60}]
+                skills:[]
             }
         },
         ready(){
@@ -51,11 +51,16 @@
                     },60)
                 })
             };
-          for(let i of this.skills){
-             runnSkill(i).then((timer)=>{
-                clearInterval(timer)
-             })
-          }
+
+            $.promiseAjax("/home/skill").then((data)=>{
+                this.skills=data.result;
+                for(let i of this.skills){
+                    runnSkill(i).then((timer)=>{
+                        clearInterval(timer)
+                    })
+                }
+            }).catch()
+
         },
         components:{
 

@@ -52,8 +52,6 @@
                     console.log("studtyExp",data)
                 }).catch()
             }
-
-
         },
         components:{
 

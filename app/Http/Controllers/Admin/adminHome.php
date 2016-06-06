@@ -175,7 +175,6 @@ class adminHome extends  Controller
                     $value["skill_id"]=(int)$value["skill_id"];
                     $tryData=DB::table("skill")->where("skill_id",$value["skill_id"])->get();
                     if(!empty($tryData)){
-
                         $t=DB::table("skill")->where("skill_id",$value["skill_id"])
                             ->update([
                                 "skill_name"=>(int)$value["skill_name"],
@@ -190,7 +189,7 @@ class adminHome extends  Controller
                     //新数据
                     $exp=DB::table("skill")->insertGetId(
                         [
-                            "skill_name"=>(int)$value["skill_name"],
+                            "skill_name"=>$value["skill_name"],
                             "start_exp"=>(int)$value["start_exp"],
                             "end_exp"=>(int)$value["end_exp"],
                             "created_at"=>time(),
