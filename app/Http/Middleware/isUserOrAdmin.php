@@ -27,10 +27,12 @@ class isUserOrAdmin
         $user=$request->users;
         $userName=$user->name;
         $findUser=User::where("name",$userName)->first();
+        $request->userRole=$findUser->role;
         if($findUser->role>=10){
             return $next($request);
         }else{
             if($id){
+                //判断是否存在id以及当前用户查询的是否为他本身
                 if($findUser->id!=$id){
                     return response()->json(["type"=>"false","message"=>"非用户本身","code"=>"40010"]);
                 }
