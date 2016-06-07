@@ -31,5 +31,6 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         "JWTAuthToken"=>\App\Http\Middleware\JWTAuthToken::class,
         "AdminRole"=>\App\Http\Middleware\AdminRole::class,
+        "isUserOrAdmin"=>\App\Http\Middleware\isUserOrAdmin::class
     ];
 }

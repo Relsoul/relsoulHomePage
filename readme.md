@@ -33,7 +33,7 @@ restfulAPI返回的格式为
 |40006|注册插入数据库失败|
 |40007|解析token成功,但是获取数据库用户失败|
 |40008|程序异常|
-|40009|数据不正确|
+|40009|请求参数不正确|
 |40010|用户权限不足|
 
 
@@ -56,13 +56,14 @@ login-id:"loginModal",register-id:"registerId"
 
 
 
-# 后台更新首页
+# AboutMe
 
 更新需要在头部附加token与进行role验证
 
 | 说明 | URL | 附加参数 | 成功返回说明 |
 | --- | :---: | :---: | :---:|
 | 获取abouteMe | /home/aboutme |  |result(name,age,email,website,img) |
+| 更新abouteMe | /admin/home/aboutme | | |
 
 
 

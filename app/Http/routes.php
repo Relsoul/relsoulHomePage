@@ -42,6 +42,20 @@ Route::group(["middleware"=>["JWTAuthToken","AdminRole"],"prefix"=>"admin"],func
     //删除首页-skill
     Route::delete("home/skill","Admin\\adminHome@deleteSkill");
 
+
+    //用户管理-删除用户
+    Route::delete("/user/{id?}","Admin\\adminUser@deleteUser");
+    //用户管理-新建用户
+    Route::post("/user/","Admin\\adminUser@newUser");
+
+});
+
+//新分组 判断请求用户是否是本身或者具有管理权限
+Route::group(["middleware"=>"JWTAuthToken"],function(){
+    //用户管理-获取用户
+    Route::get("/user/{id?}",["middleware"=>"isUserOrAdmin:id","uses"=>"Admin\\adminUser@getUser"]);
+    //用户管理-更新用户
+    Route::put("/user/{id?}",["middleware"=>"isUserOrAdmin","uses"=>"Admin\\adminUser@updateUser"]);
 });
 
 
@@ -50,7 +64,7 @@ Route::group(["middleware"=>["JWTAuthToken","AdminRole"],"prefix"=>"admin"],func
 Route::post("/login","userController@login");
 Route::get("/login","userController@initGeeTest");
 
-
+//用户注册
 Route::post("/register","userController@register");
 
 
