@@ -37,21 +37,51 @@ class adminUser extends Controller
 
     public function updateUser(Request $request,$id){
         if(!empty($id)){
+            DB::table("users")->where("id",$id)
 
         }else{
-
+            return response()->json(["type"=>"false","message"=>"更新必须提供id参数","code"=>"40009"]);
         }
 
-
-        return response()->json(["type"=>"true","message"=>"获取权限成功","result"=>["role"=>$userInfo[0]->role]]);
     }
 
     public function newUser(Request $request){
+        $userName=$request->input("name");
+        $email=$request->input("email");
+        $passWord=$request->input("password");
+        $role=(int) $request->input("role");
+        if(empty($userName)||empty($email)||empty($passWord)||empty($role)){
+            return response()->json(["type"=>"false","message"=>"请填写完整的用户提交表单","code"=>"40009"]);
+        }
+        $newUser=DB::table("users")->where("name",$userName)->orWhere("email",$userName)->get();
+        if(empty($newUser)){
+            $passWord=Crypt::encrypt($passWord);
+            $insertUser=DB::table("users")->insert(
+                ["name"=>$userName,"email"=>$email,"password"=>$passWord,"role"=>$role,"created_at"=>time(),"updated_at"=>time()]
+            );
+            return response()->json(["type"=>"true","message"=>"添加成功","result"=>$insertUser]);
+        }else{
+            return response()->json(["type"=>"false","message"=>"已有相同的用户存在","code"=>"40009"]);
+        }
+
+
 
     }
 
     public function deleteUser(Request $request,$id){
+        if(!empty($id)){
+            //预先查找是否存在用户
+            $isExist=DB::table("users")->where("id",$id)->first();
+            if(empty($isExist)){
+                return response()->json(["type"=>"false","message"=>"用户不存在","code"=>"40009"]);
+            }
+            
+            //删除用户
+            $deleteUser=DB::table("users")->where("id",$id)->delete();
+            return response()->json(["type"=>"true","message"=>"删除成功","result"=>$deleteUser]);
 
+        }
+        return response()->json(["type"=>"false","message"=>"删除必须提供id参数","code"=>"40009"]);
     }
     
 
