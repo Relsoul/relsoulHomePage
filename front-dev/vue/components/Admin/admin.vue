@@ -8,8 +8,8 @@
                     <div class="nav-wrapper">
                         <a href="#" v-link="{path:'/admin'}" class="brand-logo">Relsoul后台管理</a>
                         <ul id="nav-mobile" class="right hide-on-med-and-down">
-                            <li><a href="badges">首页</a></li>
-                            <li><a href="buttons">用户</a></li>
+                            <li><a href="#" >首页</a></li>
+                            <li><a href="#" v-link="{path:'/admin/user/'}">用户</a></li>
                             <li><a href="footer">项目与文章</a></li>
                         </ul>
                     </div>

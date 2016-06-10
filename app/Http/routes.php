@@ -55,7 +55,7 @@ Route::group(["middleware"=>"JWTAuthToken"],function(){
     //用户管理-获取用户
     Route::get("/user/{id?}",["middleware"=>"isUserOrAdmin:id","uses"=>"Admin\\adminUser@getUser"]);
     //用户管理-更新用户
-    Route::put("/user/{id?}",["middleware"=>"isUserOrAdmin","uses"=>"Admin\\adminUser@updateUser"]);
+    Route::put("/user/{id?}",["middleware"=>"isUserOrAdmin:id","uses"=>"Admin\\adminUser@updateUser"]);
 });
 
 

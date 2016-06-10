@@ -72,6 +72,14 @@
 	
 	var _adminHome2 = _interopRequireDefault(_adminHome);
 	
+	var _userList = __webpack_require__(162);
+	
+	var _userList2 = _interopRequireDefault(_userList);
+	
+	var _userDetail = __webpack_require__(167);
+	
+	var _userDetail2 = _interopRequireDefault(_userDetail);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// 挂载tokenAjax
@@ -105,6 +113,12 @@
 	        subRoutes: {
 	            "/": {
 	                component: _adminHome2.default
+	            },
+	            "/user/": {
+	                component: _userList2.default
+	            },
+	            "/user/:username": {
+	                component: _userDetail2.default
 	            }
 	        }
 	    }
@@ -16814,8 +16828,8 @@
 	//                     <div class="nav-wrapper">
 	//                         <a href="#" v-link="{path:'/admin'}" class="brand-logo">Relsoul后台管理</a>
 	//                         <ul id="nav-mobile" class="right hide-on-med-and-down">
-	//                             <li><a href="badges">首页</a></li>
-	//                             <li><a href="buttons">用户</a></li>
+	//                             <li><a href="#" >首页</a></li>
+	//                             <li><a href="#" v-link="{path:'/admin/user/'}">用户</a></li>
 	//                             <li><a href="footer">项目与文章</a></li>
 	//                         </ul>
 	//                     </div>
@@ -16847,7 +16861,7 @@
 /* 134 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"admin\">\n        <div class=\"row no-gutters\">\n\n            <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n            <div class=\"col s12 m10 right-content\" :class=\"[Contentcls]\">\n                <nav style=\"transition:all 0.5s;\">\n                    <div class=\"nav-wrapper\">\n                        <a href=\"#\" v-link=\"{path:'/admin'}\" class=\"brand-logo\">Relsoul后台管理</a>\n                        <ul id=\"nav-mobile\" class=\"right hide-on-med-and-down\">\n                            <li><a href=\"badges\">首页</a></li>\n                            <li><a href=\"buttons\">用户</a></li>\n                            <li><a href=\"footer\">项目与文章</a></li>\n                        </ul>\n                    </div>\n                </nav>\n                444555666\n                <router-view></router-view>\n            </div>\n<!--            <div class=\"fixed-action-btn\" style=\"bottom: 45px; right: 24px;\">\n                <a class=\"btn-floating btn-large red\">\n                    <i class=\"large mdi-editor-mode-edit\"></i>\n                </a>\n                <ul>\n                    <li><a class=\"btn-floating red\"><i class=\"large mdi-editor-insert-chart\"></i></a></li>\n                    <li><a class=\"btn-floating yellow darken-1\"><i class=\"large mdi-editor-format-quote\"></i></a></li>\n                    <li><a class=\"btn-floating green\"><i class=\"large mdi-editor-publish\"></i></a></li>\n                    <li><a class=\"btn-floating blue\"><i class=\"large mdi-editor-attach-file\"></i></a></li>\n                </ul>\n            </div>-->\n        </div>\n\n    </div>\n"
+	module.exports = "\n    <div class=\"admin\">\n        <div class=\"row no-gutters\">\n\n            <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n            <div class=\"col s12 m10 right-content\" :class=\"[Contentcls]\">\n                <nav style=\"transition:all 0.5s;\">\n                    <div class=\"nav-wrapper\">\n                        <a href=\"#\" v-link=\"{path:'/admin'}\" class=\"brand-logo\">Relsoul后台管理</a>\n                        <ul id=\"nav-mobile\" class=\"right hide-on-med-and-down\">\n                            <li><a href=\"#\" >首页</a></li>\n                            <li><a href=\"#\" v-link=\"{path:'/admin/user/'}\">用户</a></li>\n                            <li><a href=\"footer\">项目与文章</a></li>\n                        </ul>\n                    </div>\n                </nav>\n                444555666\n                <router-view></router-view>\n            </div>\n<!--            <div class=\"fixed-action-btn\" style=\"bottom: 45px; right: 24px;\">\n                <a class=\"btn-floating btn-large red\">\n                    <i class=\"large mdi-editor-mode-edit\"></i>\n                </a>\n                <ul>\n                    <li><a class=\"btn-floating red\"><i class=\"large mdi-editor-insert-chart\"></i></a></li>\n                    <li><a class=\"btn-floating yellow darken-1\"><i class=\"large mdi-editor-format-quote\"></i></a></li>\n                    <li><a class=\"btn-floating green\"><i class=\"large mdi-editor-publish\"></i></a></li>\n                    <li><a class=\"btn-floating blue\"><i class=\"large mdi-editor-attach-file\"></i></a></li>\n                </ul>\n            </div>-->\n        </div>\n\n    </div>\n"
 
 /***/ },
 /* 135 */
@@ -17800,6 +17814,364 @@
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <admin-about-me></admin-about-me>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\">\n                        <admin-study-exp></admin-study-exp>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\">\n                        <admin-skill></admin-skill>\n                    </div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(163)
+	__vue_script__ = __webpack_require__(165)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\user\\userList.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(166)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Admin\\user\\userList.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(164);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./userList.vue", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./userList.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"userList.vue","sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _getIterator2 = __webpack_require__(125);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	var _showInfo = __webpack_require__(18);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: '',
+	            searchTimer: null,
+	            searchText: "",
+	            pageLength: [],
+	            currentPage: 1,
+	            userList: []
+	        };
+	    },
+	
+	    methods: {
+	        showInfo: (0, _showInfo.showInfo)(),
+	        searchUser: function searchUser(e) {
+	            var _this = this;
+	
+	            if (this.searchTimer) {
+	                return false;
+	            }
+	            //延迟处理搜索
+	            this.searchTimer = setTimeout(function () {
+	                $.tokenAjax("/user/", "get", { "s": _this.searchText }).then(function (data) {
+	                    _this.searchTimer = null;
+	                    _this.showInfo(data.message, 3000, "msg");
+	                    _this.generate(data.result.count);
+	                    _this.userList = data.result;
+	                    console.log("搜索用户", data);
+	                }).catch();
+	            }, 800);
+	        },
+	        changePage: function changePage(e, index) {
+	            var _this2 = this;
+	
+	            var active = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	
+	            //判断是否已经是第一页或者最后一页
+	
+	            if (active == "prev") {
+	                index--;
+	            }
+	            if (active == "next") {
+	                index++;
+	            }
+	
+	            console.log("index", index, "pageLength", this.pageLength.length);
+	            if (index <= 0 || index > this.pageLength.length) {
+	                return false;
+	            }
+	
+	            //处理当前选择元素样式
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+	
+	            try {
+	                for (var _iterator = (0, _getIterator3.default)(this.pageLength), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var elem = _step.value;
+	
+	                    elem.cls = "waves-effect";
+	                }
+	                //因为index是从1开始 所以这里要-1对上数组索引
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+	
+	            this.pageLength[index - 1].cls = 'active';
+	            //当前分页设置为所点击的分页
+	            this.currentPage = index;
+	            $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
+	                _this2.userList = data.result;
+	            }).catch();
+	            return false;
+	        },
+	
+	        //分页处理函数
+	        generate: function generate(count) {
+	            //清空原有的page分页列表
+	            this.currentPage = 1;
+	            this.pageLength = [];
+	            var len = Math.ceil(count / 10);
+	            //替换num为array 以循环生成数据,为了方便更改class 所以采用了object
+	            //num从1开始
+	            for (var i = 0; i < len; i++) {
+	                var _o = { num: i + 1, cls: "waves-effect" };
+	                if (i == 0) {
+	                    _o.cls = "active";
+	                }
+	                this.pageLength.push(_o);
+	            }
+	        }
+	    },
+	    ready: function ready() {
+	        var _this3 = this;
+	
+	        $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
+	            _this3.showInfo(data.message, 3000, "msg");
+	            _this3.generate(data.result.count);
+	            _this3.userList = data.result;
+	            console.log("userList", data);
+	        }).catch();
+	    },
+	
+	    components: {}
+	};
+	// </script>
+	/* generated by vue-loader */
+	// <template>
+	//     <div class="user-list">
+	//         <div class="container">
+	//             <p>{{msg}}</p>
+	//             <div class="row">
+	//                 <form class="col s12">
+	//                     <div class="row">
+	//                         <div class="input-field col s12">
+	//                             <i class="material-icons prefix white-text">search</i>
+	//                             <input id="icon_prefix" type="text" class="validate" v-model="searchText" @change="searchUser($event)">
+	//                             <label for="icon_prefix" class="white-text">搜索</label>
+	//                         </div>
+	//                     </div>
+	//                 </form>
+	//             </div>
+	//             <ul class="collection">
+	//                 <li class="collection-item" v-for="user in userList">{{user.name}}</li>
+	//             </ul>
+	//             <ul class="pagination white-text">
+	//                 <li class="" :class="{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}" @click="changePage($event,currentPage,'prev')">
+	//                     <a ><i class="material-icons">chevron_left</i></a>
+	//                 </li>
+	//                 <li class="waves-effect" :class="page.cls"  v-for="page in pageLength" @click="changePage($event,page.num)">
+	//                     <a>{{page.num}}</a>
+	//                 </li>
+	//
+	//                 <li class=""  :class="{'disabled':currentPage>=pageLength.length?true:false,
+	//                 'waves-effect':currentPage>=pageLength.length?false:true}" @click="changePage($event,currentPage,'next')">
+	//                     <a  ><i class="material-icons">chevron_right</i></a>
+	//                 </li>
+	//             </ul>
+	//         </div>
+	//
+	//         user-list
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
+
+/***/ },
+/* 166 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"user-list\">\n    <div class=\"container\">\n        <p>{{msg}}</p>\n        <div class=\"row\">\n            <form class=\"col s12\">\n                <div class=\"row\">\n                    <div class=\"input-field col s12\">\n                        <i class=\"material-icons prefix white-text\">search</i>\n                        <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\">\n                        <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                    </div>\n                </div>\n            </form>\n        </div>\n        <ul class=\"collection\">\n            <li class=\"collection-item\" v-for=\"user in userList\">{{user.name}}</li>\n        </ul>\n        <ul class=\"pagination white-text\">\n            <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n                <a ><i class=\"material-icons\">chevron_left</i></a>\n            </li>\n            <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n                <a>{{page.num}}</a>\n            </li>\n\n            <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n            'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n                <a  ><i class=\"material-icons\">chevron_right</i></a>\n            </li>\n        </ul>\n    </div>\n\n    user-list\n</div>\n"
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(168)
+	__vue_script__ = __webpack_require__(170)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\user\\userDetail.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(171)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Admin\\user\\userDetail.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(169);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./userDetail.vue", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./userDetail.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"userDetail.vue","sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 170 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// <template>
+	//    <div class="user-detail">
+	//        user-detail
+	//    </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script>
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue'
+	        };
+	    },
+	
+	    components: {}
+	};
+	// </script>
+	/* generated by vue-loader */
+
+/***/ },
+/* 171 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"user-detail\">\n    user-detail\n</div>\n"
 
 /***/ }
 /******/ ]);

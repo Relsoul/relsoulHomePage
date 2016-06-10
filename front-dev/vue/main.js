@@ -10,6 +10,8 @@ $.promiseAjax=promiseAjax;
 import Home from "./components/Home/home.vue"
 import Admin from "./components/Admin/admin.vue"
 import adminHome from "./components/Admin/adminHome.vue"
+import adminUserList from "./components/Admin/user/userList.vue";
+import adminUserDetail from "./components/Admin/user/userDetail.vue";
 
 
 Vue.use(Router);
@@ -40,6 +42,12 @@ router.map({
         subRoutes:{
             "/":{
                 component:adminHome
+            },
+            "/user/":{
+                component:adminUserList
+            },
+            "/user/:username":{
+                component:adminUserDetail
             }
         }
     }
