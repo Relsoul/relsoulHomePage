@@ -33,27 +33,21 @@ class adminUser extends Controller
                 if(!empty($search)){
                     $data=DB::table("users")->where("name","like","%".$search."%")->skip($limit)->take(10)->get();
                     $dataLength=DB::table("users")->where("name","like","%".$search."%")->count();
-                    $data["count"]=$dataLength;
-                    return response()->json(["type"=>"true","message"=>"获取搜索用户成功","result"=>$data]);
+                    return response()->json(["type"=>"true","message"=>"获取搜索用户成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
                 }
 
                 //不搜索用户,仅仅分页
                 $data=DB::table("users")->skip($limit)->take(10)->get();
                 $dataLength=DB::table("users")->count();
-                $data["count"]=$dataLength;
 
-
-
-
-                return response()->json(["type"=>"true","message"=>"获取分页用户成功","result"=>$data]);
+                return response()->json(["type"=>"true","message"=>"获取分页用户成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
 
                 //如果存在search字段则是在数据库中全部搜索
             }else if(!empty($search)){
                 $data=DB::table("users")->where("name","like","%".$search."%")->get();
                 $dataLength=DB::table("users")->where("name","like","%".$search."%")->count();
-                $data["count"]=$dataLength;
 
-                return response()->json(["type"=>"true","message"=>"获取搜索用户成功","result"=>$data]);
+                return response()->json(["type"=>"true","message"=>"获取搜索用户成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
             }else{
                 return response()->json(["type"=>"false","message"=>"请求参数不正确","code"=>"40009"]);
             }

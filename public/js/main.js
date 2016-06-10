@@ -17928,7 +17928,7 @@
 	                    _this.searchTimer = null;
 	                    _this.showInfo(data.message, 3000, "msg");
 	                    _this.generate(data.result.count);
-	                    _this.userList = data.result;
+	                    _this.userList = data.result.userList;
 	                    console.log("搜索用户", data);
 	                }).catch();
 	            }, 800);
@@ -17983,7 +17983,7 @@
 	            //当前分页设置为所点击的分页
 	            this.currentPage = index;
 	            $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
-	                _this2.userList = data.result;
+	                _this2.userList = data.result.userList;
 	            }).catch();
 	            return false;
 	        },
@@ -18011,7 +18011,7 @@
 	        $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
 	            _this3.showInfo(data.message, 3000, "msg");
 	            _this3.generate(data.result.count);
-	            _this3.userList = data.result;
+	            _this3.userList = data.result.userList;
 	            console.log("userList", data);
 	        }).catch();
 	    },

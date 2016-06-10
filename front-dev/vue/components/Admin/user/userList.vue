@@ -65,7 +65,7 @@
                                 this.searchTimer=null;
                                 this.showInfo(data.message,3000,"msg");
                                 this.generate(data.result.count);
-                                this.userList=data.result;
+                                this.userList=data.result.userList;
                                 console.log("搜索用户",data);
                             })
                             .catch()
@@ -97,7 +97,7 @@
                 this.currentPage=index;
                 $.tokenAjax("/user/","get",{"page":this.currentPage})
                         .then((data)=>{
-                            this.userList=data.result;
+                            this.userList=data.result.userList;
                         })
                         .catch();
                 return false
@@ -124,7 +124,7 @@
             $.tokenAjax("/user/","get",{"page":this.currentPage}).then((data)=>{
                 this.showInfo(data.message,3000,"msg");
                 this.generate(data.result.count);
-                this.userList=data.result;
+                this.userList=data.result.userList;
                 console.log("userList",data);
 
             }).catch()
