@@ -14,7 +14,7 @@
                 <div class="row">
                     <h4>登陆</h4>
                     <p class="info-text"></p>
-                    <form  class="col m12">
+                    <form  class="col m12" >
                         <div class="row">
                             <div class="input-field col m5 offset-m3 s12 ">
                                 <i class="material-icons prefix">account_box</i>
@@ -30,11 +30,12 @@
                         <div class="row">
                             <div id="popup-captcha" class="col m5 offset-m3 s12 "></div>
                         </div>
-                        <div class="row">
-                            <button class="btn col m3 offset-m2 s12 login-btn animated" :class="{'flipInX':loginDone}" >登陆</button>
-                            <button class="btn col m3 offset-m1 s12 findpw-btn">忘记密码</button>
-                        </div>
+
                     </form>
+                    <div class="row">
+                        <button class="btn col m3 offset-m2 s12 login-btn animated" :class="{'flipInX':loginDone}" >登陆</button>
+                        <button data-target="fetchPassWord" class=" modal-trigger modal-close btn col m3 offset-m1 s12 findpw-btn">忘记密码</button>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <p>还没有账号?赶紧来注册吧</p>

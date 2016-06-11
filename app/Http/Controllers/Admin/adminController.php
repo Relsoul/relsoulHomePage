@@ -18,16 +18,7 @@ class adminController extends Controller
         return response()->json(["type"=>"true","message"=>"管理页面登录成功"]);
     }
 
-    public function me(Request $request){
-        $name=$request->users->name;
-
-        $userInfo=User::where("name",$name)->get();
-        if(!$userInfo){
-            return response()->json(["type"=>"false","message"=>"token无效或过期,用户获取失败","code"=>"40007"]);
-        }
-
-        return response()->json(["type"=>"true","message"=>"获取权限成功","result"=>["role"=>$userInfo[0]->role]]);
-    }
+    
     
 
 }

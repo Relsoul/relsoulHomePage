@@ -3,6 +3,7 @@
         <button class="btn header-btn" :class="navButton" @click="showNav"><i class="material-icons">menu</i></button>
         <login-modal :login-id="loginModalId" @login-done="loginDone"></login-modal>
         <register-modal :register-id="registerModalId"></register-modal>
+        <fetch-pass-word-modal></fetch-pass-word-modal>
         <div class="row no-gutters">
             <div class="navcol s12 m12 ">
                 <nav>
@@ -64,6 +65,7 @@
     import loginModal from "./loginModal.vue"
     import registerModal from "./registerModal.vue"
     import {setHeaderWidth} from "./../service/setHeaderWidth"
+    import fetchPassWordModal from "./user/fetchPassWord.vue"
     export default{
         data(){
             return{
@@ -87,7 +89,7 @@
             if(window.localStorage.getItem("token")&&window.localStorage.getItem("name")){
                 this.isLogin=true;
                 this.loginName=window.localStorage.getItem("name");
-                $.tokenAjax("/admin/me","get").then((data)=>{
+                $.tokenAjax("/me","get").then((data)=>{
                     console.log(91,data);
                     this.role=data.result.role;
                 }).catch((error)=>{
@@ -138,7 +140,8 @@
         },
         components:{
             loginModal,
-            registerModal
+            registerModal,
+            fetchPassWordModal
         }
     }
 </script>

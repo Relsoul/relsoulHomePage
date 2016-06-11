@@ -12,7 +12,8 @@ import Admin from "./components/Admin/admin.vue"
 import adminHome from "./components/Admin/adminHome.vue"
 import adminUserList from "./components/Admin/user/userList.vue";
 import adminUserDetail from "./components/Admin/user/userDetail.vue";
-
+import user from "./components/user/user.vue";
+import fenchPassWord from "./components/user/fetchPassWord.vue";
 
 Vue.use(Router);
 
@@ -50,7 +51,12 @@ router.map({
                 component:adminUserDetail
             }
         }
-    }
+    },
+    "/user/:userId":{
+        name:"user",
+        component:user,
+    },
+
 });
 
 
@@ -59,7 +65,7 @@ router.beforeEach(function (transition) {
     if(transition.to.auth){
         //判断用户是否有权限访问本页面
         if(window.localStorage.getItem("token")&&window.localStorage.getItem("name")){
-            $.tokenAjax("/admin/me","get").then((data)=>{
+            $.tokenAjax("/me","get").then((data)=>{
                 console.log(91,data);
                 if(data.result.role>=10){
                     transition.next();
@@ -70,9 +76,14 @@ router.beforeEach(function (transition) {
         }else{
             transition.redirect("/");
         };
-    }else{
+        //判断用户是否登陆,登陆才能访问个人页面
+    }else {
         transition.next();
     }
+
+
+
+
 });
 
 router.start(App,"#app");

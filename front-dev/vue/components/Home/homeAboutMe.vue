@@ -35,22 +35,23 @@
                 <div class="col m6" style="padding: 25px">
                     <img :src="aboutMeImg" alt="" class="responsive-img">
                 </div>
-                <div class="col s6 m6">
-                    <ul class="tabs">
-                        <li class="tab col s6">
-                            <a href="#normal-html">markdown</a>
-                        </li>
-                        <li class="tab col s6">
-                            <a href="#normal-markdown">html</a>
-                        </li>
-                    </ul>
-
-                </div>
-                <div id="normal-html" class="col s12 m12 markdown">
-                    {{{aboutMeContent}}}
-                </div>
-                <div id="normal-markdown" class="col s12 m12 markdown-body">
-                    {{{aboutMeContent}}}
+                <div class="row">
+                    <div class="col s6 m6">
+                        <ul class="tabs">
+                            <li class="tab col s6">
+                                <a href="#normal-html">markdown</a>
+                            </li>
+                            <li class="tab col s6">
+                                <a href="#normal-markdown">html</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="normal-html" class="col s12 m12 markdown">
+                        {{{aboutMeContent}}}
+                    </div>
+                    <div id="normal-markdown" class="col s12 m12 markdown-body">
+                        {{{aboutMeContent}}}
+                    </div>
                 </div>
             </div>
 

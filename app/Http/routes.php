@@ -23,10 +23,6 @@ Route::group(["middleware"=>["JWTAuthToken","AdminRole"],"prefix"=>"admin"],func
     Route::get("users","Admin\\adminController@users");
 
 
-    //获取个人信息
-    Route::get("me","Admin\\adminController@me");
-
-
     //更新首页-关于我
     Route::post("home/aboutme","Admin\\adminHome@updateAboutMe");
 
@@ -56,6 +52,7 @@ Route::group(["middleware"=>"JWTAuthToken"],function(){
     Route::get("/user/{id?}",["middleware"=>"isUserOrAdmin:id","uses"=>"Admin\\adminUser@getUser"]);
     //用户管理-更新用户
     Route::put("/user/{id?}",["middleware"=>"isUserOrAdmin:id","uses"=>"Admin\\adminUser@updateUser"]);
+    Route::get("/me/","userController@me");
 });
 
 
