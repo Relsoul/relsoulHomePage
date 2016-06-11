@@ -117,7 +117,7 @@
 	            "/user/": {
 	                component: _userList2.default
 	            },
-	            "/user/:username": {
+	            "/user/:userId": {
 	                component: _userDetail2.default
 	            }
 	        }
@@ -125,7 +125,7 @@
 	});
 	
 	router.beforeEach(function (transition) {
-	    if (transition.to.xxx) {
+	    if (transition.to.auth) {
 	        //判断用户是否有权限访问本页面
 	        if (window.localStorage.getItem("token") && window.localStorage.getItem("name")) {
 	            $.tokenAjax("/admin/me", "get").then(function (data) {
@@ -17933,8 +17933,24 @@
 	                }).catch();
 	            }, 800);
 	        },
-	        changePage: function changePage(e, index) {
+	        deleteUser: function deleteUser(e, id) {
 	            var _this2 = this;
+	
+	            var r = window.confirm("确定要删除该用户?");
+	            if (r == false) {
+	                return false;
+	            }
+	            $.tokenAjax("/admin/user/" + id, "delete").then(function (data) {
+	                _this2.showInfo(data.message, 1500, "msg");
+	                setTimeout(function () {
+	                    location.reload();
+	                }, 2500);
+	            }).catch(function (data) {
+	                _this2.showInfo(data.message, 3000, "msg");
+	            });
+	        },
+	        changePage: function changePage(e, index) {
+	            var _this3 = this;
 	
 	            var active = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
 	
@@ -17983,7 +17999,7 @@
 	            //当前分页设置为所点击的分页
 	            this.currentPage = index;
 	            $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
-	                _this2.userList = data.result.userList;
+	                _this3.userList = data.result.userList;
 	            }).catch();
 	            return false;
 	        },
@@ -18006,12 +18022,12 @@
 	        }
 	    },
 	    ready: function ready() {
-	        var _this3 = this;
+	        var _this4 = this;
 	
 	        $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
-	            _this3.showInfo(data.message, 3000, "msg");
-	            _this3.generate(data.result.count);
-	            _this3.userList = data.result.userList;
+	            _this4.showInfo(data.message, 3000, "msg");
+	            _this4.generate(data.result.count);
+	            _this4.userList = data.result.userList;
 	            console.log("userList", data);
 	        }).catch();
 	    },
@@ -18036,7 +18052,13 @@
 	//                 </form>
 	//             </div>
 	//             <ul class="collection">
-	//                 <li class="collection-item" v-for="user in userList">{{user.name}}</li>
+	//                 <li class="collection-item"  v-for="user in userList">
+	//                     <span class="user-name">{{user.name}}</span>
+	//                     <div class="secondary-content">
+	//                         <a class="btn" v-link="{path:'/admin/user/'+user.id}">修改</a>
+	//                         <a class="btn" @click="deleteUser($event,user.id)" >删除</a>
+	//                     </div>
+	//                 </li>
 	//             </ul>
 	//             <ul class="pagination white-text">
 	//                 <li class="" :class="{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}" @click="changePage($event,currentPage,'prev')">
@@ -18065,7 +18087,7 @@
 /* 166 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"user-list\">\n    <div class=\"container\">\n        <p>{{msg}}</p>\n        <div class=\"row\">\n            <form class=\"col s12\">\n                <div class=\"row\">\n                    <div class=\"input-field col s12\">\n                        <i class=\"material-icons prefix white-text\">search</i>\n                        <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\">\n                        <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                    </div>\n                </div>\n            </form>\n        </div>\n        <ul class=\"collection\">\n            <li class=\"collection-item\" v-for=\"user in userList\">{{user.name}}</li>\n        </ul>\n        <ul class=\"pagination white-text\">\n            <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n                <a ><i class=\"material-icons\">chevron_left</i></a>\n            </li>\n            <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n                <a>{{page.num}}</a>\n            </li>\n\n            <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n            'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n                <a  ><i class=\"material-icons\">chevron_right</i></a>\n            </li>\n        </ul>\n    </div>\n\n    user-list\n</div>\n"
+	module.exports = "\n<div class=\"user-list\">\n    <div class=\"container\">\n        <p>{{msg}}</p>\n        <div class=\"row\">\n            <form class=\"col s12\">\n                <div class=\"row\">\n                    <div class=\"input-field col s12\">\n                        <i class=\"material-icons prefix white-text\">search</i>\n                        <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\">\n                        <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                    </div>\n                </div>\n            </form>\n        </div>\n        <ul class=\"collection\">\n            <li class=\"collection-item\"  v-for=\"user in userList\">\n                <span class=\"user-name\">{{user.name}}</span>\n                <div class=\"secondary-content\">\n                    <a class=\"btn\" v-link=\"{path:'/admin/user/'+user.id}\">修改</a>\n                    <a class=\"btn\" @click=\"deleteUser($event,user.id)\" >删除</a>\n                </div>\n            </li>\n        </ul>\n        <ul class=\"pagination white-text\">\n            <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n                <a ><i class=\"material-icons\">chevron_left</i></a>\n            </li>\n            <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n                <a>{{page.num}}</a>\n            </li>\n\n            <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n            'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n                <a  ><i class=\"material-icons\">chevron_right</i></a>\n            </li>\n        </ul>\n    </div>\n\n    user-list\n</div>\n"
 
 /***/ },
 /* 167 */
@@ -18138,40 +18160,141 @@
 
 /***/ },
 /* 170 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	// <template>
-	//    <div class="user-detail">
-	//        user-detail
-	//    </div>
-	// </template>
-	// <style>
-	//
-	// </style>
-	// <script>
+	
+	var _showInfo = __webpack_require__(18);
 	
 	exports.default = {
 	    data: function data() {
 	        return {
-	            msg: 'hello vue'
+	            msg: '',
+	            userInfo: {},
+	            adminRole: 0
 	        };
 	    },
+	
+	    methods: {
+	        showInfo: (0, _showInfo.showInfo)(),
+	        updateUser: function updateUser(e) {
+	            var _this = this;
+	
+	            var userId = this.$route.params.userId;
+	            var _userInfo = this.userInfo;
+	            var name = _userInfo.name;
+	            var password = _userInfo.password;
+	            var oldPassWord = _userInfo.oldPassWord;
+	            var role = _userInfo.role;
+	            var email = _userInfo.email;
+	
+	            $.tokenAjax("/user/" + userId, "put", { name: name, password: password, oldPassWord: oldPassWord, role: role, email: email }).then(function (data) {
+	                _this.showInfo(data.message, 3000, "msg");
+	            }).catch(function (data) {
+	                _this.showInfo(data.message, 3000, "msg");
+	            });
+	
+	            return false;
+	        }
+	    },
+	    route: {
+	        data: function data(transition) {
+	            var _this2 = this;
+	
+	            var userId = this.$route.params.userId;
+	            $.tokenAjax("/user/" + userId, "get").then(function (data) {
+	                _this2.userInfo = data.result.user;
+	                _this2.adminRole = data.result.role;
+	                _this2.$nextTick(function () {
+	                    Materialize.updateTextFields();
+	                });
+	                console.log("获取单个用户", data);
+	            }).catch();
+	        }
+	    },
+	    ready: function ready() {},
 	
 	    components: {}
 	};
 	// </script>
 	/* generated by vue-loader */
+	// <template>
+	//    <div class="user-detail">
+	//        <div class="container">
+	//            <div class="row">
+	//                <div class="col s12 m8 offset-m2">
+	//                    <div class="card blue-grey darken-1">
+	//                        <div class="card-content white-text">
+	//                            <span class="card-title">用户信息</span>
+	//                            <p>{{msg}}</p>
+	//                            <div class="container">
+	//                                <div class="row">
+	//                                    <form class="col m12">
+	//                                        <div class="row">
+	//                                            <div class="input-field col s12">
+	//                                                <input id="name" type="text" class="validate" v-model="userInfo.name">
+	//                                                <label for="name">name</label>
+	//                                            </div>
+	//                                        </div>
+	//                                        <div class="row">
+	//                                            <div class="input-field col s12">
+	//                                                <input id="pw" type="text" class="validate" >
+	//                                                <label for="pw">password</label>
+	//                                            </div>
+	//                                        </div>
+	//                                        <div class="row" v-if="adminRole<10">
+	//                                            <div class="input-field col s12">
+	//                                                <input id="oldpw" type="text" class="validate" v-model="userInfo.oldPassWord">
+	//                                                <label for="oldpw">oldpw</label>
+	//                                            </div>
+	//                                        </div>
+	//                                        <div class="user-detail-admin">
+	//                                            <div class="row" v-if="adminRole>=10">
+	//                                                <div class="input-field col s12">
+	//                                                    <input id="role" type="text" class="validate" v-model="userInfo.role">
+	//                                                    <label for="role" class="active">role</label>
+	//                                                </div>
+	//                                            </div>
+	//                                        </div>
+	//
+	//                                        <div class="row">
+	//                                            <div class="input-field col s12">
+	//                                                <input id="email" type="email" class="validate" v-model="userInfo.email">
+	//                                                <label for="email" >email</label>
+	//                                            </div>
+	//                                        </div>
+	//                                        <div class="row">
+	//                                            <button class="col m6 btn " @click="updateUser($event)">提交修改</button>
+	//                                        </div>
+	//                                    </form>
+	//                                </div>
+	//                            </div>
+	//
+	//                        </div>
+	//                        <div class="card-action">
+	//                            <a href="#">This is a link</a>
+	//                            <a href='#'>This is a link</a>
+	//                        </div>
+	//                    </div>
+	//                </div>
+	//            </div>
+	//        </div>
+	//    </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
 
 /***/ },
 /* 171 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"user-detail\">\n    user-detail\n</div>\n"
+	module.exports = "\n<div class=\"user-detail\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col s12 m8 offset-m2\">\n                <div class=\"card blue-grey darken-1\">\n                    <div class=\"card-content white-text\">\n                        <span class=\"card-title\">用户信息</span>\n                        <p>{{msg}}</p>\n                        <div class=\"container\">\n                            <div class=\"row\">\n                                <form class=\"col m12\">\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"name\" type=\"text\" class=\"validate\" v-model=\"userInfo.name\">\n                                            <label for=\"name\">name</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"pw\" type=\"text\" class=\"validate\" >\n                                            <label for=\"pw\">password</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\" v-if=\"adminRole<10\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"oldpw\" type=\"text\" class=\"validate\" v-model=\"userInfo.oldPassWord\">\n                                            <label for=\"oldpw\">oldpw</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"user-detail-admin\">\n                                        <div class=\"row\" v-if=\"adminRole>=10\">\n                                            <div class=\"input-field col s12\">\n                                                <input id=\"role\" type=\"text\" class=\"validate\" v-model=\"userInfo.role\">\n                                                <label for=\"role\" class=\"active\">role</label>\n                                            </div>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"email\" type=\"email\" class=\"validate\" v-model=\"userInfo.email\">\n                                            <label for=\"email\" >email</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <button class=\"col m6 btn \" @click=\"updateUser($event)\">提交修改</button>\n                                    </div>\n                                </form>\n                            </div>\n                        </div>\n\n                    </div>\n                    <div class=\"card-action\">\n                        <a href=\"#\">This is a link</a>\n                        <a href='#'>This is a link</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }
 /******/ ]);

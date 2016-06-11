@@ -14,7 +14,13 @@
                 </form>
             </div>
             <ul class="collection">
-                <li class="collection-item" v-for="user in userList">{{user.name}}</li>
+                <li class="collection-item"  v-for="user in userList">
+                    <span class="user-name">{{user.name}}</span>
+                    <div class="secondary-content">
+                        <a class="btn" v-link="{path:'/admin/user/'+user.id}">修改</a>
+                        <a class="btn" @click="deleteUser($event,user.id)" >删除</a>
+                    </div>
+                </li>
             </ul>
             <ul class="pagination white-text">
                 <li class="" :class="{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}" @click="changePage($event,currentPage,'prev')">
@@ -70,6 +76,23 @@
                             })
                             .catch()
                 },800)
+
+            },
+            deleteUser(e,id){
+                let r=window.confirm("确定要删除该用户?");
+                if(r==false){
+                    return false
+                }
+                $.tokenAjax("/admin/user/"+id,"delete")
+                        .then((data)=>{
+                            this.showInfo(data.message,1500,"msg");
+                            setTimeout(()=>{
+                                location.reload();
+                            },2500);
+                        })
+                        .catch((data)=>{
+                            this.showInfo(data.message,3000,"msg");
+                        })
 
             },
             changePage(e,index,active=null){

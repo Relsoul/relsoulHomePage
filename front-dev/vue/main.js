@@ -46,7 +46,7 @@ router.map({
             "/user/":{
                 component:adminUserList
             },
-            "/user/:username":{
+            "/user/:userId":{
                 component:adminUserDetail
             }
         }
@@ -56,7 +56,7 @@ router.map({
 
 
 router.beforeEach(function (transition) {
-    if(transition.to.xxx){
+    if(transition.to.auth){
         //判断用户是否有权限访问本页面
         if(window.localStorage.getItem("token")&&window.localStorage.getItem("name")){
             $.tokenAjax("/admin/me","get").then((data)=>{

@@ -7,12 +7,10 @@
  */
 
 namespace App\Http\Controllers\Admin;
-use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Crypt;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class adminUser extends Controller
 {
@@ -20,8 +18,8 @@ class adminUser extends Controller
         //如果存在id则获取某个用户数据
         if(!empty($id)){
             //获取全部数据,并且通过page来分页
-            $data=DB::table("users")->where("id",$id)->get();
-            return response()->json(["type"=>"true","message"=>"获取单个用户成功","result"=>$data]);
+            $data=DB::table("users")->select("name","id","email","role")->where("id",$id)->first();
+            return response()->json(["type"=>"true","message"=>"获取单个用户成功","result"=>["user"=>$data,"role"=>$request->userRole]]);
             //不传递id则需要管理员权限
         }else if($request->userRole>=10){
             $page=(int) $request->input("page");
@@ -31,24 +29,25 @@ class adminUser extends Controller
 
                 //如果存在分页和search参数 则认定为搜索用户的分页
                 if(!empty($search)){
-                    $data=DB::table("users")->where("name","like","%".$search."%")->skip($limit)->take(10)->get();
+                    $data=DB::table("users")->select("name","id","email","role")->where("name","like","%".$search."%")->skip($limit)->take(10)->get();
                     $dataLength=DB::table("users")->where("name","like","%".$search."%")->count();
                     return response()->json(["type"=>"true","message"=>"获取搜索用户成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
                 }
 
                 //不搜索用户,仅仅分页
-                $data=DB::table("users")->skip($limit)->take(10)->get();
+                $data=DB::table("users")->select("name","id","email","role")->skip($limit)->take(10)->get();
                 $dataLength=DB::table("users")->count();
 
                 return response()->json(["type"=>"true","message"=>"获取分页用户成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
 
                 //如果存在search字段则是在数据库中全部搜索
             }else if(!empty($search)){
-                $data=DB::table("users")->where("name","like","%".$search."%")->get();
+                $data=DB::table("users")->select("name","id","email","role")->where("name","like","%".$search."%")->get();
                 $dataLength=DB::table("users")->where("name","like","%".$search."%")->count();
 
                 return response()->json(["type"=>"true","message"=>"获取搜索用户成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
             }else{
+                //即不存在id也不存在search参数
                 return response()->json(["type"=>"false","message"=>"请求参数不正确","code"=>"40009"]);
             }
         }
@@ -90,10 +89,8 @@ class adminUser extends Controller
                 //如果没查询到用户则可以更新该id和用户名
             }
 
-
             //必填选项
             $updateArr=["name"=>$userName,"email"=>$email,"updated_at"=>time()];
-
 
             //如果用户不是管理员则需要输入原来老密码,并且不提供role权限更改功能
             if($request->userRole<10){
@@ -118,7 +115,6 @@ class adminUser extends Controller
                     ->update($updateArr);
             }
             return response()->json(["type"=>"true","message"=>"更新成功","result"=>$updateUser]);
-
         }else{
             return response()->json(["type"=>"false","message"=>"更新必须提供id参数","code"=>"40009"]);
         }
@@ -149,7 +145,7 @@ class adminUser extends Controller
 
     }
 
-    public function deleteUser(Request $request,$id){
+    public function deleteUser(Request $request,$id=null){
         if(!empty($id)){
             //预先查找是否存在用户
             $isExist=DB::table("users")->where("id",$id)->first();
@@ -157,13 +153,15 @@ class adminUser extends Controller
                 return response()->json(["type"=>"false","message"=>"用户不存在","code"=>"40009"]);
             }
 
+            if($isExist->role>=10){
+                return response()->json(["type"=>"false","message"=>"用户为管理员,不允许直接删除","code"=>"40009"]);
+            }
+
+
             //删除用户
             $deleteUser=DB::table("users")->where("id",$id)->delete();
             return response()->json(["type"=>"true","message"=>"删除成功","result"=>$deleteUser]);
-
         }
         return response()->json(["type"=>"false","message"=>"删除必须提供id参数","code"=>"40009"]);
     }
-    
-
 }
