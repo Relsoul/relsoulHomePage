@@ -13,7 +13,8 @@ import adminHome from "./components/Admin/adminHome.vue"
 import adminUserList from "./components/Admin/user/userList.vue";
 import adminUserDetail from "./components/Admin/user/userDetail.vue";
 import user from "./components/user/user.vue";
-import fenchPassWord from "./components/user/fetchPassWord.vue";
+//import fenchPassWord from "./components/user/fetchPassWord.vue";
+import userData from "./components/user/userData.vue"
 
 Vue.use(Router);
 
@@ -52,9 +53,17 @@ router.map({
             }
         }
     },
-    "/user/:userId":{
+    "/user/":{
         name:"user",
         component:user,
+        subRoutes:{
+            "/:userId":{
+                component:userData
+            },
+            "/change/:userId":{
+                component:adminUserDetail
+            }
+        }
     },
 
 });

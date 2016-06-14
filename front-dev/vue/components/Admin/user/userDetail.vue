@@ -103,7 +103,9 @@
                             });
                             console.log("获取单个用户",data)
                         })
-                        .catch()
+                        .catch((data)=>{
+
+                        })
             }
         },
         ready(){

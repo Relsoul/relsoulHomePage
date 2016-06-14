@@ -84,15 +84,17 @@
 	
 	var _user2 = _interopRequireDefault(_user);
 	
-	var _fetchPassWord = __webpack_require__(26);
+	var _userData = __webpack_require__(182);
 	
-	var _fetchPassWord2 = _interopRequireDefault(_fetchPassWord);
+	var _userData2 = _interopRequireDefault(_userData);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// 挂载tokenAjax
 	$.tokenAjax = _ajax.tokenAjax;
 	$.promiseAjax = _ajax.promiseAjax;
+	//import fenchPassWord from "./components/user/fetchPassWord.vue";
+	
 	
 	_vue2.default.use(_vueRouter2.default);
 	
@@ -130,9 +132,17 @@
 	            }
 	        }
 	    },
-	    "/user/:userId": {
+	    "/user/": {
 	        name: "user",
-	        component: _user2.default
+	        component: _user2.default,
+	        subRoutes: {
+	            "/:userId": {
+	                component: _userData2.default
+	            },
+	            "/change/:userId": {
+	                component: _userDetail2.default
+	            }
+	        }
 	    }
 	
 	});
@@ -13550,7 +13560,7 @@
 	//                                 <div class="col s6 user-choose-box-wrap">
 	//                                     <div class="user-choose-box" >
 	//                                         <ul id="user-choose" class="dropdown-content" >
-	//                                             <li><a href="#!">one<span class="badge">1</span></a></li>
+	//                                             <li><a href="#!" v-link="{path:'/user/'+userId}">个人中心<span class="badge">1</span></a></li>
 	//                                             <li><a href="#!">two<span class="new badge">1</span></a></li>
 	//                                             <li v-if="role>=10?true:false" ><a href="#!" v-link="{path:'/admin'}" >admin管理</a></li>
 	//                                         </ul>
@@ -13603,7 +13613,8 @@
 	            registerModalId: "registerModal",
 	            isLogin: false,
 	            loginName: "",
-	            role: false
+	            role: false,
+	            userId: 0
 	        };
 	    },
 	    ready: function ready() {
@@ -13617,6 +13628,7 @@
 	            $.tokenAjax("/me", "get").then(function (data) {
 	                console.log(91, data);
 	                _this.role = data.result.role;
+	                _this.userId = data.result.id;
 	            }).catch(function (error) {
 	                _this.isLogin = false;
 	                window.localStorage.removeItem("token");
@@ -14311,7 +14323,7 @@
 /* 31 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <fetch-pass-word-modal></fetch-pass-word-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6 user-hello-wrap\">\n                                    <p class=\"user-hello\">欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6 user-choose-box-wrap\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\">one<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li v-if=\"role>=10?true:false\" ><a href=\"#!\" v-link=\"{path:'/admin'}\" >admin管理</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >选择与访问\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
+	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <fetch-pass-word-modal></fetch-pass-word-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6 user-hello-wrap\">\n                                    <p class=\"user-hello\">欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6 user-choose-box-wrap\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\" v-link=\"{path:'/user/'+userId}\">个人中心<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li v-if=\"role>=10?true:false\" ><a href=\"#!\" v-link=\"{path:'/admin'}\" >admin管理</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >选择与访问\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
 
 /***/ },
 /* 32 */
@@ -18359,7 +18371,7 @@
 	                    Materialize.updateTextFields();
 	                });
 	                console.log("获取单个用户", data);
-	            }).catch();
+	            }).catch(function (data) {});
 	        }
 	    },
 	    ready: function ready() {},
@@ -18547,6 +18559,32 @@
 	            this.Contentcls.m12 = false;
 	        }
 	    },
+	    route: {
+	        data: function data(transition) {
+	            var _this = this;
+	
+	            var route = this.$route;
+	            if (route.path == "/user/" && !route.params.userId) {
+	                return $.tokenAjax("/me", "get").then(function (data) {
+	                    _this.$router.go({ path: "/user/" + data.result.id });
+	                }).catch();
+	            }
+	
+	            if (route.path == "/user/change/" && route.params.userId == "change") {
+	                return $.tokenAjax("/me", "get").then(function (data) {
+	                    _this.$router.go({ path: "/user/change/" + data.result.id });
+	                }).catch();
+	            }
+	        }
+	    },
+	    ready: function ready() {
+	        var _this2 = this;
+	
+	        $.tokenAjax("/me", "get").then(function (data) {
+	            _this2.$router.go({ path: "/user/" + data.result.id });
+	        }).catch();
+	    },
+	
 	    components: {
 	        rHeader: _rHeader2.default
 	    }
@@ -18567,13 +18605,160 @@
 	// <style>
 	//
 	// </style>
-	// <script>
+	// <script type="text/ecmascript-6">
 
 /***/ },
 /* 181 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"user\">\n    <div class=\"row no-gutters\">\n\n        <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n        <div class=\"col s12 m10 right-content\" :class=\"[Contentcls]\">\n            <router-view></router-view>\n        </div>\n    </div>\n</div>\n"
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(183)
+	__vue_script__ = __webpack_require__(185)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\user\\userData.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(186)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\user\\userData.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(184);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./userData.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./userData.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"userData.vue","sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _showInfo = __webpack_require__(18);
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: "",
+	            user: {}
+	        };
+	    },
+	
+	    methods: {
+	        showInfo: (0, _showInfo.showInfo)()
+	    },
+	    ready: function ready() {},
+	
+	    route: {
+	        data: function data() {
+	            var _this = this;
+	
+	            $.tokenAjax("/me", "get").then(function (data) {
+	                console.log("userData", data);
+	            }).catch();
+	            var id = this.$route.params.userId;
+	            $.tokenAjax("/user/" + id, "get").then(function (data) {
+	                _this.user = data.result.user;
+	                _this.showInfo(data.message, 3000, "msg");
+	            }).catch(function (data) {});
+	        }
+	    },
+	    components: {}
+	};
+	// </script>
+	/* generated by vue-loader */
+	// <template>
+	//     <div class="user-data">
+	//         <div class="container">
+	//             <div class="row">
+	//                 <div class="col s12 m6 offset-m3">
+	//                     <div class="card">
+	//                         <div class="card-image">
+	//                             <img src="img/user-title.jpg">
+	//                             <span class="card-title">用户资料</span>
+	//                         </div>
+	//                         <div class="card-content">
+	//                             <p>{{msg}}</p>
+	//                             <p><i class="material-icons">perm_identity</i><span class=" user-text">{{user.name}}</span></p>
+	//                             <p><i class="material-icons">email</i><span class=" user-text">{{user.email}}</span></p>
+	//                         </div>
+	//                         <div class="card-action">
+	//                             <a href="#" v-link="{path:'/user/change/'+user.id}" class="btn">修改个人资料</a>
+	//                         </div>
+	//                     </div>
+	//                 </div>
+	//             </div>
+	//         </div>
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
+
+/***/ },
+/* 186 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"user-data\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col s12 m6 offset-m3\">\n                <div class=\"card\">\n                    <div class=\"card-image\">\n                        <img src=\"img/user-title.jpg\">\n                        <span class=\"card-title\">用户资料</span>\n                    </div>\n                    <div class=\"card-content\">\n                        <p>{{msg}}</p>\n                        <p><i class=\"material-icons\">perm_identity</i><span class=\" user-text\">{{user.name}}</span></p>\n                        <p><i class=\"material-icons\">email</i><span class=\" user-text\">{{user.email}}</span></p>\n                    </div>\n                    <div class=\"card-action\">\n                        <a href=\"#\" v-link=\"{path:'/user/change/'+user.id}\" class=\"btn\">修改个人资料</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }
 /******/ ]);

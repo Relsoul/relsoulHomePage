@@ -12,7 +12,7 @@
 <style>
 
 </style>
-<script>
+<script type="text/ecmascript-6">
 
     import rHeader from "../rHeader.vue"
     export default{
@@ -34,6 +34,27 @@
                 this.Contentcls.m10=true;
                 this.Contentcls.m12=false;
             }
+        },
+        route:{
+            data(transition){
+                let route=this.$route;
+                if(route.path=="/user/"&&!route.params.userId){
+                    return $.tokenAjax("/me","get").then((data)=>{
+                        this.$router.go({path:"/user/"+data.result.id});
+                    }).catch();
+                }
+
+                if(route.path=="/user/change/"&&route.params.userId=="change"){
+                    return $.tokenAjax("/me","get").then((data)=>{
+                        this.$router.go({path:"/user/change/"+data.result.id});
+                    }).catch();
+                }
+            }
+        },
+        ready(){
+            $.tokenAjax("/me","get").then((data)=>{
+                this.$router.go({path:"/user/"+data.result.id});
+            }).catch();
         },
         components:{
             rHeader

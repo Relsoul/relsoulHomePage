@@ -19,6 +19,9 @@ class adminUser extends Controller
         if(!empty($id)){
             //获取全部数据,并且通过page来分页
             $data=DB::table("users")->select("name","id","email","role")->where("id",$id)->first();
+            if(empty($data)){
+                return response()->json(["type"=>"false","message"=>"用户不存在","code"=>"40009"]);
+            }
             return response()->json(["type"=>"true","message"=>"获取单个用户成功","result"=>["user"=>$data,"role"=>$request->userRole]]);
             //不传递id则需要管理员权限
         }else if($request->userRole>=10){

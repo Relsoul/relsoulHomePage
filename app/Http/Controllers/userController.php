@@ -115,13 +115,13 @@ class userController extends Controller
 
     public function me(Request $request){
         $name=$request->users->name;
-
+  
         $userInfo=DB::table("users")->where("name",$name)->first();
         if(empty($userInfo)){
             return response()->json(["type"=>"false","message"=>"token无效或过期,用户获取失败","code"=>"40007"]);
         }
 
-        return response()->json(["type"=>"true","message"=>"获取权限成功","result"=>["role"=>$userInfo->role]]);
+        return response()->json(["type"=>"true","message"=>"获取权限成功","result"=>["role"=>$userInfo->role,"id"=>$userInfo->id]]);
     }
 
 

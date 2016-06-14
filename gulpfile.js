@@ -9,6 +9,7 @@ const sprity=require("sprity");
 const rename=require("gulp-rename");
 const sourcemaps = require('gulp-sourcemaps');
 //const nodemon=require("gulp-nodemon");
+const apidoc=require("gulp-apidoc");
 
 gulp.task("default",["watch"]);
 
@@ -45,7 +46,7 @@ gulp.task("sass:compile",function(){
     gulp.src("front-dev/sass/main.scss")
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(sourcemaps.write("/"))
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest('public/css'))
         .pipe(livereload());
 });
@@ -65,4 +66,12 @@ gulp.task("spriter",function(cb){
         "style-type":"scss"
     }).pipe(gulpif("*.png",gulp.dest("./public/img"),gulp.dest("./front-dev/sass/sprite-sass")));
 
+});
+
+gulp.task('apidoc', function(done){
+    apidoc({
+        src: "front-dev/",
+        dest: "public/t/",
+        debug:true,
+    },done);
 });

@@ -23,7 +23,7 @@
                                 <div class="col s6 user-choose-box-wrap">
                                     <div class="user-choose-box" >
                                         <ul id="user-choose" class="dropdown-content" >
-                                            <li><a href="#!">one<span class="badge">1</span></a></li>
+                                            <li><a href="#!" v-link="{path:'/user/'+userId}">个人中心<span class="badge">1</span></a></li>
                                             <li><a href="#!">two<span class="new badge">1</span></a></li>
                                             <li v-if="role>=10?true:false" ><a href="#!" v-link="{path:'/admin'}" >admin管理</a></li>
                                         </ul>
@@ -80,7 +80,8 @@
                 registerModalId:"registerModal",
                 isLogin:false,
                 loginName:"",
-                role:false
+                role:false,
+                userId:0,
             }
         },
         ready(){
@@ -92,6 +93,7 @@
                 $.tokenAjax("/me","get").then((data)=>{
                     console.log(91,data);
                     this.role=data.result.role;
+                    this.userId=data.result.id;
                 }).catch((error)=>{
                     this.isLogin=false;
                     window.localStorage.removeItem("token");
