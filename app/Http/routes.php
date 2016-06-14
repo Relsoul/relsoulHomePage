@@ -51,9 +51,9 @@ Route::group(["middleware"=>["JWTAuthToken","AdminRole"],"prefix"=>"admin"],func
 //新分组 判断请求用户是否是本身或者具有管理权限
 Route::group(["middleware"=>"JWTAuthToken"],function(){
     //用户管理-获取用户
-    Route::get("/user/{id?}",["middleware"=>"isUserOrAdmin:id","uses"=>"Admin\\adminUser@getUser"]);
+    Route::get("/user/{id?}",["middleware"=>"isUserOrAdmin","uses"=>"Admin\\adminUser@getUser"]);
     //用户管理-更新用户
-    Route::put("/user/{id?}",["middleware"=>"isUserOrAdmin:id","uses"=>"Admin\\adminUser@updateUser"]);
+    Route::put("/user/{id?}",["middleware"=>"isUserOrAdmin","uses"=>"Admin\\adminUser@updateUser"]);
     Route::get("/me/","userController@me");
 });
 

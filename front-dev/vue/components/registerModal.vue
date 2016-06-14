@@ -60,6 +60,8 @@
         },
         methods:{
             registerClick(e){
+                e.stopImmediatePropagation();
+
                 if(this.registerUser&&this.registerEmail&&this.registerPw){
                     if(/\s+/gi.test(this.registerUser)){
                         this.showInfo("请不要再用户名中包含空格哦~",2000,"fromInfo");
@@ -96,7 +98,7 @@
                     //this.fromInfo=;
                     return false;
                 }
-                e.stopImmediatePropagation();
+
 
             },
             showInfo:showInfo()

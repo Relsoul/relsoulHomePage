@@ -16,16 +16,16 @@
                                                <label for="name">name</label>
                                            </div>
                                        </div>
-                                       <div class="row">
-                                           <div class="input-field col s12">
-                                               <input id="pw" type="text" class="validate" >
-                                               <label for="pw">password</label>
-                                           </div>
-                                       </div>
                                        <div class="row" v-if="adminRole<10">
                                            <div class="input-field col s12">
                                                <input id="oldpw" type="text" class="validate" v-model="userInfo.oldPassWord">
                                                <label for="oldpw">oldpw</label>
+                                           </div>
+                                       </div>
+                                       <div class="row">
+                                           <div class="input-field col s12">
+                                               <input id="pw" type="text" class="validate"  v-model="userInfo.password" >
+                                               <label for="pw">password</label>
                                            </div>
                                        </div>
                                        <div class="user-detail-admin">
@@ -80,12 +80,31 @@
             updateUser(e){
                 let userId=this.$route.params.userId;
                 let {name,password,oldPassWord,role,email}=this.userInfo;
+
+
+                if(/\s+/gi.test(name)){
+                    this.showInfo("请不要再用户名中包含空格哦~",2000,"msg");
+                    return false;
+                }
+
+                if(password&&(password.length<=6||password.length>=6)&&!(/[^0-9]+/.test(password))){
+                    this.showInfo("为了安全请见~请输入大于6位非纯数字密码",2000,"msg");
+                    return false;
+                }
+
+
                 $.tokenAjax("/user/"+userId,"put",{name,password,oldPassWord,role,email})
                         .then((data)=>{
                             this.showInfo(data.message,3000,"msg");
+                            //更新成功移除下重新登陆
+                            window.localStorage.removeItem("name");
+                            window.localStorage.removeItem("token");
+                            //重新打开登陆框
+                            $("#loginModal").openModal();
                         })
                         .catch((data)=>{
                             this.showInfo(data.message,3000,"msg");
+                            this.$router.go({path:"/"})
                         });
 
                 return false;
@@ -104,6 +123,7 @@
                             console.log("获取单个用户",data)
                         })
                         .catch((data)=>{
+                            this.$router.go({path:"/"})
 
                         })
             }

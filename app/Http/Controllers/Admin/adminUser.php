@@ -102,7 +102,7 @@ class adminUser extends Controller
                     if(Crypt::decrypt($updateUser->password)!=$oldPassWord){
                         return response()->json(["type"=>"false","message"=>"原密码不正确","code"=>"40003"]);
                     }
-                    $updateArr["password"]=$passWord;
+                    $updateArr["password"]=Crypt::encrypt($passWord);
                 }
 
                 $updateUser=DB::table("users")

@@ -14070,6 +14070,8 @@
 	        registerClick: function registerClick(e) {
 	            var _this = this;
 	
+	            e.stopImmediatePropagation();
+	
 	            if (this.registerUser && this.registerEmail && this.registerPw) {
 	                if (/\s+/gi.test(this.registerUser)) {
 	                    this.showInfo("请不要再用户名中包含空格哦~", 2000, "fromInfo");
@@ -14105,7 +14107,6 @@
 	                //this.fromInfo=;
 	                return false;
 	            }
-	            e.stopImmediatePropagation();
 	        },
 	
 	        showInfo: (0, _showInfo.showInfo)()
@@ -18350,10 +18351,27 @@
 	            var role = _userInfo.role;
 	            var email = _userInfo.email;
 	
+	
+	            if (/\s+/gi.test(name)) {
+	                this.showInfo("请不要再用户名中包含空格哦~", 2000, "msg");
+	                return false;
+	            }
+	
+	            if (password && (password.length <= 6 || password.length >= 6) && !/[^0-9]+/.test(password)) {
+	                this.showInfo("为了安全请见~请输入大于6位非纯数字密码", 2000, "msg");
+	                return false;
+	            }
+	
 	            $.tokenAjax("/user/" + userId, "put", { name: name, password: password, oldPassWord: oldPassWord, role: role, email: email }).then(function (data) {
 	                _this.showInfo(data.message, 3000, "msg");
+	                //更新成功移除下重新登陆
+	                window.localStorage.removeItem("name");
+	                window.localStorage.removeItem("token");
+	                //重新打开登陆框
+	                $("#loginModal").openModal();
 	            }).catch(function (data) {
 	                _this.showInfo(data.message, 3000, "msg");
+	                _this.$router.go({ path: "/" });
 	            });
 	
 	            return false;
@@ -18371,7 +18389,9 @@
 	                    Materialize.updateTextFields();
 	                });
 	                console.log("获取单个用户", data);
-	            }).catch(function (data) {});
+	            }).catch(function (data) {
+	                _this2.$router.go({ path: "/" });
+	            });
 	        }
 	    },
 	    ready: function ready() {},
@@ -18398,16 +18418,16 @@
 	//                                                <label for="name">name</label>
 	//                                            </div>
 	//                                        </div>
-	//                                        <div class="row">
-	//                                            <div class="input-field col s12">
-	//                                                <input id="pw" type="text" class="validate" >
-	//                                                <label for="pw">password</label>
-	//                                            </div>
-	//                                        </div>
 	//                                        <div class="row" v-if="adminRole<10">
 	//                                            <div class="input-field col s12">
 	//                                                <input id="oldpw" type="text" class="validate" v-model="userInfo.oldPassWord">
 	//                                                <label for="oldpw">oldpw</label>
+	//                                            </div>
+	//                                        </div>
+	//                                        <div class="row">
+	//                                            <div class="input-field col s12">
+	//                                                <input id="pw" type="text" class="validate"  v-model="userInfo.password" >
+	//                                                <label for="pw">password</label>
 	//                                            </div>
 	//                                        </div>
 	//                                        <div class="user-detail-admin">
@@ -18451,7 +18471,7 @@
 /* 176 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"user-detail\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col s12 m8 offset-m2\">\n                <div class=\"card blue-grey darken-1\">\n                    <div class=\"card-content white-text\">\n                        <span class=\"card-title\">用户信息</span>\n                        <p>{{msg}}</p>\n                        <div class=\"container\">\n                            <div class=\"row\">\n                                <form class=\"col m12\">\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"name\" type=\"text\" class=\"validate\" v-model=\"userInfo.name\">\n                                            <label for=\"name\">name</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"pw\" type=\"text\" class=\"validate\" >\n                                            <label for=\"pw\">password</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\" v-if=\"adminRole<10\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"oldpw\" type=\"text\" class=\"validate\" v-model=\"userInfo.oldPassWord\">\n                                            <label for=\"oldpw\">oldpw</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"user-detail-admin\">\n                                        <div class=\"row\" v-if=\"adminRole>=10\">\n                                            <div class=\"input-field col s12\">\n                                                <input id=\"role\" type=\"text\" class=\"validate\" v-model=\"userInfo.role\">\n                                                <label for=\"role\" class=\"active\">role</label>\n                                            </div>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"email\" type=\"email\" class=\"validate\" v-model=\"userInfo.email\">\n                                            <label for=\"email\" >email</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <button class=\"col m6 btn \" @click=\"updateUser($event)\">提交修改</button>\n                                    </div>\n                                </form>\n                            </div>\n                        </div>\n\n                    </div>\n                    <div class=\"card-action\">\n\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"user-detail\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col s12 m8 offset-m2\">\n                <div class=\"card blue-grey darken-1\">\n                    <div class=\"card-content white-text\">\n                        <span class=\"card-title\">用户信息</span>\n                        <p>{{msg}}</p>\n                        <div class=\"container\">\n                            <div class=\"row\">\n                                <form class=\"col m12\">\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"name\" type=\"text\" class=\"validate\" v-model=\"userInfo.name\">\n                                            <label for=\"name\">name</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\" v-if=\"adminRole<10\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"oldpw\" type=\"text\" class=\"validate\" v-model=\"userInfo.oldPassWord\">\n                                            <label for=\"oldpw\">oldpw</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"pw\" type=\"text\" class=\"validate\"  v-model=\"userInfo.password\" >\n                                            <label for=\"pw\">password</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"user-detail-admin\">\n                                        <div class=\"row\" v-if=\"adminRole>=10\">\n                                            <div class=\"input-field col s12\">\n                                                <input id=\"role\" type=\"text\" class=\"validate\" v-model=\"userInfo.role\">\n                                                <label for=\"role\" class=\"active\">role</label>\n                                            </div>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"email\" type=\"email\" class=\"validate\" v-model=\"userInfo.email\">\n                                            <label for=\"email\" >email</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <button class=\"col m6 btn \" @click=\"updateUser($event)\">提交修改</button>\n                                    </div>\n                                </form>\n                            </div>\n                        </div>\n\n                    </div>\n                    <div class=\"card-action\">\n\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 177 */

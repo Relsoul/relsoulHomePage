@@ -23,14 +23,16 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class isUserOrAdmin
 {
-    public function handle($request,$next,$id){
+    public function handle($request, Closure $next){
         $user=$request->users;
         $userName=$user->name;
         $findUser=User::where("name",$userName)->first();
         $request->userRole=$findUser->role;
+        $id=(int) $request->route()->getParameter("id");
         if($findUser->role>=10){
             return $next($request);
         }else{
+
             if($id){
                 //判断是否存在id以及当前用户查询的是否为他本身
                 if($findUser->id!=$id){
