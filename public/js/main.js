@@ -76,15 +76,15 @@
 	
 	var _userList2 = _interopRequireDefault(_userList);
 	
-	var _userDetail = __webpack_require__(172);
+	var _userDetail = __webpack_require__(177);
 	
 	var _userDetail2 = _interopRequireDefault(_userDetail);
 	
-	var _user = __webpack_require__(177);
+	var _user = __webpack_require__(182);
 	
 	var _user2 = _interopRequireDefault(_user);
 	
-	var _userData = __webpack_require__(182);
+	var _userData = __webpack_require__(187);
 	
 	var _userData2 = _interopRequireDefault(_userData);
 	
@@ -17985,7 +17985,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\user\\userList.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(171)
+	__vue_template__ = __webpack_require__(176)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -18053,14 +18053,34 @@
 	    value: true
 	});
 	
-	var _getIterator2 = __webpack_require__(130);
-	
-	var _getIterator3 = _interopRequireDefault(_getIterator2);
-	
 	var _showInfo = __webpack_require__(18);
+	
+	var _userListView = __webpack_require__(171);
+	
+	var _userListView2 = _interopRequireDefault(_userListView);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// <template>
+	//     <div class="user-list">
+	//         <user-list-view
+	//                 :list-data="userList"
+	//                 :page-length="pageLength"
+	//                 :current-page="currentPage"
+	//                 :search-timer="searchTimer"
+	//                 :msg="msg"
+	//                 @search-list="searchUser"
+	//                 @change-page="changePage"
+	//                 @delete-list="deleteUser"
+	//
+	//         ></user-list-view>
+	//         user-list
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
 	exports.default = {
 	    data: function data() {
 	        return {
@@ -18075,30 +18095,30 @@
 	
 	    methods: {
 	        showInfo: (0, _showInfo.showInfo)(),
-	        searchUser: function searchUser(e) {
+	        searchUser: function searchUser(searchText) {
 	            var _this = this;
 	
-	            if (this.searchTimer) {
-	                return false;
-	            }
-	            //延迟处理搜索
-	            this.searchTimer = setTimeout(function () {
-	                $.tokenAjax("/user/", "get", { "s": _this.searchText }).then(function (data) {
-	                    _this.searchTimer = null;
+	            //与子组件属性进行同步
+	            this.searchText = searchText;
+	            //如果为空那么则是不搜索获取全部用户
+	            if (this.searchText.trim() == "") {
+	                return $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
 	                    _this.showInfo(data.message, 3000, "msg");
 	                    _this.generate(data.result.count);
 	                    _this.userList = data.result.userList;
-	                    console.log("搜索用户", data);
+	                    console.log("userList", data);
 	                }).catch();
-	            }, 800);
+	            }
+	            $.tokenAjax("/user/", "get", { "s": this.searchText }).then(function (data) {
+	                _this.showInfo(data.message, 3000, "msg");
+	                _this.generate(data.result.count);
+	                _this.userList = data.result.userList;
+	                console.log("搜索用户", data);
+	            }).catch();
 	        },
-	        deleteUser: function deleteUser(e, id) {
+	        deleteUser: function deleteUser(id) {
 	            var _this2 = this;
 	
-	            var r = window.confirm("确定要删除该用户?");
-	            if (r == false) {
-	                return false;
-	            }
 	            $.tokenAjax("/admin/user/" + id, "delete").then(function (data) {
 	                _this2.showInfo(data.message, 1500, "msg");
 	                setTimeout(function () {
@@ -18108,10 +18128,166 @@
 	                _this2.showInfo(data.message, 3000, "msg");
 	            });
 	        },
-	        changePage: function changePage(e, index) {
+	        changePage: function changePage(index) {
 	            var _this3 = this;
 	
+	            var active = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	
+	            //与子组件属性进行同步
+	            this.currentPage = index;
+	            $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
+	                _this3.userList = data.result.userList;
+	            }).catch();
+	            return false;
+	        },
+	
+	        //分页处理函数
+	        generate: function generate(count) {
+	            //清空原有的page分页列表
+	            this.currentPage = 1;
+	            this.pageLength = [];
+	            var len = Math.ceil(count / 10);
+	            //替换num为array 以循环生成数据,为了方便更改class 所以采用了object
+	            //num从1开始
+	            for (var i = 0; i < len; i++) {
+	                var _o = { num: i + 1, cls: "waves-effect" };
+	                if (i == 0) {
+	                    _o.cls = "active";
+	                }
+	                this.pageLength.push(_o);
+	            }
+	        }
+	    },
+	    ready: function ready() {
+	        var _this4 = this;
+	
+	        $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
+	            _this4.showInfo(data.message, 3000, "msg");
+	            _this4.generate(data.result.count);
+	            _this4.userList = data.result.userList;
+	            console.log("userList", data);
+	        }).catch();
+	    },
+	
+	    components: {
+	        userListView: _userListView2.default
+	
+	    }
+	};
+	// </script>
+	/* generated by vue-loader */
+
+/***/ },
+/* 171 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(172)
+	__vue_script__ = __webpack_require__(174)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\user\\userList-view.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(175)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Admin\\user\\userList-view.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(173);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./userList-view.vue", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./userList-view.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"userList-view.vue","sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _getIterator2 = __webpack_require__(130);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	var _showInfo = __webpack_require__(18);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            searchText: ""
+	        };
+	    },
+	
+	    props: ["listData", "pageLength", "currentPage", "searchTimer", "msg"],
+	    methods: {
+	        searchUser: function searchUser(e) {
+	            var _this = this;
+	
+	            if (this.searchTimer) {
+	                return false;
+	            }
+	
+	            this.searchTimer = setTimeout(function () {
+	                _this.searchTimer = null;
+	                _this.$dispatch('search-list', _this.searchText);
+	            }, 800);
+	        },
+	        changePage: function changePage(e, index) {
 	            var active = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	
 	
 	            //判断是否已经是第一页或者最后一页
 	
@@ -18157,46 +18333,25 @@
 	            this.pageLength[index - 1].cls = 'active';
 	            //当前分页设置为所点击的分页
 	            this.currentPage = index;
-	            $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
-	                _this3.userList = data.result.userList;
-	            }).catch();
+	
+	            this.$dispatch('change-page', index, active);
+	
 	            return false;
 	        },
-	
-	        //分页处理函数
-	        generate: function generate(count) {
-	            //清空原有的page分页列表
-	            this.currentPage = 1;
-	            this.pageLength = [];
-	            var len = Math.ceil(count / 10);
-	            //替换num为array 以循环生成数据,为了方便更改class 所以采用了object
-	            //num从1开始
-	            for (var i = 0; i < len; i++) {
-	                var _o = { num: i + 1, cls: "waves-effect" };
-	                if (i == 0) {
-	                    _o.cls = "active";
-	                }
-	                this.pageLength.push(_o);
+	        deleteUser: function deleteUser() {
+	            var r = window.confirm("确定要删除该用户?");
+	            if (r == false) {
+	                return false;
 	            }
+	
+	            this.$dispatch('delete-list', this.msg);
 	        }
 	    },
-	    ready: function ready() {
-	        var _this4 = this;
-	
-	        $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
-	            _this4.showInfo(data.message, 3000, "msg");
-	            _this4.generate(data.result.count);
-	            _this4.userList = data.result.userList;
-	            console.log("userList", data);
-	        }).catch();
-	    },
-	
 	    components: {}
 	};
 	// </script>
 	/* generated by vue-loader */
 	// <template>
-	//     <div class="user-list">
 	//         <div class="container">
 	//             <p>{{msg}}</p>
 	//             <div class="row">
@@ -18204,18 +18359,18 @@
 	//                     <div class="row">
 	//                         <div class="input-field col s12">
 	//                             <i class="material-icons prefix white-text">search</i>
-	//                             <input id="icon_prefix" type="text" class="validate" v-model="searchText" @change="searchUser($event)">
+	//                             <input id="icon_prefix" type="text" class="validate" v-model="searchText" @change="searchUser($event)" @click="searchUser($event)">
 	//                             <label for="icon_prefix" class="white-text">搜索</label>
 	//                         </div>
 	//                     </div>
 	//                 </form>
 	//             </div>
 	//             <ul class="collection">
-	//                 <li class="collection-item"  v-for="user in userList">
-	//                     <span class="user-name">{{user.name}}</span>
+	//                 <li class="collection-item"  v-for="list in listData">
+	//                     <span class="user-name">{{list.name}}</span>
 	//                     <div class="secondary-content">
-	//                         <a class="btn" v-link="{path:'/admin/user/'+user.id}">修改</a>
-	//                         <a class="btn" @click="deleteUser($event,user.id)" >删除</a>
+	//                         <a class="btn" v-link="{path:'/admin/user/'+list.id}">修改</a>
+	//                         <a class="btn" @click="deleteUser($event,list.id)" >删除</a>
 	//                     </div>
 	//                 </li>
 	//             </ul>
@@ -18235,7 +18390,6 @@
 	//         </div>
 	//
 	//         user-list
-	//     </div>
 	// </template>
 	// <style>
 	//
@@ -18243,23 +18397,29 @@
 	// <script type="text/ecmascript-6">
 
 /***/ },
-/* 171 */
+/* 175 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"user-list\">\n    <div class=\"container\">\n        <p>{{msg}}</p>\n        <div class=\"row\">\n            <form class=\"col s12\">\n                <div class=\"row\">\n                    <div class=\"input-field col s12\">\n                        <i class=\"material-icons prefix white-text\">search</i>\n                        <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\">\n                        <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                    </div>\n                </div>\n            </form>\n        </div>\n        <ul class=\"collection\">\n            <li class=\"collection-item\"  v-for=\"user in userList\">\n                <span class=\"user-name\">{{user.name}}</span>\n                <div class=\"secondary-content\">\n                    <a class=\"btn\" v-link=\"{path:'/admin/user/'+user.id}\">修改</a>\n                    <a class=\"btn\" @click=\"deleteUser($event,user.id)\" >删除</a>\n                </div>\n            </li>\n        </ul>\n        <ul class=\"pagination white-text\">\n            <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n                <a ><i class=\"material-icons\">chevron_left</i></a>\n            </li>\n            <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n                <a>{{page.num}}</a>\n            </li>\n\n            <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n            'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n                <a  ><i class=\"material-icons\">chevron_right</i></a>\n            </li>\n        </ul>\n    </div>\n\n    user-list\n</div>\n"
+	module.exports = "\n<div class=\"container\">\n    <p>{{msg}}</p>\n    <div class=\"row\">\n        <form class=\"col s12\">\n            <div class=\"row\">\n                <div class=\"input-field col s12\">\n                    <i class=\"material-icons prefix white-text\">search</i>\n                    <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\" @click=\"searchUser($event)\">\n                    <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                </div>\n            </div>\n        </form>\n    </div>\n    <ul class=\"collection\">\n        <li class=\"collection-item\"  v-for=\"list in listData\">\n            <span class=\"user-name\">{{list.name}}</span>\n            <div class=\"secondary-content\">\n                <a class=\"btn\" v-link=\"{path:'/admin/user/'+list.id}\">修改</a>\n                <a class=\"btn\" @click=\"deleteUser($event,list.id)\" >删除</a>\n            </div>\n        </li>\n    </ul>\n    <ul class=\"pagination white-text\">\n        <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n            <a ><i class=\"material-icons\">chevron_left</i></a>\n        </li>\n        <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n            <a>{{page.num}}</a>\n        </li>\n\n        <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n        'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n            <a  ><i class=\"material-icons\">chevron_right</i></a>\n        </li>\n    </ul>\n</div>\n\nuser-list\n"
 
 /***/ },
-/* 172 */
+/* 176 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"user-list\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n\n    ></user-list-view>\n    user-list\n</div>\n"
+
+/***/ },
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(173)
-	__vue_script__ = __webpack_require__(175)
+	__webpack_require__(178)
+	__vue_script__ = __webpack_require__(180)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\user\\userDetail.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(176)
+	__vue_template__ = __webpack_require__(181)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -18278,13 +18438,13 @@
 	})()}
 
 /***/ },
-/* 173 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(174);
+	var content = __webpack_require__(179);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(8)(content, {});
@@ -18304,7 +18464,7 @@
 	}
 
 /***/ },
-/* 174 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(7)();
@@ -18318,7 +18478,7 @@
 
 
 /***/ },
-/* 175 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -18468,23 +18628,23 @@
 	// <script type="text/ecmascript-6">
 
 /***/ },
-/* 176 */
+/* 181 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"user-detail\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col s12 m8 offset-m2\">\n                <div class=\"card blue-grey darken-1\">\n                    <div class=\"card-content white-text\">\n                        <span class=\"card-title\">用户信息</span>\n                        <p>{{msg}}</p>\n                        <div class=\"container\">\n                            <div class=\"row\">\n                                <form class=\"col m12\">\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"name\" type=\"text\" class=\"validate\" v-model=\"userInfo.name\">\n                                            <label for=\"name\">name</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\" v-if=\"adminRole<10\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"oldpw\" type=\"text\" class=\"validate\" v-model=\"userInfo.oldPassWord\">\n                                            <label for=\"oldpw\">oldpw</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"pw\" type=\"text\" class=\"validate\"  v-model=\"userInfo.password\" >\n                                            <label for=\"pw\">password</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"user-detail-admin\">\n                                        <div class=\"row\" v-if=\"adminRole>=10\">\n                                            <div class=\"input-field col s12\">\n                                                <input id=\"role\" type=\"text\" class=\"validate\" v-model=\"userInfo.role\">\n                                                <label for=\"role\" class=\"active\">role</label>\n                                            </div>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"email\" type=\"email\" class=\"validate\" v-model=\"userInfo.email\">\n                                            <label for=\"email\" >email</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <button class=\"col m6 btn \" @click=\"updateUser($event)\">提交修改</button>\n                                    </div>\n                                </form>\n                            </div>\n                        </div>\n\n                    </div>\n                    <div class=\"card-action\">\n\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
-/* 177 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(178)
-	__vue_script__ = __webpack_require__(180)
+	__webpack_require__(183)
+	__vue_script__ = __webpack_require__(185)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] front-dev\\vue\\components\\user\\user.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(181)
+	__vue_template__ = __webpack_require__(186)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -18503,13 +18663,13 @@
 	})()}
 
 /***/ },
-/* 178 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(179);
+	var content = __webpack_require__(184);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(8)(content, {});
@@ -18529,7 +18689,7 @@
 	}
 
 /***/ },
-/* 179 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(7)();
@@ -18543,7 +18703,7 @@
 
 
 /***/ },
-/* 180 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -18628,23 +18788,23 @@
 	// <script type="text/ecmascript-6">
 
 /***/ },
-/* 181 */
+/* 186 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"user\">\n    <div class=\"row no-gutters\">\n\n        <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n        <div class=\"col s12 m10 right-content\" :class=\"[Contentcls]\">\n            <router-view></router-view>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
-/* 182 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(183)
-	__vue_script__ = __webpack_require__(185)
+	__webpack_require__(188)
+	__vue_script__ = __webpack_require__(190)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] front-dev\\vue\\components\\user\\userData.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(186)
+	__vue_template__ = __webpack_require__(191)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -18663,13 +18823,13 @@
 	})()}
 
 /***/ },
-/* 183 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(184);
+	var content = __webpack_require__(189);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(8)(content, {});
@@ -18689,7 +18849,7 @@
 	}
 
 /***/ },
-/* 184 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(7)();
@@ -18703,7 +18863,7 @@
 
 
 /***/ },
-/* 185 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -18775,7 +18935,7 @@
 	// <script type="text/ecmascript-6">
 
 /***/ },
-/* 186 */
+/* 191 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"user-data\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col s12 m6 offset-m3\">\n                <div class=\"card\">\n                    <div class=\"card-image\">\n                        <img src=\"img/user-title.jpg\">\n                        <span class=\"card-title\">用户资料</span>\n                    </div>\n                    <div class=\"card-content\">\n                        <p>{{msg}}</p>\n                        <p><i class=\"material-icons\">perm_identity</i><span class=\" user-text\">{{user.name}}</span></p>\n                        <p><i class=\"material-icons\">email</i><span class=\" user-text\">{{user.email}}</span></p>\n                    </div>\n                    <div class=\"card-action\">\n                        <a href=\"#\" v-link=\"{path:'/user/change/'+user.id}\" class=\"btn\">修改个人资料</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
