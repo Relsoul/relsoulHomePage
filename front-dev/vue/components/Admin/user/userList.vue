@@ -6,6 +6,7 @@
                 :current-page="currentPage"
                 :search-timer="searchTimer"
                 :msg="msg"
+                :hf="'/admin/user/'"
                 @search-list="searchUser"
                 @change-page="changePage"
                 @delete-list="deleteUser"

@@ -88,6 +88,14 @@
 	
 	var _userData2 = _interopRequireDefault(_userData);
 	
+	var _projectList = __webpack_require__(192);
+	
+	var _projectList2 = _interopRequireDefault(_projectList);
+	
+	var _projectEdit = __webpack_require__(197);
+	
+	var _projectEdit2 = _interopRequireDefault(_projectEdit);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// 挂载tokenAjax
@@ -129,6 +137,12 @@
 	            },
 	            "/user/:userId": {
 	                component: _userDetail2.default
+	            },
+	            "/project/": {
+	                component: _projectList2.default
+	            },
+	            "/project/:id": {
+	                component: _projectEdit2.default
 	            }
 	        }
 	    },
@@ -18069,6 +18083,7 @@
 	//                 :current-page="currentPage"
 	//                 :search-timer="searchTimer"
 	//                 :msg="msg"
+	//                 :hf="'/admin/user/'"
 	//                 @search-list="searchUser"
 	//                 @change-page="changePage"
 	//                 @delete-list="deleteUser"
@@ -18271,7 +18286,7 @@
 	        };
 	    },
 	
-	    props: ["listData", "pageLength", "currentPage", "searchTimer", "msg"],
+	    props: ["listData", "pageLength", "currentPage", "searchTimer", "msg", "hf"],
 	    methods: {
 	        searchUser: function searchUser(e) {
 	            var _this = this;
@@ -18369,7 +18384,7 @@
 	//                 <li class="collection-item"  v-for="list in listData">
 	//                     <span class="user-name">{{list.name}}</span>
 	//                     <div class="secondary-content">
-	//                         <a class="btn" v-link="{path:'/admin/user/'+list.id}">修改</a>
+	//                         <a class="btn" v-link="{path:hf+list.id}">修改</a>
 	//                         <a class="btn" @click="deleteUser($event,list.id)" >删除</a>
 	//                     </div>
 	//                 </li>
@@ -18389,7 +18404,6 @@
 	//             </ul>
 	//         </div>
 	//
-	//         user-list
 	// </template>
 	// <style>
 	//
@@ -18400,13 +18414,13 @@
 /* 175 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"container\">\n    <p>{{msg}}</p>\n    <div class=\"row\">\n        <form class=\"col s12\">\n            <div class=\"row\">\n                <div class=\"input-field col s12\">\n                    <i class=\"material-icons prefix white-text\">search</i>\n                    <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\" @click=\"searchUser($event)\">\n                    <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                </div>\n            </div>\n        </form>\n    </div>\n    <ul class=\"collection\">\n        <li class=\"collection-item\"  v-for=\"list in listData\">\n            <span class=\"user-name\">{{list.name}}</span>\n            <div class=\"secondary-content\">\n                <a class=\"btn\" v-link=\"{path:'/admin/user/'+list.id}\">修改</a>\n                <a class=\"btn\" @click=\"deleteUser($event,list.id)\" >删除</a>\n            </div>\n        </li>\n    </ul>\n    <ul class=\"pagination white-text\">\n        <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n            <a ><i class=\"material-icons\">chevron_left</i></a>\n        </li>\n        <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n            <a>{{page.num}}</a>\n        </li>\n\n        <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n        'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n            <a  ><i class=\"material-icons\">chevron_right</i></a>\n        </li>\n    </ul>\n</div>\n\nuser-list\n"
+	module.exports = "\n<div class=\"container\">\n    <p>{{msg}}</p>\n    <div class=\"row\">\n        <form class=\"col s12\">\n            <div class=\"row\">\n                <div class=\"input-field col s12\">\n                    <i class=\"material-icons prefix white-text\">search</i>\n                    <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\" @click=\"searchUser($event)\">\n                    <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                </div>\n            </div>\n        </form>\n    </div>\n    <ul class=\"collection\">\n        <li class=\"collection-item\"  v-for=\"list in listData\">\n            <span class=\"user-name\">{{list.name}}</span>\n            <div class=\"secondary-content\">\n                <a class=\"btn\" v-link=\"{path:hf+list.id}\">修改</a>\n                <a class=\"btn\" @click=\"deleteUser($event,list.id)\" >删除</a>\n            </div>\n        </li>\n    </ul>\n    <ul class=\"pagination white-text\">\n        <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n            <a ><i class=\"material-icons\">chevron_left</i></a>\n        </li>\n        <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n            <a>{{page.num}}</a>\n        </li>\n\n        <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n        'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n            <a  ><i class=\"material-icons\">chevron_right</i></a>\n        </li>\n    </ul>\n</div>\n\n"
 
 /***/ },
 /* 176 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"user-list\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n\n    ></user-list-view>\n    user-list\n</div>\n"
+	module.exports = "\n<div class=\"user-list\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/user/'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n\n    ></user-list-view>\n    user-list\n</div>\n"
 
 /***/ },
 /* 177 */
@@ -18939,6 +18953,336 @@
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"user-data\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col s12 m6 offset-m3\">\n                <div class=\"card\">\n                    <div class=\"card-image\">\n                        <img src=\"img/user-title.jpg\">\n                        <span class=\"card-title\">用户资料</span>\n                    </div>\n                    <div class=\"card-content\">\n                        <p>{{msg}}</p>\n                        <p><i class=\"material-icons\">perm_identity</i><span class=\" user-text\">{{user.name}}</span></p>\n                        <p><i class=\"material-icons\">email</i><span class=\" user-text\">{{user.email}}</span></p>\n                    </div>\n                    <div class=\"card-action\">\n                        <a href=\"#\" v-link=\"{path:'/user/change/'+user.id}\" class=\"btn\">修改个人资料</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+
+/***/ },
+/* 192 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(193)
+	__vue_script__ = __webpack_require__(195)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\project\\project-list.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(196)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Admin\\project\\project-list.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 193 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(194);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./project-list.vue", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./project-list.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 194 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"project-list.vue","sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _showInfo = __webpack_require__(18);
+	
+	var _userListView = __webpack_require__(171);
+	
+	var _userListView2 = _interopRequireDefault(_userListView);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// <template>
+	//     <div class="project">
+	//         <user-list-view
+	//                 :list-data="userList"
+	//                 :page-length="pageLength"
+	//                 :current-page="currentPage"
+	//                 :search-timer="searchTimer"
+	//                 :msg="msg"
+	//                 :hf="'/admin/user/'"
+	//                 @search-list="searchUser"
+	//                 @change-page="changePage"
+	//                 @delete-list="deleteUser"
+	//
+	//         ></user-list-view>
+	//         project-list
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: '',
+	            searchTimer: null,
+	            searchText: "",
+	            pageLength: [],
+	            currentPage: 1,
+	            userList: []
+	        };
+	    },
+	
+	    methods: {
+	        showInfo: (0, _showInfo.showInfo)(),
+	        searchUser: function searchUser(searchText) {
+	            var _this = this;
+	
+	            //与子组件属性进行同步
+	            this.searchText = searchText;
+	            //如果为空那么则是不搜索获取全部用户
+	            if (this.searchText.trim() == "") {
+	                return $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
+	                    _this.showInfo(data.message, 3000, "msg");
+	                    _this.generate(data.result.count);
+	                    _this.userList = data.result.userList;
+	                    console.log("userList", data);
+	                }).catch();
+	            }
+	            $.tokenAjax("/user/", "get", { "s": this.searchText }).then(function (data) {
+	                _this.showInfo(data.message, 3000, "msg");
+	                _this.generate(data.result.count);
+	                _this.userList = data.result.userList;
+	                console.log("搜索用户", data);
+	            }).catch();
+	        },
+	        deleteUser: function deleteUser(id) {
+	            var _this2 = this;
+	
+	            $.tokenAjax("/admin/user/" + id, "delete").then(function (data) {
+	                _this2.showInfo(data.message, 1500, "msg");
+	                setTimeout(function () {
+	                    location.reload();
+	                }, 2500);
+	            }).catch(function (data) {
+	                _this2.showInfo(data.message, 3000, "msg");
+	            });
+	        },
+	        changePage: function changePage(index) {
+	            var _this3 = this;
+	
+	            var active = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	
+	            //与子组件属性进行同步
+	            this.currentPage = index;
+	            $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
+	                _this3.userList = data.result.userList;
+	            }).catch();
+	            return false;
+	        },
+	
+	        //分页处理函数
+	        generate: function generate(count) {
+	            //清空原有的page分页列表
+	            this.currentPage = 1;
+	            this.pageLength = [];
+	            var len = Math.ceil(count / 10);
+	            //替换num为array 以循环生成数据,为了方便更改class 所以采用了object
+	            //num从1开始
+	            for (var i = 0; i < len; i++) {
+	                var _o = { num: i + 1, cls: "waves-effect" };
+	                if (i == 0) {
+	                    _o.cls = "active";
+	                }
+	                this.pageLength.push(_o);
+	            }
+	        }
+	    },
+	    ready: function ready() {
+	        var _this4 = this;
+	
+	        $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
+	            _this4.showInfo(data.message, 3000, "msg");
+	            _this4.generate(data.result.count);
+	            _this4.userList = data.result.userList;
+	            console.log("userList", data);
+	        }).catch();
+	    },
+	
+	    components: {
+	        userListView: _userListView2.default
+	
+	    }
+	};
+	// </script>
+	/* generated by vue-loader */
+
+/***/ },
+/* 196 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"project\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/user/'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n\n    ></user-list-view>\n    project-list\n</div>\n"
+
+/***/ },
+/* 197 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(198)
+	__vue_script__ = __webpack_require__(200)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Admin\\project\\project-edit.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(201)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Admin\\project\\project-edit.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(199);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./project-edit.vue", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js?sourceMap!./../../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./project-edit.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"project-edit.vue","sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 200 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// <template>
+	//    <div class="project-edit">
+	//        <div class="row">
+	//            <div class="col s10 m10 offset-s1 offset-m1">
+	//                <p>测试</p>
+	//                <div id="editormd">
+	//                    <textarea style="display:none;">### Hello Editor.md !</textarea>
+	//                </div>
+	//            </div>
+	//        </div>
+	//    </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script>
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue'
+	        };
+	    },
+	    ready: function ready() {
+	        var screenHeight = $(document).height();
+	        var editor = editormd("editormd", {
+	            path: "/lib/editor/module/", // Autoload modules mode, codemirror, marked... dependents libs path
+	            height: screenHeight - 50
+	        });
+	    },
+	
+	    components: {}
+	};
+	// </script>  
+	/* generated by vue-loader */
+
+/***/ },
+/* 201 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <p>测试</p>\n            <div id=\"editormd\">\n                <textarea style=\"display:none;\">### Hello Editor.md !</textarea>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }
 /******/ ]);

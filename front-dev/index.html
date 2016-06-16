@@ -7,11 +7,13 @@
     <link rel="stylesheet" href="lib/materialize/css/materialize.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="lib/animate.css">
+    <link rel="stylesheet" href="lib/editor/css/editormd.min.css">
     <script src="lib/jquery.min.js"></script>
     <script src="http://localhost:35729/livereload.js"></script>
     <script src="lib/materialize/js/materialize.min.js"></script>
     <script src="lib/underscore-min.js"></script>
     <script src="lib/markdown.js"></script>
+    <script src="lib/editor/editormd.min.js"></script>
     <!--<script src="https://static.geetest.com/static/tools/gt.js"></script>-->
 </head>
 <body>

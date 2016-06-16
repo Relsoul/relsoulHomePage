@@ -14,6 +14,7 @@ use Mockery\CountValidator\Exception;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTFactory;
 use JWT;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -38,6 +39,11 @@ class JWTAuthToken
             return  response()->json(["type"=>"false","message"=>"token已经过期,请重新登陆","code"=>"40001"]);
         }
         $request->users=$users;
+        //查找用户权限并且写入request
+        $userName=$users->name;
+        $findUser=DB::table("users")->where("name",$userName)->first();
+        $request->userRole=$findUser->role;
+
         return $next($request);
     }
 }

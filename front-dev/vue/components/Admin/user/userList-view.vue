@@ -16,7 +16,7 @@
                 <li class="collection-item"  v-for="list in listData">
                     <span class="user-name">{{list.name}}</span>
                     <div class="secondary-content">
-                        <a class="btn" v-link="{path:'/admin/user/'+list.id}">修改</a>
+                        <a class="btn" v-link="{path:hf+list.id}">修改</a>
                         <a class="btn" @click="deleteUser($event,list.id)" >删除</a>
                     </div>
                 </li>
@@ -36,7 +36,6 @@
             </ul>
         </div>
 
-        user-list
 </template>
 <style>
 
@@ -49,7 +48,7 @@
                 searchText:"",
             }
         },
-        props:["listData","pageLength","currentPage","searchTimer","msg"],
+        props:["listData","pageLength","currentPage","searchTimer","msg","hf"],
         methods:{
             searchUser(e){
                 if(this.searchTimer){
