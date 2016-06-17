@@ -44,6 +44,33 @@ Route::group(["middleware"=>["JWTAuthToken","AdminRole"],"prefix"=>"admin"],func
     //用户管理-新建用户
     Route::post("/user/","Admin\\adminUser@newUser");
 
+
+
+    /*
+     * project管理
+     *
+     *
+     */
+
+
+    //更新project
+    Route::put("/project/{id}","Admin\\adminProject@updateProject");
+
+    //上传图片至project
+    Route::post("/project/uploadimg/{id}","Admin\\adminProject@uploadProjectImg");
+
+    //新建Project
+    Route::post("/project/","Admin\\adminProject@newProject");
+
+    //获取Project
+    Route::get("/project/{id?}","Admin\\adminProject@getProject");
+
+    //删除Project
+    Route::delete("/project/{id}","Admin\\adminProject@deleteProject");
+
+    
+
+
 });
 
 

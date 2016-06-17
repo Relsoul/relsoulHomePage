@@ -10,6 +10,7 @@
                 @search-list="searchUser"
                 @change-page="changePage"
                 @delete-list="deleteUser"
+                @new-list="newUser"
 
         ></user-list-view>
         user-list
@@ -57,6 +58,9 @@
                             })
                             .catch()
 
+            },
+            newUser(){
+                this.$router.go({path:"/admin/user/newuser/"})
             },
             deleteUser(id){
                 $.tokenAjax("/admin/user/"+id,"delete")

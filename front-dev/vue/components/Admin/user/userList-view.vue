@@ -11,29 +11,34 @@
                         </div>
                     </div>
                 </form>
-            </div>
-            <ul class="collection">
-                <li class="collection-item"  v-for="list in listData">
-                    <span class="user-name">{{list.name}}</span>
-                    <div class="secondary-content">
-                        <a class="btn" v-link="{path:hf+list.id}">修改</a>
-                        <a class="btn" @click="deleteUser($event,list.id)" >删除</a>
-                    </div>
-                </li>
-            </ul>
-            <ul class="pagination white-text">
-                <li class="" :class="{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}" @click="changePage($event,currentPage,'prev')">
-                    <a ><i class="material-icons">chevron_left</i></a>
-                </li>
-                <li class="waves-effect" :class="page.cls"  v-for="page in pageLength" @click="changePage($event,page.num)">
-                    <a>{{page.num}}</a>
-                </li>
+                <button class="btn" @click="newList($event)">
+                    新建用户
+                </button>
+                <ul class="collection">
+                        <li class="collection-item"  v-for="list in listData">
+                            <span class="user-name">{{list.name}}</span>
+                            <div class="secondary-content">
+                                <a class="btn" v-link="{path:hf+list.id}">修改</a>
+                                <a class="btn" @click="deleteUser($event,list.id)" >删除</a>
+                            </div>
+                        </li>
+                    </ul>
 
-                <li class=""  :class="{'disabled':currentPage>=pageLength.length?true:false,
+                <ul class="pagination white-text">
+                    <li class="" :class="{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}" @click="changePage($event,currentPage,'prev')">
+                        <a ><i class="material-icons">chevron_left</i></a>
+                    </li>
+                    <li class="waves-effect" :class="page.cls"  v-for="page in pageLength" @click="changePage($event,page.num)">
+                        <a>{{page.num}}</a>
+                    </li>
+
+                    <li class=""  :class="{'disabled':currentPage>=pageLength.length?true:false,
                 'waves-effect':currentPage>=pageLength.length?false:true}" @click="changePage($event,currentPage,'next')">
-                    <a  ><i class="material-icons">chevron_right</i></a>
-                </li>
-            </ul>
+                        <a  ><i class="material-icons">chevron_right</i></a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
 
 </template>
@@ -50,6 +55,10 @@
         },
         props:["listData","pageLength","currentPage","searchTimer","msg","hf"],
         methods:{
+            newList(e){
+                this.$dispatch('new-list');
+                return false;
+            },
             searchUser(e){
                 if(this.searchTimer){
                     return false;

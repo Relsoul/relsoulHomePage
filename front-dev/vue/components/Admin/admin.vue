@@ -10,7 +10,7 @@
                         <ul id="nav-mobile" class="right hide-on-med-and-down">
                             <li><a href="#" >首页</a></li>
                             <li><a href="#" v-link="{path:'/admin/user/'}">用户</a></li>
-                            <li><a href="footer">项目与文章</a></li>
+                            <li><a href="#" v-link="{path:'/admin/project/'}" >项目与文章</a></li>
                         </ul>
                     </div>
                 </nav>

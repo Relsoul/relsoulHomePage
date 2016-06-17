@@ -17003,7 +17003,7 @@
 	//                         <ul id="nav-mobile" class="right hide-on-med-and-down">
 	//                             <li><a href="#" >首页</a></li>
 	//                             <li><a href="#" v-link="{path:'/admin/user/'}">用户</a></li>
-	//                             <li><a href="footer">项目与文章</a></li>
+	//                             <li><a href="#" v-link="{path:'/admin/project/'}" >项目与文章</a></li>
 	//                         </ul>
 	//                     </div>
 	//                 </nav>
@@ -17034,7 +17034,7 @@
 /* 139 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"admin\">\n        <div class=\"row no-gutters\">\n\n            <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n            <div class=\"col s12 m10 right-content\" :class=\"[Contentcls]\">\n                <nav style=\"transition:all 0.5s;\">\n                    <div class=\"nav-wrapper\">\n                        <a href=\"#\" v-link=\"{path:'/admin'}\" class=\"brand-logo\">Relsoul后台管理</a>\n                        <ul id=\"nav-mobile\" class=\"right hide-on-med-and-down\">\n                            <li><a href=\"#\" >首页</a></li>\n                            <li><a href=\"#\" v-link=\"{path:'/admin/user/'}\">用户</a></li>\n                            <li><a href=\"footer\">项目与文章</a></li>\n                        </ul>\n                    </div>\n                </nav>\n                444555666\n                <router-view></router-view>\n            </div>\n<!--            <div class=\"fixed-action-btn\" style=\"bottom: 45px; right: 24px;\">\n                <a class=\"btn-floating btn-large red\">\n                    <i class=\"large mdi-editor-mode-edit\"></i>\n                </a>\n                <ul>\n                    <li><a class=\"btn-floating red\"><i class=\"large mdi-editor-insert-chart\"></i></a></li>\n                    <li><a class=\"btn-floating yellow darken-1\"><i class=\"large mdi-editor-format-quote\"></i></a></li>\n                    <li><a class=\"btn-floating green\"><i class=\"large mdi-editor-publish\"></i></a></li>\n                    <li><a class=\"btn-floating blue\"><i class=\"large mdi-editor-attach-file\"></i></a></li>\n                </ul>\n            </div>-->\n        </div>\n\n    </div>\n"
+	module.exports = "\n    <div class=\"admin\">\n        <div class=\"row no-gutters\">\n\n            <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n            <div class=\"col s12 m10 right-content\" :class=\"[Contentcls]\">\n                <nav style=\"transition:all 0.5s;\">\n                    <div class=\"nav-wrapper\">\n                        <a href=\"#\" v-link=\"{path:'/admin'}\" class=\"brand-logo\">Relsoul后台管理</a>\n                        <ul id=\"nav-mobile\" class=\"right hide-on-med-and-down\">\n                            <li><a href=\"#\" >首页</a></li>\n                            <li><a href=\"#\" v-link=\"{path:'/admin/user/'}\">用户</a></li>\n                            <li><a href=\"#\" v-link=\"{path:'/admin/project/'}\" >项目与文章</a></li>\n                        </ul>\n                    </div>\n                </nav>\n                444555666\n                <router-view></router-view>\n            </div>\n<!--            <div class=\"fixed-action-btn\" style=\"bottom: 45px; right: 24px;\">\n                <a class=\"btn-floating btn-large red\">\n                    <i class=\"large mdi-editor-mode-edit\"></i>\n                </a>\n                <ul>\n                    <li><a class=\"btn-floating red\"><i class=\"large mdi-editor-insert-chart\"></i></a></li>\n                    <li><a class=\"btn-floating yellow darken-1\"><i class=\"large mdi-editor-format-quote\"></i></a></li>\n                    <li><a class=\"btn-floating green\"><i class=\"large mdi-editor-publish\"></i></a></li>\n                    <li><a class=\"btn-floating blue\"><i class=\"large mdi-editor-attach-file\"></i></a></li>\n                </ul>\n            </div>-->\n        </div>\n\n    </div>\n"
 
 /***/ },
 /* 140 */
@@ -18087,6 +18087,7 @@
 	//                 @search-list="searchUser"
 	//                 @change-page="changePage"
 	//                 @delete-list="deleteUser"
+	//                 @new-list="newUser"
 	//
 	//         ></user-list-view>
 	//         user-list
@@ -18130,6 +18131,9 @@
 	                _this.userList = data.result.userList;
 	                console.log("搜索用户", data);
 	            }).catch();
+	        },
+	        newUser: function newUser() {
+	            this.$router.go({ path: "/admin/user/newuser/" });
 	        },
 	        deleteUser: function deleteUser(id) {
 	            var _this2 = this;
@@ -18288,6 +18292,10 @@
 	
 	    props: ["listData", "pageLength", "currentPage", "searchTimer", "msg", "hf"],
 	    methods: {
+	        newList: function newList(e) {
+	            this.$dispatch('new-list');
+	            return false;
+	        },
 	        searchUser: function searchUser(e) {
 	            var _this = this;
 	
@@ -18379,29 +18387,34 @@
 	//                         </div>
 	//                     </div>
 	//                 </form>
-	//             </div>
-	//             <ul class="collection">
-	//                 <li class="collection-item"  v-for="list in listData">
-	//                     <span class="user-name">{{list.name}}</span>
-	//                     <div class="secondary-content">
-	//                         <a class="btn" v-link="{path:hf+list.id}">修改</a>
-	//                         <a class="btn" @click="deleteUser($event,list.id)" >删除</a>
-	//                     </div>
-	//                 </li>
-	//             </ul>
-	//             <ul class="pagination white-text">
-	//                 <li class="" :class="{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}" @click="changePage($event,currentPage,'prev')">
-	//                     <a ><i class="material-icons">chevron_left</i></a>
-	//                 </li>
-	//                 <li class="waves-effect" :class="page.cls"  v-for="page in pageLength" @click="changePage($event,page.num)">
-	//                     <a>{{page.num}}</a>
-	//                 </li>
+	//                 <button class="btn" @click="newList($event)">
+	//                     新建用户
+	//                 </button>
+	//                 <ul class="collection">
+	//                         <li class="collection-item"  v-for="list in listData">
+	//                             <span class="user-name">{{list.name}}</span>
+	//                             <div class="secondary-content">
+	//                                 <a class="btn" v-link="{path:hf+list.id}">修改</a>
+	//                                 <a class="btn" @click="deleteUser($event,list.id)" >删除</a>
+	//                             </div>
+	//                         </li>
+	//                     </ul>
 	//
-	//                 <li class=""  :class="{'disabled':currentPage>=pageLength.length?true:false,
+	//                 <ul class="pagination white-text">
+	//                     <li class="" :class="{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}" @click="changePage($event,currentPage,'prev')">
+	//                         <a ><i class="material-icons">chevron_left</i></a>
+	//                     </li>
+	//                     <li class="waves-effect" :class="page.cls"  v-for="page in pageLength" @click="changePage($event,page.num)">
+	//                         <a>{{page.num}}</a>
+	//                     </li>
+	//
+	//                     <li class=""  :class="{'disabled':currentPage>=pageLength.length?true:false,
 	//                 'waves-effect':currentPage>=pageLength.length?false:true}" @click="changePage($event,currentPage,'next')">
-	//                     <a  ><i class="material-icons">chevron_right</i></a>
-	//                 </li>
-	//             </ul>
+	//                         <a  ><i class="material-icons">chevron_right</i></a>
+	//                     </li>
+	//                 </ul>
+	//             </div>
+	//
 	//         </div>
 	//
 	// </template>
@@ -18414,13 +18427,13 @@
 /* 175 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"container\">\n    <p>{{msg}}</p>\n    <div class=\"row\">\n        <form class=\"col s12\">\n            <div class=\"row\">\n                <div class=\"input-field col s12\">\n                    <i class=\"material-icons prefix white-text\">search</i>\n                    <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\" @click=\"searchUser($event)\">\n                    <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                </div>\n            </div>\n        </form>\n    </div>\n    <ul class=\"collection\">\n        <li class=\"collection-item\"  v-for=\"list in listData\">\n            <span class=\"user-name\">{{list.name}}</span>\n            <div class=\"secondary-content\">\n                <a class=\"btn\" v-link=\"{path:hf+list.id}\">修改</a>\n                <a class=\"btn\" @click=\"deleteUser($event,list.id)\" >删除</a>\n            </div>\n        </li>\n    </ul>\n    <ul class=\"pagination white-text\">\n        <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n            <a ><i class=\"material-icons\">chevron_left</i></a>\n        </li>\n        <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n            <a>{{page.num}}</a>\n        </li>\n\n        <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n        'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n            <a  ><i class=\"material-icons\">chevron_right</i></a>\n        </li>\n    </ul>\n</div>\n\n"
+	module.exports = "\n<div class=\"container\">\n    <p>{{msg}}</p>\n    <div class=\"row\">\n        <form class=\"col s12\">\n            <div class=\"row\">\n                <div class=\"input-field col s12\">\n                    <i class=\"material-icons prefix white-text\">search</i>\n                    <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\" @click=\"searchUser($event)\">\n                    <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                </div>\n            </div>\n        </form>\n        <button class=\"btn\" @click=\"newList($event)\">\n            新建用户\n        </button>\n        <ul class=\"collection\">\n                <li class=\"collection-item\"  v-for=\"list in listData\">\n                    <span class=\"user-name\">{{list.name}}</span>\n                    <div class=\"secondary-content\">\n                        <a class=\"btn\" v-link=\"{path:hf+list.id}\">修改</a>\n                        <a class=\"btn\" @click=\"deleteUser($event,list.id)\" >删除</a>\n                    </div>\n                </li>\n            </ul>\n\n        <ul class=\"pagination white-text\">\n            <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n                <a ><i class=\"material-icons\">chevron_left</i></a>\n            </li>\n            <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n                <a>{{page.num}}</a>\n            </li>\n\n            <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n        'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n                <a  ><i class=\"material-icons\">chevron_right</i></a>\n            </li>\n        </ul>\n    </div>\n\n</div>\n\n"
 
 /***/ },
 /* 176 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"user-list\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/user/'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n\n    ></user-list-view>\n    user-list\n</div>\n"
+	module.exports = "\n<div class=\"user-list\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/user/'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n            @new-list=\"newUser\"\n\n    ></user-list-view>\n    user-list\n</div>\n"
 
 /***/ },
 /* 177 */
@@ -18508,16 +18521,16 @@
 	        return {
 	            msg: '',
 	            userInfo: {},
-	            adminRole: 0
+	            adminRole: 0,
+	            newUser: false
 	        };
 	    },
 	
 	    methods: {
 	        showInfo: (0, _showInfo.showInfo)(),
-	        updateUser: function updateUser(e) {
+	        addUser: function addUser(e) {
 	            var _this = this;
 	
-	            var userId = this.$route.params.userId;
 	            var _userInfo = this.userInfo;
 	            var name = _userInfo.name;
 	            var password = _userInfo.password;
@@ -18536,16 +18549,49 @@
 	                return false;
 	            }
 	
-	            $.tokenAjax("/user/" + userId, "put", { name: name, password: password, oldPassWord: oldPassWord, role: role, email: email }).then(function (data) {
+	            $.tokenAjax("/admin/user/", "post", { name: name, password: password, role: role, email: email }).then(function (data) {
 	                _this.showInfo(data.message, 3000, "msg");
+	                //成功清除表单信息.
+	                _this.userInfo = {};
+	            }).catch(function (data) {
+	                _this.showInfo(data.message, 3000, "msg");
+	                _this.$router.go({ path: "/" });
+	            });
+	
+	            return false;
+	        },
+	        updateUser: function updateUser(e) {
+	            var _this2 = this;
+	
+	            var userId = this.$route.params.userId;
+	            var _userInfo2 = this.userInfo;
+	            var name = _userInfo2.name;
+	            var password = _userInfo2.password;
+	            var oldPassWord = _userInfo2.oldPassWord;
+	            var role = _userInfo2.role;
+	            var email = _userInfo2.email;
+	
+	
+	            if (/\s+/gi.test(name)) {
+	                this.showInfo("请不要再用户名中包含空格哦~", 2000, "msg");
+	                return false;
+	            }
+	
+	            if (password && (password.length <= 6 || password.length >= 6) && !/[^0-9]+/.test(password)) {
+	                this.showInfo("为了安全请见~请输入大于6位非纯数字密码", 2000, "msg");
+	                return false;
+	            }
+	
+	            $.tokenAjax("/user/" + userId, "put", { name: name, password: password, oldPassWord: oldPassWord, role: role, email: email }).then(function (data) {
+	                _this2.showInfo(data.message, 3000, "msg");
 	                //更新成功移除下重新登陆
 	                window.localStorage.removeItem("name");
 	                window.localStorage.removeItem("token");
 	                //重新打开登陆框
 	                $("#loginModal").openModal();
 	            }).catch(function (data) {
-	                _this.showInfo(data.message, 3000, "msg");
-	                _this.$router.go({ path: "/" });
+	                _this2.showInfo(data.message, 3000, "msg");
+	                _this2.$router.go({ path: "/" });
 	            });
 	
 	            return false;
@@ -18553,19 +18599,26 @@
 	    },
 	    route: {
 	        data: function data(transition) {
-	            var _this2 = this;
+	            var _this3 = this;
 	
 	            var userId = this.$route.params.userId;
-	            $.tokenAjax("/user/" + userId, "get").then(function (data) {
-	                _this2.userInfo = data.result.user;
-	                _this2.adminRole = data.result.role;
-	                _this2.$nextTick(function () {
-	                    Materialize.updateTextFields();
+	            //新用户逻辑处理
+	            if (userId == "newuser") {
+	                //上级路由已经做过用户验证.这里不再验证.
+	                this.newUser = true;
+	                this.adminRole = 20;
+	            } else {
+	                $.tokenAjax("/user/" + userId, "get").then(function (data) {
+	                    _this3.userInfo = data.result.user;
+	                    _this3.adminRole = data.result.role;
+	                    _this3.$nextTick(function () {
+	                        Materialize.updateTextFields();
+	                    });
+	                    console.log("获取单个用户", data);
+	                }).catch(function (data) {
+	                    _this3.$router.go({ path: "/" });
 	                });
-	                console.log("获取单个用户", data);
-	            }).catch(function (data) {
-	                _this2.$router.go({ path: "/" });
-	            });
+	            }
 	        }
 	    },
 	    ready: function ready() {},
@@ -18592,6 +18645,12 @@
 	//                                                <label for="name">name</label>
 	//                                            </div>
 	//                                        </div>
+	//                                        <div class="row">
+	//                                            <div class="input-field col s12">
+	//                                                <input id="email" type="email" class="validate" v-model="userInfo.email">
+	//                                                <label for="email" >email</label>
+	//                                            </div>
+	//                                        </div>
 	//                                        <div class="row" v-if="adminRole<10">
 	//                                            <div class="input-field col s12">
 	//                                                <input id="oldpw" type="text" class="validate" v-model="userInfo.oldPassWord">
@@ -18612,15 +18671,9 @@
 	//                                                </div>
 	//                                            </div>
 	//                                        </div>
-	//
 	//                                        <div class="row">
-	//                                            <div class="input-field col s12">
-	//                                                <input id="email" type="email" class="validate" v-model="userInfo.email">
-	//                                                <label for="email" >email</label>
-	//                                            </div>
-	//                                        </div>
-	//                                        <div class="row">
-	//                                            <button class="col m6 btn " @click="updateUser($event)">提交修改</button>
+	//                                            <button class="col m6 btn " @click="updateUser($event)" v-if="!newUser">提交修改</button>
+	//                                            <button class="col m6 btn" @click="addUser($event)" v-if="newUser">添加新用户</button>
 	//                                        </div>
 	//                                    </form>
 	//                                </div>
@@ -18645,7 +18698,7 @@
 /* 181 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"user-detail\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col s12 m8 offset-m2\">\n                <div class=\"card blue-grey darken-1\">\n                    <div class=\"card-content white-text\">\n                        <span class=\"card-title\">用户信息</span>\n                        <p>{{msg}}</p>\n                        <div class=\"container\">\n                            <div class=\"row\">\n                                <form class=\"col m12\">\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"name\" type=\"text\" class=\"validate\" v-model=\"userInfo.name\">\n                                            <label for=\"name\">name</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\" v-if=\"adminRole<10\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"oldpw\" type=\"text\" class=\"validate\" v-model=\"userInfo.oldPassWord\">\n                                            <label for=\"oldpw\">oldpw</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"pw\" type=\"text\" class=\"validate\"  v-model=\"userInfo.password\" >\n                                            <label for=\"pw\">password</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"user-detail-admin\">\n                                        <div class=\"row\" v-if=\"adminRole>=10\">\n                                            <div class=\"input-field col s12\">\n                                                <input id=\"role\" type=\"text\" class=\"validate\" v-model=\"userInfo.role\">\n                                                <label for=\"role\" class=\"active\">role</label>\n                                            </div>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"email\" type=\"email\" class=\"validate\" v-model=\"userInfo.email\">\n                                            <label for=\"email\" >email</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <button class=\"col m6 btn \" @click=\"updateUser($event)\">提交修改</button>\n                                    </div>\n                                </form>\n                            </div>\n                        </div>\n\n                    </div>\n                    <div class=\"card-action\">\n\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"user-detail\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col s12 m8 offset-m2\">\n                <div class=\"card blue-grey darken-1\">\n                    <div class=\"card-content white-text\">\n                        <span class=\"card-title\">用户信息</span>\n                        <p>{{msg}}</p>\n                        <div class=\"container\">\n                            <div class=\"row\">\n                                <form class=\"col m12\">\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"name\" type=\"text\" class=\"validate\" v-model=\"userInfo.name\">\n                                            <label for=\"name\">name</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"email\" type=\"email\" class=\"validate\" v-model=\"userInfo.email\">\n                                            <label for=\"email\" >email</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\" v-if=\"adminRole<10\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"oldpw\" type=\"text\" class=\"validate\" v-model=\"userInfo.oldPassWord\">\n                                            <label for=\"oldpw\">oldpw</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"input-field col s12\">\n                                            <input id=\"pw\" type=\"text\" class=\"validate\"  v-model=\"userInfo.password\" >\n                                            <label for=\"pw\">password</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"user-detail-admin\">\n                                        <div class=\"row\" v-if=\"adminRole>=10\">\n                                            <div class=\"input-field col s12\">\n                                                <input id=\"role\" type=\"text\" class=\"validate\" v-model=\"userInfo.role\">\n                                                <label for=\"role\" class=\"active\">role</label>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <button class=\"col m6 btn \" @click=\"updateUser($event)\" v-if=\"!newUser\">提交修改</button>\n                                        <button class=\"col m6 btn\" @click=\"addUser($event)\" v-if=\"newUser\">添加新用户</button>\n                                    </div>\n                                </form>\n                            </div>\n                        </div>\n\n                    </div>\n                    <div class=\"card-action\">\n\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 182 */
@@ -19235,20 +19288,117 @@
 
 /***/ },
 /* 200 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	
+	var _showInfo = __webpack_require__(18);
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: '',
+	            editor: null,
+	            imgs: [],
+	            preview: ""
+	        };
+	    },
+	
+	    methods: {
+	        showInfo: (0, _showInfo.showInfo)(),
+	        uploadProjectImg: function uploadProjectImg(e) {
+	            var _this = this;
+	
+	            //非按值传递
+	
+	            //获取目标对象并且渲染出file
+	            var target = e.target;
+	            var file = target.files[0];
+	            var reader = new FileReader();
+	
+	            if (/image/.test(file.type)) {
+	                reader.readAsDataURL(file);
+	            } else {
+	                this.showInfo("请上传图片文件", 2000, "msg");
+	                return false;
+	            }
+	
+	            reader.onload = function () {
+	                _this.preview = reader.result;
+	            };
+	
+	            var f = new FormData();
+	            f.append("file", target.files[0]);
+	            this[imgFile] = target.files[0];
+	
+	            console.log(f);
+	            console.log("event", e);
+	            console.log("文件对象", target.files[0]);
+	        }
+	    },
+	    ready: function ready() {
+	        var screenHeight = $(document).height();
+	        this.editor = editormd("editormd", {
+	            path: "/lib/editor/module/", // Autoload modules mode, codemirror, marked... dependents libs path
+	            height: screenHeight - 100
+	        });
+	
+	        //设置下拉
+	        $(document).ready(function () {
+	            $('.collapsible').collapsible({
+	                accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+	            });
+	        });
+	    },
+	
+	    components: {}
+	};
+	// </script>  
+	/* generated by vue-loader */
 	// <template>
 	//    <div class="project-edit">
 	//        <div class="row">
 	//            <div class="col s10 m10 offset-s1 offset-m1">
-	//                <p>测试</p>
-	//                <div id="editormd">
-	//                    <textarea style="display:none;">### Hello Editor.md !</textarea>
+	//                <div class="row">
+	//                    <p>{{msg}}</p>
+	//                    <ul class="collapsible popout" data-collapsible="accordion">
+	//                        <li class="col s4 m4">
+	//                                <div class="collapsible-header"><i class="mdi-image-filter-drama"></i>图片列表</div>
+	//                                <div class="collapsible-body">
+	//                                    <ul class="collection">
+	//                                        <li class="collection-item">Alvin</li>
+	//                                        <li class="collection-item">Alvin</li>
+	//                                        <li class="collection-item">Alvin</li>
+	//                                        <li class="collection-item">Alvin</li>
+	//                                    </ul>
+	//                                </div>
+	//                        </li>
+	//                    </ul>
+	//                    <div class="col s4 m4 img-upload-box" style="padding-left:20px;">
+	//                        <div class="file-field input-field project-file-upload">
+	//                            <div class="btn">
+	//                                <span>图片上传</span>
+	//                                <input type="file" @change="uploadProjectImg($event)">
+	//                            </div>
+	//                            <div class="file-path-wrapper">
+	//                                <input class="file-path validate" type="text">
+	//                            </div>
+	//                        </div>
+	//                        <div class="row">
+	//                            <div class="col s4 m4">
+	//                                <img class="img-preview" src="" :src="preview" alt="" >
+	//                            </div>
+	//                        </div>
+	//                    </div>
+	//                </div>
+	//                <div class="row">
+	//                    <div id="editormd">
+	//                        <textarea style="display:none;">### Hello Editor.md !</textarea>
+	//                    </div>
 	//                </div>
 	//            </div>
 	//        </div>
@@ -19257,32 +19407,13 @@
 	// <style>
 	//
 	// </style>
-	// <script>
-	
-	exports.default = {
-	    data: function data() {
-	        return {
-	            msg: 'hello vue'
-	        };
-	    },
-	    ready: function ready() {
-	        var screenHeight = $(document).height();
-	        var editor = editormd("editormd", {
-	            path: "/lib/editor/module/", // Autoload modules mode, codemirror, marked... dependents libs path
-	            height: screenHeight - 50
-	        });
-	    },
-	
-	    components: {}
-	};
-	// </script>  
-	/* generated by vue-loader */
+	// <script type="text/ecmascript-6">
 
 /***/ },
 /* 201 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <p>测试</p>\n            <div id=\"editormd\">\n                <textarea style=\"display:none;\">### Hello Editor.md !</textarea>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s4 m4\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item\">Alvin</li>\n                                    <li class=\"collection-item\">Alvin</li>\n                                    <li class=\"collection-item\">Alvin</li>\n                                    <li class=\"collection-item\">Alvin</li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div id=\"editormd\">\n                    <textarea style=\"display:none;\">### Hello Editor.md !</textarea>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }
 /******/ ]);

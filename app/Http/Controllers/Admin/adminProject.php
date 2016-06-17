@@ -31,7 +31,6 @@ class adminProject extends Controller{
             //如果page参数存在
             if(!empty($page)){
                 $limit=--$page*10;
-
                 //分页获取项目
                 $data=DB::table("project")->select("id","title","content","cover","imgs")->skip($limit)->take(10)->get();
                 $dataLength=DB::table("project")->count();
@@ -57,8 +56,36 @@ class adminProject extends Controller{
 
         //如果存在id参数则进行更新
         if(!empty($id)){
+            $title=$request->input("title");
+            $content=$request->input("content");
+            $cover=$request->input("cover");
+            $home_show=(int) $request->input("home_show");
 
+
+            //预先查找是否存在id项目
+            $isData=DB::table("project")->where("id",$id)->first();
+
+            //如果不存在该id项目则返回..这种情况都非法提交.
+            if(empty($isData)){
+                return response()->json(["type"=>"false","message"=>"非法提交id参数","code"=>"40009"]);
+            }
+
+            //构建数组进行填充.
+            $updateArr=["title"=>$title,"content"=>$content,"cover"=>$cover?$cover:" ","home_show"=>$home_show?$home_show:0];
+
+            $data=DB::table('project')
+                ->where('id', $id)
+                ->update($updateArr);
+
+            if(empty($data)){
+                return response()->json(["type"=>"false","message"=>"更新失败,某些参数不正确","code"=>"40009"]);
+
+            }
+
+            return response()->json(["type"=>"true","message"=>"更新成功","result"=>$data]);
         }
+
+        return response()->json(["type"=>"false","message"=>"请提供正确的参数","code"=>"40009"]);
 
 
     }
@@ -70,15 +97,87 @@ class adminProject extends Controller{
             return response()->json(["type"=>"false","message"=>"删除必须提供id参数","code"=>"40009"]);
         }
 
+        if(!empty($id)){
+            //预先查找是否存在项目
+            $isExist=DB::table("project")->where("id",$id)->first();
+            if(empty($isExist)){
+                return response()->json(["type"=>"false","message"=>"项目不存在","code"=>"40009"]);
+            }
+
+            //删除用户
+            $deleteUser=DB::table("project")->where("id",$id)->delete();
+            return response()->json(["type"=>"true","message"=>"删除成功","result"=>$deleteUser]);
+        }
+
+
+        return response()->json(["type"=>"false","message"=>"请提供正确的参数","code"=>"40009"]);
+
     }
 
     public function newProject(Request $request){
+        //因为要预先知道文章id才能进行imgupload,那么点击new则是新建一个文章
+        $newProjectId = DB::table('project')->insertGetId(
+            ['title' => '命名你的项目', 'content' => "hello world"]
+        );
 
-
+        return response()->json(["type"=>"true","message"=>"更新成功","result"=>["id"=>$newProjectId]]);
 
     }
 
-    public function uploadProjectImg(Request $request){
+    public function uploadProjectImg(Request $request,$projectID=null){
+        $projectImg=$request->file("projectImg");
+
+        if(empty($projectID)){
+            return response()->json(["type"=>"false","message"=>"上传图片必须有projectId","code"=>"40009"]);
+        }
+
+        if ($request->hasFile("projectImg")&&$projectImg->isValid()) {
+            $clientName = $projectImg->getClientOriginalName();
+            $tmpName = $projectImg->getFileName();//缓存文件名
+            $realPath = $projectImg->getRealPath();//真实路径
+            $ext = $projectImg->getClientOriginalExtension();//后缀名
+            $mimeTyoe = $projectImg->getMimeType();//mimeType
+            $newName = md5(time() . $clientName) . "." . $ext;//重命名
+            //realpath(__DIR__."/../../../vendor/gee-team/gt-php-sdk/")
+
+
+            $projectImgDir=app_path(). '/../public/storage/uploads/project/'.$projectID;
+            $dir_exists=file_exists($projectImgDir);
+            //如果不存在项目ID的文件夹则创建一个新的文件夹.
+            if(!$dir_exists){
+                mkdir($projectImgDir);
+            }
+
+            $path = $projectImg->move($projectImgDir, $newName);//移动文件
+            //开发环境要把url换成url
+
+            //获取文件httpUrl
+            $host = config("app.url");
+            $projectImgUrl = $host .'/storage/uploads/project/'.$projectID."/".$newName;
+
+            //把新图像插入项目img数据库中
+
+            //获取数据库中存在的imgs
+            $project=DB::table("project")->select("imgs")->where("id",$projectID)->first();
+
+            $imgs=[];
+            if(!empty($project->imgs)){
+                //字符串转数组
+                $imgs=$imgs=explode(',', $project->imgs);
+            }
+
+            array_push($imgs,$projectImgUrl);
+
+            //数组转字符串保存到数据库
+            $imgString=implode(",",$imgs);
+
+            DB::table("project")->where("id",$projectID)->update(["imgs"=>$imgString]);
+
+            return response()->json(["type"=>"true","message"=>"上传成功","result"=>["url"=>$projectImgUrl]]);
+        }
+
+        return response()->json(["type"=>"false","message"=>"请上传图像文件","code"=>"40009"]);
+
 
     }
 
