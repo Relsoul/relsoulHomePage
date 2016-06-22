@@ -18,11 +18,11 @@ class adminProject extends Controller{
     public function getProject(Request $request,$id=null){
         //获取某个特定项目
         if(!empty($id)){
-            $data=DB::table("project")->select("id","title","content","cover","imgs")->where("id",$id)->first();
+            $data=DB::table("project")->select("id","title as name","content","cover","imgs")->where("id",$id)->first();
             if(empty($data)){
                 return response()->json(["type"=>"false","message"=>"项目不存在","code"=>"40009"]);
             }
-            return response()->json(["type"=>"true","message"=>"获取项目成功","result"=>["user"=>$data]]);
+            return response()->json(["type"=>"true","message"=>"获取项目成功","result"=>$data]);
         }
 
         //如果id不存在则通过分页获取所有项目
@@ -32,10 +32,10 @@ class adminProject extends Controller{
             if(!empty($page)){
                 $limit=--$page*10;
                 //分页获取项目
-                $data=DB::table("project")->select("id","title","content","cover","imgs")->skip($limit)->take(10)->get();
+                $data=DB::table("project")->select("id","title as name","content","cover","imgs")->skip($limit)->take(10)->get();
                 $dataLength=DB::table("project")->count();
 
-                return response()->json(["type"=>"true","message"=>"获取分页用户成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
+                return response()->json(["type"=>"true","message"=>"获取分页项目成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
 
                 //如果不存在id也不存在page参数则返回错误
             }else{
@@ -45,6 +45,26 @@ class adminProject extends Controller{
     }
 
     public function searchProject(Request $request){
+        $s=$request->input("s");
+        $page=(int) $request->input("page");
+
+        //page与s必须存在
+        if(!empty($page)&&!empty($s)){
+            $limit=--$page*10;
+            //分页获取项目
+            $data=DB::table("project")->select("id","title as name","content","cover","imgs")->where("title","like","%".$s."%")->skip($limit)->take(10)->get();
+            $dataLength=DB::table("project")->where("title","like","%".$s."%")->count();
+
+            return response()->json(["type"=>"true","message"=>"搜索项目成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
+
+            //如果不存在s或者page参数则返回错误
+        }else{
+            return response()->json(["type"=>"false","message"=>"参数不正确,page参数必须存在","code"=>"40009"]);
+        }
+
+
+
+
 
     }
 
@@ -61,7 +81,6 @@ class adminProject extends Controller{
             $cover=$request->input("cover");
             $home_show=(int) $request->input("home_show");
 
-
             //预先查找是否存在id项目
             $isData=DB::table("project")->where("id",$id)->first();
 
@@ -71,7 +90,7 @@ class adminProject extends Controller{
             }
 
             //构建数组进行填充.
-            $updateArr=["title"=>$title,"content"=>$content,"cover"=>$cover?$cover:" ","home_show"=>$home_show?$home_show:0];
+            $updateArr=["title"=>$title,"content"=>$content,"cover"=>$cover?$cover:"http://baidu.com/","home_show"=>$home_show?$home_show:0];
 
             $data=DB::table('project')
                 ->where('id', $id)
@@ -104,7 +123,7 @@ class adminProject extends Controller{
                 return response()->json(["type"=>"false","message"=>"项目不存在","code"=>"40009"]);
             }
 
-            //删除用户
+            //删除项目
             $deleteUser=DB::table("project")->where("id",$id)->delete();
             return response()->json(["type"=>"true","message"=>"删除成功","result"=>$deleteUser]);
         }
@@ -124,6 +143,30 @@ class adminProject extends Controller{
 
     }
 
+    public function getProjectImg(Request $request,$projectID=null){
+        if(empty($projectID)){
+            return response()->json(["type"=>"false","message"=>"获取图片必须有projectId","code"=>"40009"]);
+        }
+        $data=DB::table("project_img")->where("project_id",$projectID)->get();
+        return response()->json(["type"=>"true","message"=>"获取图片成功","result"=>$data]);
+    }
+
+
+    public function deleteProjectImg(Request $request,$imgID=null){
+        if(empty($imgID)){
+            return response()->json(["type"=>"false","message"=>"删除图片必须有imgId","code"=>"40009"]);
+        }
+        //预先查找是否存在项目
+        $isExist=DB::table("project_img")->where("id",$imgID)->first();
+        if(empty($isExist)){
+            return response()->json(["type"=>"false","message"=>"图片不存在","code"=>"40009"]);
+        }
+
+        $delete=DB::table("project_img")->where("id",$imgID)->delete();
+
+        return response()->json(["type"=>"true","message"=>"删除成功","result"=>$delete]);
+    }
+
     public function uploadProjectImg(Request $request,$projectID=null){
         $projectImg=$request->file("projectImg");
 
@@ -140,7 +183,6 @@ class adminProject extends Controller{
             $newName = md5(time() . $clientName) . "." . $ext;//重命名
             //realpath(__DIR__."/../../../vendor/gee-team/gt-php-sdk/")
 
-
             $projectImgDir=app_path(). '/../public/storage/uploads/project/'.$projectID;
             $dir_exists=file_exists($projectImgDir);
             //如果不存在项目ID的文件夹则创建一个新的文件夹.
@@ -155,25 +197,18 @@ class adminProject extends Controller{
             $host = config("app.url");
             $projectImgUrl = $host .'/storage/uploads/project/'.$projectID."/".$newName;
 
-            //把新图像插入项目img数据库中
+            //把新图像插入项目project_img数据库中
 
-            //获取数据库中存在的imgs
             $project=DB::table("project")->select("imgs")->where("id",$projectID)->first();
 
-            $imgs=[];
-            if(!empty($project->imgs)){
-                //字符串转数组
-                $imgs=$imgs=explode(',', $project->imgs);
+
+            if(empty($project)){
+                return response()->json(["type"=>"false","message"=>"项目不存在","code"=>"40009"]);
             }
 
-            array_push($imgs,$projectImgUrl);
+            $newImgId=DB::table("project_img")->insertGetId(["url"=>$projectImgUrl,"project_id"=>$projectID]);
 
-            //数组转字符串保存到数据库
-            $imgString=implode(",",$imgs);
-
-            DB::table("project")->where("id",$projectID)->update(["imgs"=>$imgString]);
-
-            return response()->json(["type"=>"true","message"=>"上传成功","result"=>["url"=>$projectImgUrl]]);
+            return response()->json(["type"=>"true","message"=>"上传成功","result"=>["id"=>$newImgId,"url"=>$projectImgUrl]]);
         }
 
         return response()->json(["type"=>"false","message"=>"请上传图像文件","code"=>"40009"]);

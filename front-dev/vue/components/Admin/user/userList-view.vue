@@ -100,13 +100,13 @@
                 return false;
 
             },
-            deleteUser(){
-                let r=window.confirm("确定要删除该用户?");
+            deleteUser(e,id){
+                let r=window.confirm("确定要删除该列表元素?");
                 if(r==false){
                     return false
                 }
-
-                this.$dispatch('delete-list', this.msg);
+                this.$dispatch('delete-list',id);
+                return false;
 
             },
         },

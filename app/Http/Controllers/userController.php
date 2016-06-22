@@ -11,8 +11,9 @@ use Illuminate\Http\Request;
 use DB;
 use Crypt;
 use JWT;
-define("geePath",realpath(__DIR__."/../../../vendor/gee-team/gt-php-sdk/"));
 
+//这里可以使用app_path来替换目录..
+define("geePath",realpath(__DIR__."/../../../vendor/gee-team/gt-php-sdk/"));
 
 require_once (geePath."/lib/class.geetestlib.php");
 require_once (geePath."/config/config.php");

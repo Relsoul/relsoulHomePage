@@ -6,11 +6,11 @@
                 :current-page="currentPage"
                 :search-timer="searchTimer"
                 :msg="msg"
-                :hf="'/admin/user/'"
+                :hf="'/admin/project/'"
                 @search-list="searchUser"
                 @change-page="changePage"
                 @delete-list="deleteUser"
-
+                @new-list="newUser"
         ></user-list-view>
         project-list
     </div>
@@ -35,20 +35,33 @@
         },
         methods:{
             showInfo:showInfo(),
+            newUser(){
+                $.tokenAjax("/admin/project/","post")
+                        .then((data)=>{
+                            let id=data.result.id;
+                            this.$router.go({"path":"/admin/project/"+id});
+                        })
+                        .catch((data)=>{
+                            this.showInfo(data.message,3000,"msg");
+                        })
+
+            },
             searchUser(searchText){
                 //与子组件属性进行同步
                 this.searchText=searchText;
-                //如果为空那么则是不搜索获取全部用户
+                //如果为空那么则是不搜索获取全部项目
                 if(this.searchText.trim()==""){
-                    return $.tokenAjax("/user/","get",{"page":this.currentPage}).then((data)=>{
+                    return $.tokenAjax("/admin/project/","get",{"page":this.currentPage}).then((data)=>{
                         this.showInfo(data.message,3000,"msg");
                         this.generate(data.result.count);
                         this.userList=data.result.userList;
                         console.log("userList",data);
                     }).catch()
-
                 }
-                $.tokenAjax("/user/","get",{"s":this.searchText})
+
+
+                //默认为获取搜索项目第一页
+                $.tokenAjax("/admin/project-search/","get",{"s":this.searchText,"page":1})
                         .then((data)=>{
                             this.showInfo(data.message,3000,"msg");
                             this.generate(data.result.count);
@@ -59,7 +72,7 @@
 
             },
             deleteUser(id){
-                $.tokenAjax("/admin/user/"+id,"delete")
+                $.tokenAjax("/admin/project/"+id,"delete")
                         .then((data)=>{
                             this.showInfo(data.message,1500,"msg");
                             setTimeout(()=>{
@@ -74,7 +87,18 @@
             changePage(index,active=null){
                 //与子组件属性进行同步
                 this.currentPage=index;
-                $.tokenAjax("/user/","get",{"page":this.currentPage})
+
+                //如果不为空则是搜索项目分页
+                if(this.searchText!==""){
+
+                    return $.tokenAjax("/admin/project-search/","get",{"page":this.currentPage,"s":this.searchText})
+                            .then((data)=>{
+                                this.userList=data.result.userList;
+                            })
+                            .catch();
+                }
+
+                $.tokenAjax("/admin/project/","get",{"page":this.currentPage})
                         .then((data)=>{
                             this.userList=data.result.userList;
                         })
@@ -100,7 +124,7 @@
             }
         },
         ready(){
-            $.tokenAjax("/user/","get",{"page":this.currentPage}).then((data)=>{
+            $.tokenAjax("/admin/project/","get",{"page":this.currentPage}).then((data)=>{
                 this.showInfo(data.message,3000,"msg");
                 this.generate(data.result.count);
                 this.userList=data.result.userList;

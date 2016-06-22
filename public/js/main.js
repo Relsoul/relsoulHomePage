@@ -18154,6 +18154,15 @@
 	
 	            //与子组件属性进行同步
 	            this.currentPage = index;
+	
+	            //如果不为空则是搜索用户分页
+	            if (this.searchText !== "") {
+	
+	                return $.tokenAjax("/user/", "get", { "page": this.currentPage, "s": this.searchText }).then(function (data) {
+	                    _this3.userList = data.result.userList;
+	                }).catch();
+	            }
+	
 	            $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
 	                _this3.userList = data.result.userList;
 	            }).catch();
@@ -18361,13 +18370,13 @@
 	
 	            return false;
 	        },
-	        deleteUser: function deleteUser() {
-	            var r = window.confirm("确定要删除该用户?");
+	        deleteUser: function deleteUser(e, id) {
+	            var r = window.confirm("确定要删除该列表元素?");
 	            if (r == false) {
 	                return false;
 	            }
-	
-	            this.$dispatch('delete-list', this.msg);
+	            this.$dispatch('delete-list', id);
+	            return false;
 	        }
 	    },
 	    components: {}
@@ -19102,11 +19111,11 @@
 	//                 :current-page="currentPage"
 	//                 :search-timer="searchTimer"
 	//                 :msg="msg"
-	//                 :hf="'/admin/user/'"
+	//                 :hf="'/admin/project/'"
 	//                 @search-list="searchUser"
 	//                 @change-page="changePage"
 	//                 @delete-list="deleteUser"
-	//
+	//                 @new-list="newUser"
 	//         ></user-list-view>
 	//         project-list
 	//     </div>
@@ -19129,48 +19138,69 @@
 	
 	    methods: {
 	        showInfo: (0, _showInfo.showInfo)(),
-	        searchUser: function searchUser(searchText) {
+	        newUser: function newUser() {
 	            var _this = this;
+	
+	            $.tokenAjax("/admin/project/", "post").then(function (data) {
+	                var id = data.result.id;
+	                _this.$router.go({ "path": "/admin/project/" + id });
+	            }).catch(function (data) {
+	                _this.showInfo(data.message, 3000, "msg");
+	            });
+	        },
+	        searchUser: function searchUser(searchText) {
+	            var _this2 = this;
 	
 	            //与子组件属性进行同步
 	            this.searchText = searchText;
-	            //如果为空那么则是不搜索获取全部用户
+	            //如果为空那么则是不搜索获取全部项目
 	            if (this.searchText.trim() == "") {
-	                return $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
-	                    _this.showInfo(data.message, 3000, "msg");
-	                    _this.generate(data.result.count);
-	                    _this.userList = data.result.userList;
+	                return $.tokenAjax("/admin/project/", "get", { "page": this.currentPage }).then(function (data) {
+	                    _this2.showInfo(data.message, 3000, "msg");
+	                    _this2.generate(data.result.count);
+	                    _this2.userList = data.result.userList;
 	                    console.log("userList", data);
 	                }).catch();
 	            }
-	            $.tokenAjax("/user/", "get", { "s": this.searchText }).then(function (data) {
-	                _this.showInfo(data.message, 3000, "msg");
-	                _this.generate(data.result.count);
-	                _this.userList = data.result.userList;
+	
+	            //默认为获取搜索项目第一页
+	            $.tokenAjax("/admin/project-search/", "get", { "s": this.searchText, "page": 1 }).then(function (data) {
+	                _this2.showInfo(data.message, 3000, "msg");
+	                _this2.generate(data.result.count);
+	                _this2.userList = data.result.userList;
 	                console.log("搜索用户", data);
 	            }).catch();
 	        },
 	        deleteUser: function deleteUser(id) {
-	            var _this2 = this;
+	            var _this3 = this;
 	
-	            $.tokenAjax("/admin/user/" + id, "delete").then(function (data) {
-	                _this2.showInfo(data.message, 1500, "msg");
+	            $.tokenAjax("/admin/project/" + id, "delete").then(function (data) {
+	                _this3.showInfo(data.message, 1500, "msg");
 	                setTimeout(function () {
 	                    location.reload();
 	                }, 2500);
 	            }).catch(function (data) {
-	                _this2.showInfo(data.message, 3000, "msg");
+	                _this3.showInfo(data.message, 3000, "msg");
 	            });
 	        },
 	        changePage: function changePage(index) {
-	            var _this3 = this;
+	            var _this4 = this;
 	
 	            var active = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 	
 	            //与子组件属性进行同步
 	            this.currentPage = index;
-	            $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
-	                _this3.userList = data.result.userList;
+	
+	            //如果不为空则是搜索项目分页
+	            if (this.searchText !== "") {
+	
+	                return $.tokenAjax("/admin/project-search/", "get", { "page": this.currentPage, "s": this.searchText }).then(function (data) {
+	                    _this4.userList = data.result.userList;
+	                }).catch();
+	            }
+	
+	            $.tokenAjax("/admin/project/", "get", { "page": this.currentPage }).then(function (data) {
+	                _this4.userList = data.result.userList;
 	            }).catch();
 	            return false;
 	        },
@@ -19193,12 +19223,12 @@
 	        }
 	    },
 	    ready: function ready() {
-	        var _this4 = this;
+	        var _this5 = this;
 	
-	        $.tokenAjax("/user/", "get", { "page": this.currentPage }).then(function (data) {
-	            _this4.showInfo(data.message, 3000, "msg");
-	            _this4.generate(data.result.count);
-	            _this4.userList = data.result.userList;
+	        $.tokenAjax("/admin/project/", "get", { "page": this.currentPage }).then(function (data) {
+	            _this5.showInfo(data.message, 3000, "msg");
+	            _this5.generate(data.result.count);
+	            _this5.userList = data.result.userList;
 	            console.log("userList", data);
 	        }).catch();
 	    },
@@ -19215,7 +19245,7 @@
 /* 196 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/user/'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n\n    ></user-list-view>\n    project-list\n</div>\n"
+	module.exports = "\n<div class=\"project\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/project/'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n            @new-list=\"newUser\"\n    ></user-list-view>\n    project-list\n</div>\n"
 
 /***/ },
 /* 197 */
@@ -19304,14 +19334,25 @@
 	            msg: '',
 	            editor: null,
 	            imgs: [],
-	            preview: ""
+	            content: "",
+	            preview: "",
+	            title: ""
 	        };
 	    },
 	
 	    methods: {
 	        showInfo: (0, _showInfo.showInfo)(),
-	        uploadProjectImg: function uploadProjectImg(e) {
+	        saveContent: function saveContent(e) {
 	            var _this = this;
+	
+	            var id = this.$route.params.id;
+	            this.content = this.editor.getMarkdown();
+	            $.tokenAjax("/admin/project/" + id, "put", { title: this.title, content: this.content, cover: this.cover || "http://baidu.com/", home_show: this.home_show || 0 }).then(function (data) {
+	                _this.showInfo("保存成功", 2000, "msg");
+	            }).catch();
+	        },
+	        uploadProjectImg: function uploadProjectImg(e) {
+	            var _this2 = this;
 	
 	            //非按值传递
 	
@@ -19319,6 +19360,7 @@
 	            var target = e.target;
 	            var file = target.files[0];
 	            var reader = new FileReader();
+	            var id = this.$route.params.id;
 	
 	            if (/image/.test(file.type)) {
 	                reader.readAsDataURL(file);
@@ -19328,23 +19370,86 @@
 	            }
 	
 	            reader.onload = function () {
-	                _this.preview = reader.result;
+	                _this2.preview = reader.result;
 	            };
 	
-	            var f = new FormData();
-	            f.append("file", target.files[0]);
-	            this[imgFile] = target.files[0];
+	            var uploadFile = new FormData();
+	            uploadFile.append("projectImg", target.files[0]);
 	
-	            console.log(f);
-	            console.log("event", e);
-	            console.log("文件对象", target.files[0]);
+	            $.tokenAjax("/admin/project-uploadimg/" + id, "post", uploadFile).then(function (data) {
+	                _this2.showInfo(data.message, 2000, "msg");
+	                _this2.imgs.push({ Id: data.result.id, url: data.result.url });
+	                _this2.preview = "";
+	            }).catch(function (data) {
+	                _this2.showInfo(data.message, 2000, "msg");
+	                _this2.preview = "";
+	            });
+	        },
+	        deleteImg: function deleteImg(e, img, id) {
+	            var _this3 = this;
+	
+	            $.tokenAjax("/admin/project-uploadimg/" + id, "delete").then(function (data) {
+	                _this3.showInfo(data.message, 2000, "msg");
+	                var index = _this3.imgs.indexOf(img);
+	                _this3.imgs.splice(index, 1);
+	            }).catch(function (data) {
+	                _this3.showInfo(data.message, 2000, "msg");
+	            });
+	        }
+	    },
+	    route: {
+	        data: function data() {
+	            var _this4 = this;
+	
+	            var id = this.$route.params.id;
+	            $.tokenAjax("/admin/project/" + id, "get").then(function (data) {
+	                _this4.title = data.result.name;
+	                _this4.cover = data.result.cover;
+	                _this4.content = data.result.content;
+	                //this.editor.setMarkdown(this.content);
+	                console.log("project-edit", data);
+	            }).catch();
+	
+	            $.tokenAjax("/admin/project-uploadimg/" + id, "get").then(function (data) {
+	                _this4.imgs = data.result;
+	            }).catch(function () {});
 	        }
 	    },
 	    ready: function ready() {
+	        var _this5 = this;
+	
+	        //按键保存
+	        $(window).on("keydown", function (e) {
+	            var keyCode = e.keyCode || e.which || e.charCode;
+	            var ctrlKey = e.ctrlKey || e.metaKey;
+	            if (ctrlKey && keyCode == 83) {
+	                _this5.saveContent();
+	                return false;
+	            }
+	        });
+	
 	        var screenHeight = $(document).height();
+	
 	        this.editor = editormd("editormd", {
 	            path: "/lib/editor/module/", // Autoload modules mode, codemirror, marked... dependents libs path
-	            height: screenHeight - 100
+	            height: screenHeight - 100,
+	            saveHTMLToTextarea: true,
+	            onload: function () {
+	                var _this6 = this;
+	
+	                var count = 0;
+	                var timer = setInterval(function () {
+	                    count++;
+	                    //最大轮询次数
+	                    if (count >= 5) {
+	                        _this6.content == "hello world";
+	                    }
+	                    if (_this6.content !== "") {
+	                        clearInterval(timer);
+	                        _this6.editor.setMarkdown(_this6.content);
+	                    }
+	                }, 1000);
+	            }.bind(this)
 	        });
 	
 	        //设置下拉
@@ -19357,7 +19462,7 @@
 	
 	    components: {}
 	};
-	// </script>  
+	// </script>
 	/* generated by vue-loader */
 	// <template>
 	//    <div class="project-edit">
@@ -19370,10 +19475,11 @@
 	//                                <div class="collapsible-header"><i class="mdi-image-filter-drama"></i>图片列表</div>
 	//                                <div class="collapsible-body">
 	//                                    <ul class="collection">
-	//                                        <li class="collection-item">Alvin</li>
-	//                                        <li class="collection-item">Alvin</li>
-	//                                        <li class="collection-item">Alvin</li>
-	//                                        <li class="collection-item">Alvin</li>
+	//                                        <li class="collection-item image-list-item" v-for="img in imgs">
+	//                                            <img class="image-list-item-img" src="" :src="img.url" alt="" :data-id="img.Id">
+	//                                            <button class="btn image-list-item-btn" >点击插入文章</button>
+	//                                            <button class="btn image-list-item-btn" @click="deleteImg($event,img,img.Id)">删除图片</button>
+	//                                        </li>
 	//                                    </ul>
 	//                                </div>
 	//                        </li>
@@ -19396,8 +19502,17 @@
 	//                    </div>
 	//                </div>
 	//                <div class="row">
-	//                    <div id="editormd">
-	//                        <textarea style="display:none;">### Hello Editor.md !</textarea>
+	//                    <div class="row">
+	//                        <div class="input-field col s10">
+	//                            <input v-model="title" id="first_name2" type="text" class="validate">
+	//                            <label class="active" for="first_name2">标题</label>
+	//                        </div>
+	//                        <button class="btn right project-save-btn" @click="saveContent($event)">保存</button>
+	//                        <div id="editormd" class="col s12 m12" >
+	//                            <textarea class="editormd-markdown-textarea" name="$id-markdown-doc"></textarea>
+	//                            <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
+	//                            <textarea class="editormd-html-textarea" name="$id-html-code"></textarea>
+	//                        </div>
 	//                    </div>
 	//                </div>
 	//            </div>
@@ -19413,7 +19528,7 @@
 /* 201 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s4 m4\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item\">Alvin</li>\n                                    <li class=\"collection-item\">Alvin</li>\n                                    <li class=\"collection-item\">Alvin</li>\n                                    <li class=\"collection-item\">Alvin</li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div id=\"editormd\">\n                    <textarea style=\"display:none;\">### Hello Editor.md !</textarea>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s4 m4\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item image-list-item\" v-for=\"img in imgs\">\n                                        <img class=\"image-list-item-img\" src=\"\" :src=\"img.url\" alt=\"\" :data-id=\"img.Id\">\n                                        <button class=\"btn image-list-item-btn\" >点击插入文章</button>\n                                        <button class=\"btn image-list-item-btn\" @click=\"deleteImg($event,img,img.Id)\">删除图片</button>\n                                    </li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"row\">\n                    <div class=\"input-field col s10\">\n                        <input v-model=\"title\" id=\"first_name2\" type=\"text\" class=\"validate\">\n                        <label class=\"active\" for=\"first_name2\">标题</label>\n                    </div>\n                    <button class=\"btn right project-save-btn\" @click=\"saveContent($event)\">保存</button>\n                    <div id=\"editormd\" class=\"col s12 m12\" >\n                        <textarea class=\"editormd-markdown-textarea\" name=\"$id-markdown-doc\"></textarea>\n                        <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->\n                        <textarea class=\"editormd-html-textarea\" name=\"$id-html-code\"></textarea>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }
 /******/ ]);

@@ -78,6 +78,17 @@
             changePage(index,active=null){
                 //与子组件属性进行同步
                 this.currentPage=index;
+
+                //如果不为空则是搜索用户分页
+                if(this.searchText!==""){
+
+                return $.tokenAjax("/user/","get",{"page":this.currentPage,"s":this.searchText})
+                        .then((data)=>{
+                            this.userList=data.result.userList;
+                        })
+                        .catch();
+                }
+
                 $.tokenAjax("/user/","get",{"page":this.currentPage})
                         .then((data)=>{
                             this.userList=data.result.userList;

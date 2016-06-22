@@ -12,5 +12,30 @@
     }
   }
 
+  .image-list-item{
+    padding-left: 10px;
+    padding-right: 10px;
+
+    .image-list-item-img{
+      height: 50px;
+      width:80px;
+    }
+    .image-list-item-btn{
+      vertical-align: top;
+      margin-left: 10px;
+
+      @media all and (max-width: $pc) {
+        margin-left: 5px;
+        padding: 0 10px;
+        font-size: 14px;
+      }
+
+    }
+  }
+
+  .project-save-btn{
+    margin-top: 1.7rem;
+  }
+
 
 }
