@@ -15,9 +15,11 @@ import adminUserDetail from "./components/Admin/user/userDetail.vue";
 import user from "./components/user/user.vue";
 //import fenchPassWord from "./components/user/fetchPassWord.vue";
 import userData from "./components/user/userData.vue";
-import projectList from "./components/Admin/project/project-list.vue";
-import projectEdit from "./components/Admin/project/project-edit.vue";
-
+import adminProjectList from "./components/Admin/project/project-list.vue";
+import adminProjectEdit from "./components/Admin/project/project-edit.vue";
+import project from "./components/Project/project.vue";
+import projectList from "./components/Project/projectList.vue";
+import projectDetail from "./components/Project/projectDetail.vue"
 Vue.use(Router);
 
 var router = new Router();
@@ -54,10 +56,10 @@ router.map({
                 component:adminUserDetail
             },
             "/project/":{
-                component:projectList,
+                component:adminProjectList,
             },
             "/project/:id":{
-                component:projectEdit,
+                component:adminProjectEdit,
             }
         }
     },
@@ -73,7 +75,17 @@ router.map({
             }
         }
     },
-
+    "/project/":{
+        component:project,
+        subRoutes:{
+            "/":{
+                component:projectList
+            },
+            "/:projectId":{
+                component:projectDetail
+            }
+        }
+    }
 });
 
 

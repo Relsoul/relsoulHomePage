@@ -52,13 +52,8 @@ Route::group(["middleware"=>["JWTAuthToken","AdminRole"],"prefix"=>"admin"],func
      */
 
 
-
-
     //上传图片至project
     Route::post("/project-uploadimg/{id}","Admin\\adminProject@uploadProjectImg");
-
-    //获取项目图片
-    Route::get("/project-uploadimg/{id}","Admin\\adminProject@getProjectImg");
 
     //删除项目图片
     Route::delete("/project-uploadimg/{id}","Admin\\adminProject@deleteProjectImg");
@@ -70,17 +65,9 @@ Route::group(["middleware"=>["JWTAuthToken","AdminRole"],"prefix"=>"admin"],func
     //更新project
     Route::put("/project/{id}","Admin\\adminProject@updateProject");
 
-    //获取Project
-    Route::get("/project/{id?}","Admin\\adminProject@getProject");
 
     //删除Project
     Route::delete("/project/{id}","Admin\\adminProject@deleteProject");
-
-    //搜索Project
-    Route::get("/project-search/","Admin\\adminProject@searchProject");
-
-    
-
 
 });
 
@@ -113,3 +100,10 @@ Route::get("/home/studyexp","Admin\\adminHome@getStudyExp");
 
 //获取首页-skill
 Route::get("/home/skill","Admin\\adminHome@getSkill");
+
+//获取Project
+Route::get("/project/{id?}","Admin\\adminProject@getProject");
+//搜索Project
+Route::get("/project-search/","Admin\\adminProject@searchProject");
+//获取项目图片
+Route::get("/project-uploadimg/{id}","Admin\\adminProject@getProjectImg");

@@ -96,6 +96,18 @@
 	
 	var _projectEdit2 = _interopRequireDefault(_projectEdit);
 	
+	var _project = __webpack_require__(202);
+	
+	var _project2 = _interopRequireDefault(_project);
+	
+	var _projectList3 = __webpack_require__(207);
+	
+	var _projectList4 = _interopRequireDefault(_projectList3);
+	
+	var _projectDetail = __webpack_require__(212);
+	
+	var _projectDetail2 = _interopRequireDefault(_projectDetail);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// 挂载tokenAjax
@@ -157,8 +169,18 @@
 	                component: _userDetail2.default
 	            }
 	        }
+	    },
+	    "/project/": {
+	        component: _project2.default,
+	        subRoutes: {
+	            "/": {
+	                component: _projectList4.default
+	            },
+	            "/:projectId": {
+	                component: _projectDetail2.default
+	            }
+	        }
 	    }
-	
 	});
 	
 	router.beforeEach(function (transition) {
@@ -13587,7 +13609,7 @@
 	//                         </div>
 	//                     </div>
 	//                     <ul class="header-nav header-nav-list hide-on-med-and-down">
-	//                         <li><a href="#!">First Sidebar Link</a></li>
+	//                         <li><a href="#!" v-link="{path:'/project/'}">项目列表</a></li>
 	//                         <li><a href="#!">Second Sidebar Link</a></li>
 	//                         <!--
 	//                             data-target to login id
@@ -14338,7 +14360,7 @@
 /* 31 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <fetch-pass-word-modal></fetch-pass-word-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6 user-hello-wrap\">\n                                    <p class=\"user-hello\">欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6 user-choose-box-wrap\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\" v-link=\"{path:'/user/'+userId}\">个人中心<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li v-if=\"role>=10?true:false\" ><a href=\"#!\" v-link=\"{path:'/admin'}\" >admin管理</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >选择与访问\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
+	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <fetch-pass-word-modal></fetch-pass-word-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6 user-hello-wrap\">\n                                    <p class=\"user-hello\">欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6 user-choose-box-wrap\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\" v-link=\"{path:'/user/'+userId}\">个人中心<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li v-if=\"role>=10?true:false\" ><a href=\"#!\" v-link=\"{path:'/admin'}\" >admin管理</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >选择与访问\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\" v-link=\"{path:'/project/'}\">项目列表</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
 
 /***/ },
 /* 32 */
@@ -14511,17 +14533,19 @@
 	    var data = arguments.length <= 2 || arguments[2] === undefined ? "" : arguments[2];
 	
 	    return new _promise2.default(function (resolve, reject) {
-	        var contentType = true;
+	        var contentType = "application/x-www-form-urlencoded";
+	        var processData = true;
 	        if (data instanceof FormData) {
 	            //FormDta 为false
 	            contentType = false;
+	            processData = false;
 	        }
 	        $.ajax({
 	            url: url,
 	            method: method,
 	            data: data,
 	            contentType: contentType,
-	            processData: false,
+	            processData: processData,
 	            cache: false,
 	            success: function success(data) {
 	                if (data.type == "true") {
@@ -19155,7 +19179,7 @@
 	            this.searchText = searchText;
 	            //如果为空那么则是不搜索获取全部项目
 	            if (this.searchText.trim() == "") {
-	                return $.tokenAjax("/admin/project/", "get", { "page": this.currentPage }).then(function (data) {
+	                return $.tokenAjax("/project/", "get", { "page": this.currentPage }).then(function (data) {
 	                    _this2.showInfo(data.message, 3000, "msg");
 	                    _this2.generate(data.result.count);
 	                    _this2.userList = data.result.userList;
@@ -19164,7 +19188,7 @@
 	            }
 	
 	            //默认为获取搜索项目第一页
-	            $.tokenAjax("/admin/project-search/", "get", { "s": this.searchText, "page": 1 }).then(function (data) {
+	            $.tokenAjax("/project-search/", "get", { "s": this.searchText, "page": 1 }).then(function (data) {
 	                _this2.showInfo(data.message, 3000, "msg");
 	                _this2.generate(data.result.count);
 	                _this2.userList = data.result.userList;
@@ -19194,12 +19218,12 @@
 	            //如果不为空则是搜索项目分页
 	            if (this.searchText !== "") {
 	
-	                return $.tokenAjax("/admin/project-search/", "get", { "page": this.currentPage, "s": this.searchText }).then(function (data) {
+	                return $.tokenAjax("/project-search/", "get", { "page": this.currentPage, "s": this.searchText }).then(function (data) {
 	                    _this4.userList = data.result.userList;
 	                }).catch();
 	            }
 	
-	            $.tokenAjax("/admin/project/", "get", { "page": this.currentPage }).then(function (data) {
+	            $.tokenAjax("/project/", "get", { "page": this.currentPage }).then(function (data) {
 	                _this4.userList = data.result.userList;
 	            }).catch();
 	            return false;
@@ -19225,7 +19249,7 @@
 	    ready: function ready() {
 	        var _this5 = this;
 	
-	        $.tokenAjax("/admin/project/", "get", { "page": this.currentPage }).then(function (data) {
+	        $.tokenAjax("/project/", "get", { "page": this.currentPage }).then(function (data) {
 	            _this5.showInfo(data.message, 3000, "msg");
 	            _this5.generate(data.result.count);
 	            _this5.userList = data.result.userList;
@@ -19402,7 +19426,7 @@
 	            var _this4 = this;
 	
 	            var id = this.$route.params.id;
-	            $.tokenAjax("/admin/project/" + id, "get").then(function (data) {
+	            $.tokenAjax("/project/" + id, "get").then(function (data) {
 	                _this4.title = data.result.name;
 	                _this4.cover = data.result.cover;
 	                _this4.content = data.result.content;
@@ -19410,7 +19434,7 @@
 	                console.log("project-edit", data);
 	            }).catch();
 	
-	            $.tokenAjax("/admin/project-uploadimg/" + id, "get").then(function (data) {
+	            $.tokenAjax("/project-uploadimg/" + id, "get").then(function (data) {
 	                _this4.imgs = data.result;
 	            }).catch(function () {});
 	        }
@@ -19529,6 +19553,403 @@
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s4 m4\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item image-list-item\" v-for=\"img in imgs\">\n                                        <img class=\"image-list-item-img\" src=\"\" :src=\"img.url\" alt=\"\" :data-id=\"img.Id\">\n                                        <button class=\"btn image-list-item-btn\" >点击插入文章</button>\n                                        <button class=\"btn image-list-item-btn\" @click=\"deleteImg($event,img,img.Id)\">删除图片</button>\n                                    </li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"row\">\n                    <div class=\"input-field col s10\">\n                        <input v-model=\"title\" id=\"first_name2\" type=\"text\" class=\"validate\">\n                        <label class=\"active\" for=\"first_name2\">标题</label>\n                    </div>\n                    <button class=\"btn right project-save-btn\" @click=\"saveContent($event)\">保存</button>\n                    <div id=\"editormd\" class=\"col s12 m12\" >\n                        <textarea class=\"editormd-markdown-textarea\" name=\"$id-markdown-doc\"></textarea>\n                        <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->\n                        <textarea class=\"editormd-html-textarea\" name=\"$id-html-code\"></textarea>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+
+/***/ },
+/* 202 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(203)
+	__vue_script__ = __webpack_require__(205)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Project\\project.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(206)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Project\\project.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(204);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./project.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./project.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"project.vue","sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _rHeader = __webpack_require__(10);
+	
+	var _rHeader2 = _interopRequireDefault(_rHeader);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue',
+	            Contentcls: {
+	                "m10": true,
+	                "m12": false
+	            }
+	        };
+	    },
+	
+	    methods: {
+	        headerHide: function headerHide() {
+	            this.Contentcls.m10 = false;
+	            this.Contentcls.m12 = true;
+	        },
+	        headerShow: function headerShow() {
+	            this.Contentcls.m10 = true;
+	            this.Contentcls.m12 = false;
+	        }
+	    },
+	    route: {
+	        data: function data(transition) {}
+	    },
+	    ready: function ready() {},
+	
+	    components: {
+	        rHeader: _rHeader2.default
+	    }
+	};
+	// </script>
+	/* generated by vue-loader */
+	// <template>
+	//     <div class="project">
+	//         <div class="row no-gutters">
+	//
+	//             <r-header @header-show-change="headerShow" @header-hide-change="headerHide" ></r-header>
+	//             <div class="col s12 m10 right-content" :class="[Contentcls]">
+	//                 <router-view></router-view>
+	//             </div>
+	//         </div>
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
+
+/***/ },
+/* 206 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"project\">\n    <div class=\"row no-gutters\">\n\n        <r-header @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" ></r-header>\n        <div class=\"col s12 m10 right-content\" :class=\"[Contentcls]\">\n            <router-view></router-view>\n        </div>\n    </div>\n</div>\n"
+
+/***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(208)
+	__vue_script__ = __webpack_require__(210)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Project\\projectList.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(211)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Project\\projectList.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(209);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./projectList.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./projectList.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"projectList.vue","sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 210 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// <template>
+	//     <div class="project-list">
+	//             <div class="row">
+	//                 <div class="col s4 offset-s1" v-for="i in list">
+	//                     <div class="card">
+	//                         <div class="card-image waves-effect waves-block waves-light">
+	//                             <img class="activator" src="img/navTitle.png">
+	//                         </div>
+	//                         <div class="card-content">
+	//                             <span class="card-title activator grey-text text-darken-4">{{i.name}}<i class="material-icons right">more_vert</i></span>
+	//                             <p><a href="#" v-link="{'path':'/project/'+i.id}">详情</a></p>
+	//                         </div>
+	//                         <div class="card-reveal">
+	//                             <span class="card-title grey-text text-darken-4">{{i.name}}<i class="material-icons right">close</i></span>
+	//                             <div id="preview"></div>
+	//                         </div>
+	//                     </div>
+	//                 </div>
+	//         </div>
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script type="text/ecmascript-6">
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: '',
+	            page: 1,
+	            list: [],
+	            mdPreview: null
+	        };
+	    },
+	
+	    route: {
+	        data: function data() {
+	            var _this = this;
+	
+	            console.log(24, this.page);
+	            $.promiseAjax("/project/", "get", { "page": this.page }).then(function (data) {
+	                console.log(26, data);
+	                _this.list = data.result.userList;
+	                _this.mdPreview = editormd.markdownToHTML("preview", {
+	                    markdown: markdown, //+ "\r\n" + $("#append-test").text(),
+	                    //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+	                    htmlDecode: "style,script,iframe", // you can filter tags decode
+	                    //toc             : false,
+	                    tocm: true, // Using [TOCM]
+	                    //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+	                    //gfm             : false,
+	                    //tocDropdown     : true,
+	                    // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+	                    emoji: true,
+	                    taskList: true,
+	                    tex: true, // 默认不解析
+	                    flowChart: true, // 默认不解析
+	                    sequenceDiagram: true });
+	            }). // 默认不解析
+	            catch();
+	        }
+	    },
+	    components: {}
+	};
+	// </script>
+	/* generated by vue-loader */
+
+/***/ },
+/* 211 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"project-list\">\n        <div class=\"row\">\n            <div class=\"col s4 offset-s1\" v-for=\"i in list\">\n                <div class=\"card\">\n                    <div class=\"card-image waves-effect waves-block waves-light\">\n                        <img class=\"activator\" src=\"img/navTitle.png\">\n                    </div>\n                    <div class=\"card-content\">\n                        <span class=\"card-title activator grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">more_vert</i></span>\n                        <p><a href=\"#\" v-link=\"{'path':'/project/'+i.id}\">详情</a></p>\n                    </div>\n                    <div class=\"card-reveal\">\n                        <span class=\"card-title grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">close</i></span>\n                        <div id=\"preview\"></div>\n                    </div>\n                </div>\n            </div>\n    </div>\n</div>\n"
+
+/***/ },
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(213)
+	__vue_script__ = __webpack_require__(215)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] front-dev\\vue\\components\\Project\\projectDetail.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(216)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "D:\\soft\\phpstudy\\WWW\\relsoul\\front-dev\\vue\\components\\Project\\projectDetail.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(214);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./projectDetail.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./projectDetail.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"projectDetail.vue","sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 215 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// <template>
+	//     <div class="project-detail">
+	//         project-detail
+	//     </div>
+	// </template>
+	// <style>
+	//
+	// </style>
+	// <script>
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: 'hello vue'
+	        };
+	    },
+	
+	    components: {}
+	};
+	// </script>
+	/* generated by vue-loader */
+
+/***/ },
+/* 216 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"project-detail\">\n    project-detail\n</div>\n"
 
 /***/ }
 /******/ ]);

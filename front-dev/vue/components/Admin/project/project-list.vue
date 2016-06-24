@@ -51,7 +51,7 @@
                 this.searchText=searchText;
                 //如果为空那么则是不搜索获取全部项目
                 if(this.searchText.trim()==""){
-                    return $.tokenAjax("/admin/project/","get",{"page":this.currentPage}).then((data)=>{
+                    return $.tokenAjax("/project/","get",{"page":this.currentPage}).then((data)=>{
                         this.showInfo(data.message,3000,"msg");
                         this.generate(data.result.count);
                         this.userList=data.result.userList;
@@ -61,7 +61,7 @@
 
 
                 //默认为获取搜索项目第一页
-                $.tokenAjax("/admin/project-search/","get",{"s":this.searchText,"page":1})
+                $.tokenAjax("/project-search/","get",{"s":this.searchText,"page":1})
                         .then((data)=>{
                             this.showInfo(data.message,3000,"msg");
                             this.generate(data.result.count);
@@ -91,14 +91,14 @@
                 //如果不为空则是搜索项目分页
                 if(this.searchText!==""){
 
-                    return $.tokenAjax("/admin/project-search/","get",{"page":this.currentPage,"s":this.searchText})
+                    return $.tokenAjax("/project-search/","get",{"page":this.currentPage,"s":this.searchText})
                             .then((data)=>{
                                 this.userList=data.result.userList;
                             })
                             .catch();
                 }
 
-                $.tokenAjax("/admin/project/","get",{"page":this.currentPage})
+                $.tokenAjax("/project/","get",{"page":this.currentPage})
                         .then((data)=>{
                             this.userList=data.result.userList;
                         })
@@ -124,7 +124,7 @@
             }
         },
         ready(){
-            $.tokenAjax("/admin/project/","get",{"page":this.currentPage}).then((data)=>{
+            $.tokenAjax("/project/","get",{"page":this.currentPage}).then((data)=>{
                 this.showInfo(data.message,3000,"msg");
                 this.generate(data.result.count);
                 this.userList=data.result.userList;

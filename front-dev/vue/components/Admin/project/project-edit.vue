@@ -132,7 +132,7 @@
         route:{
             data(){
                 let id=this.$route.params.id;
-                $.tokenAjax("/admin/project/"+id,"get")
+                $.tokenAjax("/project/"+id,"get")
                         .then((data)=>{
                             this.title=data.result.name;
                             this.cover=data.result.cover;
@@ -142,7 +142,7 @@
                         })
                         .catch();
 
-                $.tokenAjax("/admin/project-uploadimg/"+id,"get")
+                $.tokenAjax("/project-uploadimg/"+id,"get")
                         .then((data)=>{
                             this.imgs=data.result;
                         })

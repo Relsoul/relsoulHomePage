@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <ul class="header-nav header-nav-list hide-on-med-and-down">
-                        <li><a href="#!">First Sidebar Link</a></li>
+                        <li><a href="#!" v-link="{path:'/project/'}">项目列表</a></li>
                         <li><a href="#!">Second Sidebar Link</a></li>
                         <!--
                             data-target to login id
