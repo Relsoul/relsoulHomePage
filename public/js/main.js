@@ -16321,7 +16321,7 @@
 	    value: true
 	});
 	// <template>
-	//    <div class="home-title red lighten-2">
+	//    <div class="home-title ">
 	//        <div class="container">
 	//            <h1>哦~ 你找到了一个神秘的地方</h1>
 	//            <p>欢迎来到我的个人主页</p>
@@ -16350,7 +16350,7 @@
 /* 115 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home-title red lighten-2\">\n    <div class=\"container\">\n        <h1>哦~ 你找到了一个神秘的地方</h1>\n        <p>欢迎来到我的个人主页</p>\n        <a class=\"waves-effect waves-light btn-large\"><i class=\" material-icons left\">group add</i>Find me</a>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"home-title \">\n    <div class=\"container\">\n        <h1>哦~ 你找到了一个神秘的地方</h1>\n        <p>欢迎来到我的个人主页</p>\n        <a class=\"waves-effect waves-light btn-large\"><i class=\" material-icons left\">group add</i>Find me</a>\n    </div>\n</div>\n"
 
 /***/ },
 /* 116 */
@@ -16615,10 +16615,10 @@
 	    value: true
 	});
 	// <template>
-	//    <div :class="cls">
+	//    <div :class="cls" class="time-line">
 	//        <div class="container">
-	//            <h1 class="text_underline">{{title}}</h1>
-	//            <ul class="time-line">
+	//            <h1 class="text_underline time-line-h1">{{title}}</h1>
+	//            <ul class="">
 	//                <li class="time-line-item" v-for="d in studyExpList">
 	//                    <div class="time-line-circle">
 	//
@@ -16682,7 +16682,7 @@
 /* 125 */
 /***/ function(module, exports) {
 
-	module.exports = "\n   <div :class=\"cls\">\n       <div class=\"container\">\n           <h1 class=\"text_underline\">{{title}}</h1>\n           <ul class=\"time-line\">\n               <li class=\"time-line-item\" v-for=\"d in studyExpList\">\n                   <div class=\"time-line-circle\">\n\n                   </div>\n                   <div class=\"time-line-border\" v-if=\"$index!=studyExpList.length-1\">\n\n                   </div>\n                   <div class=\"time-line-text \" :class=\"{'time-line-left':$index%2==0?false:true,'time-line-right':$index%2==0?true:false}\">\n                       <h2>{{d.exp_name}}</h2>\n                       <h3>{{d.exp_start_time}}至{{d.exp_end_time}}</h3>\n                       <p>{{d.exp_content}}</p>\n                   </div>\n               </li>\n<!--               <li class=\"time-line-item\">\n                   <div class=\"time-line-circle\">\n\n                   </div>\n                   <div class=\"time-line-border\">\n\n                   </div>\n                   <div class=\"time-line-text time-line-left \" >\n                       hello it is text2\n                   </div>\n               </li>-->\n           </ul>\n       </div>\n   </div>\n"
+	module.exports = "\n   <div :class=\"cls\" class=\"time-line\">\n       <div class=\"container\">\n           <h1 class=\"text_underline time-line-h1\">{{title}}</h1>\n           <ul class=\"\">\n               <li class=\"time-line-item\" v-for=\"d in studyExpList\">\n                   <div class=\"time-line-circle\">\n\n                   </div>\n                   <div class=\"time-line-border\" v-if=\"$index!=studyExpList.length-1\">\n\n                   </div>\n                   <div class=\"time-line-text \" :class=\"{'time-line-left':$index%2==0?false:true,'time-line-right':$index%2==0?true:false}\">\n                       <h2>{{d.exp_name}}</h2>\n                       <h3>{{d.exp_start_time}}至{{d.exp_end_time}}</h3>\n                       <p>{{d.exp_content}}</p>\n                   </div>\n               </li>\n<!--               <li class=\"time-line-item\">\n                   <div class=\"time-line-circle\">\n\n                   </div>\n                   <div class=\"time-line-border\">\n\n                   </div>\n                   <div class=\"time-line-text time-line-left \" >\n                       hello it is text2\n                   </div>\n               </li>-->\n           </ul>\n       </div>\n   </div>\n"
 
 /***/ },
 /* 126 */
@@ -19532,6 +19532,16 @@
 	//                            <label class="active" for="first_name2">标题</label>
 	//                        </div>
 	//                        <button class="btn right project-save-btn" @click="saveContent($event)">保存</button>
+	//                        <div class="row">
+	//                            <div class="col s12">
+	//                                <input type="checkbox" class="filled-in" id="home-project"  />
+	//                                <label for="home-project">是否推荐到首页</label>
+	//                            </div>
+	//                            <div class="input-field col s12">
+	//                                <textarea id="summary" class="materialize-textarea" length="120"></textarea>
+	//                                <label for="summary">摘要</label>
+	//                            </div>
+	//                        </div>
 	//                        <div id="editormd" class="col s12 m12" >
 	//                            <textarea class="editormd-markdown-textarea" name="$id-markdown-doc"></textarea>
 	//                            <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
@@ -19552,7 +19562,7 @@
 /* 201 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s4 m4\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item image-list-item\" v-for=\"img in imgs\">\n                                        <img class=\"image-list-item-img\" src=\"\" :src=\"img.url\" alt=\"\" :data-id=\"img.Id\">\n                                        <button class=\"btn image-list-item-btn\" >点击插入文章</button>\n                                        <button class=\"btn image-list-item-btn\" @click=\"deleteImg($event,img,img.Id)\">删除图片</button>\n                                    </li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"row\">\n                    <div class=\"input-field col s10\">\n                        <input v-model=\"title\" id=\"first_name2\" type=\"text\" class=\"validate\">\n                        <label class=\"active\" for=\"first_name2\">标题</label>\n                    </div>\n                    <button class=\"btn right project-save-btn\" @click=\"saveContent($event)\">保存</button>\n                    <div id=\"editormd\" class=\"col s12 m12\" >\n                        <textarea class=\"editormd-markdown-textarea\" name=\"$id-markdown-doc\"></textarea>\n                        <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->\n                        <textarea class=\"editormd-html-textarea\" name=\"$id-html-code\"></textarea>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s4 m4\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item image-list-item\" v-for=\"img in imgs\">\n                                        <img class=\"image-list-item-img\" src=\"\" :src=\"img.url\" alt=\"\" :data-id=\"img.Id\">\n                                        <button class=\"btn image-list-item-btn\" >点击插入文章</button>\n                                        <button class=\"btn image-list-item-btn\" @click=\"deleteImg($event,img,img.Id)\">删除图片</button>\n                                    </li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"row\">\n                    <div class=\"input-field col s10\">\n                        <input v-model=\"title\" id=\"first_name2\" type=\"text\" class=\"validate\">\n                        <label class=\"active\" for=\"first_name2\">标题</label>\n                    </div>\n                    <button class=\"btn right project-save-btn\" @click=\"saveContent($event)\">保存</button>\n                    <div class=\"row\">\n                        <div class=\"col s12\">\n                            <input type=\"checkbox\" class=\"filled-in\" id=\"home-project\"  />\n                            <label for=\"home-project\">是否推荐到首页</label>\n                        </div>\n                        <div class=\"input-field col s12\">\n                            <textarea id=\"summary\" class=\"materialize-textarea\" length=\"120\"></textarea>\n                            <label for=\"summary\">摘要</label>\n                        </div>\n                    </div>\n                    <div id=\"editormd\" class=\"col s12 m12\" >\n                        <textarea class=\"editormd-markdown-textarea\" name=\"$id-markdown-doc\"></textarea>\n                        <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->\n                        <textarea class=\"editormd-html-textarea\" name=\"$id-html-code\"></textarea>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 202 */
@@ -19764,13 +19774,20 @@
 
 /***/ },
 /* 210 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	
+	var _getIterator2 = __webpack_require__(130);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	// <template>
 	//     <div class="project-list">
 	//             <div class="row">
@@ -19785,7 +19802,9 @@
 	//                         </div>
 	//                         <div class="card-reveal">
 	//                             <span class="card-title grey-text text-darken-4">{{i.name}}<i class="material-icons right">close</i></span>
-	//                             <div id="preview"></div>
+	//                             <div class="project-md-preview">
+	//                                 {{{i.mdContent}}}
+	//                             </div>
 	//                         </div>
 	//                     </div>
 	//                 </div>
@@ -19814,24 +19833,35 @@
 	            console.log(24, this.page);
 	            $.promiseAjax("/project/", "get", { "page": this.page }).then(function (data) {
 	                console.log(26, data);
+	
+	                //解析并转markdown
+	                var _iteratorNormalCompletion = true;
+	                var _didIteratorError = false;
+	                var _iteratorError = undefined;
+	
+	                try {
+	                    for (var _iterator = (0, _getIterator3.default)(data.result.userList), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                        var i = _step.value;
+	
+	                        i.mdContent = window.markdown.toHTML(i.content);
+	                    }
+	                } catch (err) {
+	                    _didIteratorError = true;
+	                    _iteratorError = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion && _iterator.return) {
+	                            _iterator.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError) {
+	                            throw _iteratorError;
+	                        }
+	                    }
+	                }
+	
 	                _this.list = data.result.userList;
-	                _this.mdPreview = editormd.markdownToHTML("preview", {
-	                    markdown: markdown, //+ "\r\n" + $("#append-test").text(),
-	                    //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
-	                    htmlDecode: "style,script,iframe", // you can filter tags decode
-	                    //toc             : false,
-	                    tocm: true, // Using [TOCM]
-	                    //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
-	                    //gfm             : false,
-	                    //tocDropdown     : true,
-	                    // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
-	                    emoji: true,
-	                    taskList: true,
-	                    tex: true, // 默认不解析
-	                    flowChart: true, // 默认不解析
-	                    sequenceDiagram: true });
-	            }). // 默认不解析
-	            catch();
+	            }).catch();
 	        }
 	    },
 	    components: {}
@@ -19843,7 +19873,7 @@
 /* 211 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-list\">\n        <div class=\"row\">\n            <div class=\"col s4 offset-s1\" v-for=\"i in list\">\n                <div class=\"card\">\n                    <div class=\"card-image waves-effect waves-block waves-light\">\n                        <img class=\"activator\" src=\"img/navTitle.png\">\n                    </div>\n                    <div class=\"card-content\">\n                        <span class=\"card-title activator grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">more_vert</i></span>\n                        <p><a href=\"#\" v-link=\"{'path':'/project/'+i.id}\">详情</a></p>\n                    </div>\n                    <div class=\"card-reveal\">\n                        <span class=\"card-title grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">close</i></span>\n                        <div id=\"preview\"></div>\n                    </div>\n                </div>\n            </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-list\">\n        <div class=\"row\">\n            <div class=\"col s4 offset-s1\" v-for=\"i in list\">\n                <div class=\"card\">\n                    <div class=\"card-image waves-effect waves-block waves-light\">\n                        <img class=\"activator\" src=\"img/navTitle.png\">\n                    </div>\n                    <div class=\"card-content\">\n                        <span class=\"card-title activator grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">more_vert</i></span>\n                        <p><a href=\"#\" v-link=\"{'path':'/project/'+i.id}\">详情</a></p>\n                    </div>\n                    <div class=\"card-reveal\">\n                        <span class=\"card-title grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">close</i></span>\n                        <div class=\"project-md-preview\">\n                            {{{i.mdContent}}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 212 */

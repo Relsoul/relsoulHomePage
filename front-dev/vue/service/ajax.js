@@ -4,18 +4,18 @@
 
 "use strict";
 
-function tokenAjax(url,method,data="") {
-    return new Promise((resolve,reject)=>{
-        let token=window.localStorage.getItem("token");
-        if(!token){
-            return reject({type:"false",code:"40002","message":"无效的token"});
+function tokenAjax(url, method, data = "") {
+    return new Promise((resolve, reject)=> {
+        let token = window.localStorage.getItem("token");
+        if (!token) {
+            return reject({type: "false", code: "40002", "message": "无效的token"});
         }
-        let contentType="application/x-www-form-urlencoded";
-        let processData=true;
-        if(data instanceof FormData){
+        let contentType = "application/x-www-form-urlencoded";
+        let processData = true;
+        if (data instanceof FormData) {
             //FormDta 为false
-            contentType=false;
-            processData=false
+            contentType = false;
+            processData = false;
         }
         $.ajax(
             {
@@ -24,13 +24,13 @@ function tokenAjax(url,method,data="") {
                 data,
                 contentType,
                 processData,
-                cache : false,
+                cache: false,
                 headers: {"authorization": token},
                 success(data){
-                    if(data.type=="true"){
+                    if (data.type == "true") {
                         return resolve(data);
                     }
-                    let errorCode=data.code;
+                    let errorCode = data.code;
                     return reject(data);
                 }
             }
@@ -38,14 +38,14 @@ function tokenAjax(url,method,data="") {
     })
 };
 
-function promiseAjax(url,method,data="") {
-    return new Promise((resolve,reject)=>{
-        let contentType="application/x-www-form-urlencoded";
-        let processData=true;
-        if(data instanceof FormData){
+function promiseAjax(url, method, data = "") {
+    return new Promise((resolve, reject)=> {
+        let contentType = "application/x-www-form-urlencoded";
+        let processData = true;
+        if (data instanceof FormData) {
             //FormDta 为false
-            contentType=false;
-            processData=false;
+            contentType = false;
+            processData = false;
         }
         $.ajax(
             {
@@ -54,12 +54,12 @@ function promiseAjax(url,method,data="") {
                 data,
                 contentType,
                 processData,
-                cache : false,
+                cache: false,
                 success(data){
-                    if(data.type=="true"){
+                    if (data.type == "true") {
                         return resolve(data);
                     }
-                    let errorCode=data.code;
+                    let errorCode = data.code;
                     return reject(data);
                 }
             }
@@ -68,5 +68,5 @@ function promiseAjax(url,method,data="") {
 }
 
 
-export {tokenAjax,promiseAjax};
+export {tokenAjax, promiseAjax};
 

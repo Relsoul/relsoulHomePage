@@ -42,6 +42,16 @@
                            <label class="active" for="first_name2">标题</label>
                        </div>
                        <button class="btn right project-save-btn" @click="saveContent($event)">保存</button>
+                       <div class="row">
+                           <div class="col s12">
+                               <input type="checkbox" class="filled-in" id="home-project"  />
+                               <label for="home-project">是否推荐到首页</label>
+                           </div>
+                           <div class="input-field col s12">
+                               <textarea id="summary" class="materialize-textarea" length="120"></textarea>
+                               <label for="summary">摘要</label>
+                           </div>
+                       </div>
                        <div id="editormd" class="col s12 m12" >
                            <textarea class="editormd-markdown-textarea" name="$id-markdown-doc"></textarea>
                            <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->

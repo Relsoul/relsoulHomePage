@@ -1,8 +1,8 @@
 <template>
-   <div :class="cls">
+   <div :class="cls" class="time-line">
        <div class="container">
-           <h1 class="text_underline">{{title}}</h1>
-           <ul class="time-line">
+           <h1 class="text_underline time-line-h1">{{title}}</h1>
+           <ul class="">
                <li class="time-line-item" v-for="d in studyExpList">
                    <div class="time-line-circle">
 

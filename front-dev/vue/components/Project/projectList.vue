@@ -12,7 +12,9 @@
                         </div>
                         <div class="card-reveal">
                             <span class="card-title grey-text text-darken-4">{{i.name}}<i class="material-icons right">close</i></span>
-                            <div id="preview"></div>
+                            <div class="project-md-preview">
+                                {{{i.mdContent}}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -39,23 +41,13 @@
                 $.promiseAjax("/project/","get",{"page":this.page})
                         .then((data)=>{
                             console.log(26,data);
+
+                            //解析并转markdown
+                            for(let i of data.result.userList){
+                                i.mdContent=window.markdown.toHTML(i.content);
+                            }
+
                             this.list=data.result.userList;
-                            this.mdPreview = editormd.markdownToHTML("preview", {
-                                markdown        : markdown ,//+ "\r\n" + $("#append-test").text(),
-                                //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
-                                htmlDecode      : "style,script,iframe",  // you can filter tags decode
-                                //toc             : false,
-                                tocm            : true,    // Using [TOCM]
-                                //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
-                                //gfm             : false,
-                                //tocDropdown     : true,
-                                // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
-                                emoji           : true,
-                                taskList        : true,
-                                tex             : true,  // 默认不解析
-                                flowChart       : true,  // 默认不解析
-                                sequenceDiagram : true,  // 默认不解析
-                            });
                         })
                         .catch()
 
