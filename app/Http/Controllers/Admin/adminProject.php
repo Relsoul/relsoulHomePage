@@ -44,6 +44,12 @@ class adminProject extends Controller{
         }
     }
 
+    public function getHomeShowProject(){
+        $data=DB::table("project")->where("home_show",1)->get();
+        return response()->json(["type"=>"true","message"=>"获取Home_show项目成功","result"=>$data]);
+
+    }
+
     public function searchProject(Request $request){
         $s=$request->input("s");
         $page=(int) $request->input("page");
@@ -212,7 +218,6 @@ class adminProject extends Controller{
         }
 
         return response()->json(["type"=>"false","message"=>"请上传图像文件","code"=>"40009"]);
-
 
     }
 

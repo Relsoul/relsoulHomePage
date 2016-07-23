@@ -149,6 +149,12 @@
             },
             setCover(e,url){
                 this.cover=url;
+                $(event.target).parent('li').siblings().find("button").removeClass('tooltipped');
+                $(".material-tooltip").remove(); //移除原小气泡提示元素
+                $('.tooltipped').tooltip('remove');
+                $(event.target).addClass("tooltipped");
+                //重新生成小气泡提示
+                $('.tooltipped').tooltip({delay: 50});
                 this.saveContent();
             }
         },
@@ -205,9 +211,8 @@
                         }
                         if(this.content!==""){
                             clearInterval(timer);
-                            this.editor.setMarkdown(this.content);
-                            //定时器的坑- -
                             $('.tooltipped').tooltip({delay: 50});
+                            this.editor.setMarkdown(this.content);
                         }
                     },1000)
                 }.bind(this)
@@ -219,6 +224,7 @@
                 $('.collapsible').collapsible({
                     accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
                 });
+
 
             });
         },

@@ -24,7 +24,7 @@
                     <li>
                         <div class="collapsible-header"><i class="material-icons">build</i>推荐首页项目</div>
                         <div class="collapsible-body">
-                            <admin-skill></admin-skill>
+                            <admin-home-show></admin-home-show>
                         </div>
                     </li>
                 </ul>
@@ -41,6 +41,7 @@
     import adminAboutMe from "./home/aboutMe.vue"
     import adminStudyExp from "./home/studyExp.vue"
     import adminSkill from "./home/Skill.vue"
+    import adminHomeShow from "./home/homeShow.vue"
 
     export default{
         data(){
@@ -59,7 +60,8 @@
         components:{
             adminAboutMe,
             adminStudyExp,
-            adminSkill
+            adminSkill,
+            adminHomeShow
         }
     }
 </script>

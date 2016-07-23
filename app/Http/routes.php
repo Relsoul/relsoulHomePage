@@ -107,3 +107,6 @@ Route::get("/project/{id?}","Admin\\adminProject@getProject");
 Route::get("/project-search/","Admin\\adminProject@searchProject");
 //获取项目图片
 Route::get("/project-uploadimg/{id}","Admin\\adminProject@getProjectImg");
+
+//获取Home_show项目
+Route::get("/project-home-show","Admin\\adminProject@getHomeShowProject");
