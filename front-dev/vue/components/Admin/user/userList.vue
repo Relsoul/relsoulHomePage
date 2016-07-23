@@ -7,6 +7,7 @@
                 :search-timer="searchTimer"
                 :msg="msg"
                 :hf="'/admin/user/'"
+                new-text="'新建用户'"
                 @search-list="searchUser"
                 @change-page="changePage"
                 @delete-list="deleteUser"

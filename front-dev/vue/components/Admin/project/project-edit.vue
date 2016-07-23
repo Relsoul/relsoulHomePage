@@ -5,14 +5,15 @@
                <div class="row">
                    <p>{{msg}}</p>
                    <ul class="collapsible popout" data-collapsible="accordion">
-                       <li class="col s4 m4">
+                       <li class="col s6 m6">
                                <div class="collapsible-header"><i class="mdi-image-filter-drama"></i>图片列表</div>
                                <div class="collapsible-body">
                                    <ul class="collection">
                                        <li class="collection-item image-list-item" v-for="img in imgs">
                                            <img class="image-list-item-img" src="" :src="img.url" alt="" :data-id="img.Id">
-                                           <button class="btn image-list-item-btn" >点击插入文章</button>
+                                           <button class="btn image-list-item-btn" @click="insertImg($event,img.url)" >点击插入文章</button>
                                            <button class="btn image-list-item-btn" @click="deleteImg($event,img,img.Id)">删除图片</button>
+                                           <button class="btn image-list-item-btn " :class="img.url==cover?'tooltipped':''" data-position="top" data-delay="50" data-tooltip="封面图片" @click="setCover($event,img.url)">设置封面</button>
                                        </li>
                                    </ul>
                                </div>
@@ -44,12 +45,12 @@
                        <button class="btn right project-save-btn" @click="saveContent($event)">保存</button>
                        <div class="row">
                            <div class="col s12">
-                               <input type="checkbox" class="filled-in" id="home-project"  />
+                               <input type="checkbox" class="filled-in" id="home-project" v-model="home_show"  />
                                <label for="home-project">是否推荐到首页</label>
                            </div>
                            <div class="input-field col s12">
-                               <textarea id="summary" class="materialize-textarea" length="120"></textarea>
-                               <label for="summary">摘要</label>
+                               <textarea id="summary" class="materialize-textarea" length="255" v-model="summary"></textarea>
+                               <label class="active" for="summary">摘要</label>
                            </div>
                        </div>
                        <div id="editormd" class="col s12 m12" >
@@ -78,7 +79,10 @@
                 imgs:[],
                 content:"",
                 preview:"",
-                title:""
+                title:"",
+                home_show:false,
+                summary:"",
+                cover:""
             }
         },
         methods:{
@@ -86,7 +90,8 @@
             saveContent(e){
                 let id=this.$route.params.id;
                 this.content=this.editor.getMarkdown();
-                $.tokenAjax("/admin/project/"+id,"put",{title:this.title,content:this.content,cover:this.cover||"http://baidu.com/",home_show:this.home_show||0})
+                console.log("this.home_show",this.home_show);
+                $.tokenAjax("/admin/project/"+id,"put",{title:this.title,content:this.content,cover:this.cover||" ",home_show:0+this.home_show||0,summary:this.summary})
                         .then((data)=>{
                             this.showInfo("保存成功",2000,"msg");
                         })
@@ -137,6 +142,14 @@
                         .catch((data)=>{
                             this.showInfo(data.message,2000,"msg");
                         });
+            },
+            insertImg(e,url){
+                this.editor.insertValue(`![图片描述](${url})`);
+                this.editor.getCursor()
+            },
+            setCover(e,url){
+                this.cover=url;
+                this.saveContent();
             }
         },
         route:{
@@ -147,6 +160,8 @@
                             this.title=data.result.name;
                             this.cover=data.result.cover;
                             this.content=data.result.content;
+                            this.summary=data.result.summary;
+                            this.home_show=data.result.home_show;
                             //this.editor.setMarkdown(this.content);
                             console.log("project-edit",data)
                         })
@@ -159,7 +174,6 @@
                         .catch(()=>{
 
                         })
-
             }
         },
         ready(){
@@ -172,7 +186,6 @@
                     this.saveContent();
                     return false;
                 }
-
             });
 
 
@@ -192,7 +205,9 @@
                         }
                         if(this.content!==""){
                             clearInterval(timer);
-                            this.editor.setMarkdown(this.content)
+                            this.editor.setMarkdown(this.content);
+                            //定时器的坑- -
+                            $('.tooltipped').tooltip({delay: 50});
                         }
                     },1000)
                 }.bind(this)
@@ -204,8 +219,8 @@
                 $('.collapsible').collapsible({
                     accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
                 });
-            });
 
+            });
         },
         components:{
 

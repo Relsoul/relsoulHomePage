@@ -12,7 +12,7 @@
                     </div>
                 </form>
                 <button class="btn" @click="newList($event)">
-                    新建用户
+                    {{newText}}
                 </button>
                 <ul class="collection">
                         <li class="collection-item"  v-for="list in listData">
@@ -53,7 +53,7 @@
                 searchText:"",
             }
         },
-        props:["listData","pageLength","currentPage","searchTimer","msg","hf"],
+        props:["listData","pageLength","currentPage","searchTimer","msg","hf","newText"],
         methods:{
             newList(e){
                 this.$dispatch('new-list');

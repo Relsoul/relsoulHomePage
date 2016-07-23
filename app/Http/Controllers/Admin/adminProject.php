@@ -18,7 +18,7 @@ class adminProject extends Controller{
     public function getProject(Request $request,$id=null){
         //获取某个特定项目
         if(!empty($id)){
-            $data=DB::table("project")->select("id","title as name","content","cover","imgs")->where("id",$id)->first();
+            $data=DB::table("project")->select("id","title as name","content","cover","imgs","summary","home_show")->where("id",$id)->first();
             if(empty($data)){
                 return response()->json(["type"=>"false","message"=>"项目不存在","code"=>"40009"]);
             }
@@ -80,6 +80,7 @@ class adminProject extends Controller{
             $content=$request->input("content");
             $cover=$request->input("cover");
             $home_show=(int) $request->input("home_show");
+            $summary=$request->input("summary");
 
             //预先查找是否存在id项目
             $isData=DB::table("project")->where("id",$id)->first();
@@ -90,7 +91,7 @@ class adminProject extends Controller{
             }
 
             //构建数组进行填充.
-            $updateArr=["title"=>$title,"content"=>$content,"cover"=>$cover?$cover:"http://baidu.com/","home_show"=>$home_show?$home_show:0];
+            $updateArr=["title"=>$title,"content"=>$content,"cover"=>$cover?$cover:" ","home_show"=>$home_show?$home_show:0,"summary"=>$summary?$summary:"项目未描述"];
 
             $data=DB::table('project')
                 ->where('id', $id)
@@ -98,7 +99,6 @@ class adminProject extends Controller{
 
             if(empty($data)){
                 return response()->json(["type"=>"false","message"=>"更新失败,某些参数不正确","code"=>"40009"]);
-
             }
 
             return response()->json(["type"=>"true","message"=>"更新成功","result"=>$data]);
@@ -136,7 +136,7 @@ class adminProject extends Controller{
     public function newProject(Request $request){
         //因为要预先知道文章id才能进行imgupload,那么点击new则是新建一个文章
         $newProjectId = DB::table('project')->insertGetId(
-            ['title' => '命名你的项目', 'content' => "hello world"]
+            ['title' => '命名你的项目', 'content' => "hello world",'created_at'=>time(),'updated_at'=>time()]
         );
 
         return response()->json(["type"=>"true","message"=>"更新成功","result"=>["id"=>$newProjectId]]);
@@ -191,7 +191,7 @@ class adminProject extends Controller{
             }
 
             $path = $projectImg->move($projectImgDir, $newName);//移动文件
-            //开发环境要把url换成url
+            //开发环境要把app.url换成url
 
             //获取文件httpUrl
             $host = config("app.url");

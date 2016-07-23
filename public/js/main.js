@@ -17167,13 +17167,19 @@
 	//                         </div>
 	//                     </li>
 	//                     <li>
-	//                         <div class="collapsible-header"><i class="material-icons">build</i>Second</div>
+	//                         <div class="collapsible-header"><i class="material-icons">build</i>学习经验</div>
 	//                         <div class="collapsible-body">
 	//                             <admin-study-exp></admin-study-exp>
 	//                         </div>
 	//                     </li>
 	//                     <li>
-	//                         <div class="collapsible-header"><i class="material-icons">build</i>Third</div>
+	//                         <div class="collapsible-header"><i class="material-icons">build</i>技能管理</div>
+	//                         <div class="collapsible-body">
+	//                             <admin-skill></admin-skill>
+	//                         </div>
+	//                     </li>
+	//                     <li>
+	//                         <div class="collapsible-header"><i class="material-icons">build</i>推荐首页项目</div>
 	//                         <div class="collapsible-body">
 	//                             <admin-skill></admin-skill>
 	//                         </div>
@@ -18010,7 +18016,7 @@
 /* 166 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <admin-about-me></admin-about-me>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Second</div>\n                    <div class=\"collapsible-body\">\n                        <admin-study-exp></admin-study-exp>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>Third</div>\n                    <div class=\"collapsible-body\">\n                        <admin-skill></admin-skill>\n                    </div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
+	module.exports = "\n<div class=\"admin-home\">\n    <div class=\"row\">\n        <div class=\"container\">\n            <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                <li class=\"\">\n                    <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>关于我</div>\n                    <div class=\"collapsible-body \">\n                        <admin-about-me></admin-about-me>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>学习经验</div>\n                    <div class=\"collapsible-body\">\n                        <admin-study-exp></admin-study-exp>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>技能管理</div>\n                    <div class=\"collapsible-body\">\n                        <admin-skill></admin-skill>\n                    </div>\n                </li>\n                <li>\n                    <div class=\"collapsible-header\"><i class=\"material-icons\">build</i>推荐首页项目</div>\n                    <div class=\"collapsible-body\">\n                        <admin-skill></admin-skill>\n                    </div>\n                </li>\n            </ul>\n        </div>\n    </div>\n</div>\n\n"
 
 /***/ },
 /* 167 */
@@ -18108,6 +18114,7 @@
 	//                 :search-timer="searchTimer"
 	//                 :msg="msg"
 	//                 :hf="'/admin/user/'"
+	//                 new-text="'新建用户'"
 	//                 @search-list="searchUser"
 	//                 @change-page="changePage"
 	//                 @delete-list="deleteUser"
@@ -18323,7 +18330,7 @@
 	        };
 	    },
 	
-	    props: ["listData", "pageLength", "currentPage", "searchTimer", "msg", "hf"],
+	    props: ["listData", "pageLength", "currentPage", "searchTimer", "msg", "hf", "newText"],
 	    methods: {
 	        newList: function newList(e) {
 	            this.$dispatch('new-list');
@@ -18421,7 +18428,7 @@
 	//                     </div>
 	//                 </form>
 	//                 <button class="btn" @click="newList($event)">
-	//                     新建用户
+	//                     {{newText}}
 	//                 </button>
 	//                 <ul class="collection">
 	//                         <li class="collection-item"  v-for="list in listData">
@@ -18460,13 +18467,13 @@
 /* 175 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"container\">\n    <p>{{msg}}</p>\n    <div class=\"row\">\n        <form class=\"col s12\">\n            <div class=\"row\">\n                <div class=\"input-field col s12\">\n                    <i class=\"material-icons prefix white-text\">search</i>\n                    <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\" @click=\"searchUser($event)\">\n                    <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                </div>\n            </div>\n        </form>\n        <button class=\"btn\" @click=\"newList($event)\">\n            新建用户\n        </button>\n        <ul class=\"collection\">\n                <li class=\"collection-item\"  v-for=\"list in listData\">\n                    <span class=\"user-name\">{{list.name}}</span>\n                    <div class=\"secondary-content\">\n                        <a class=\"btn\" v-link=\"{path:hf+list.id}\">修改</a>\n                        <a class=\"btn\" @click=\"deleteUser($event,list.id)\" >删除</a>\n                    </div>\n                </li>\n            </ul>\n\n        <ul class=\"pagination white-text\">\n            <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n                <a ><i class=\"material-icons\">chevron_left</i></a>\n            </li>\n            <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n                <a>{{page.num}}</a>\n            </li>\n\n            <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n        'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n                <a  ><i class=\"material-icons\">chevron_right</i></a>\n            </li>\n        </ul>\n    </div>\n\n</div>\n\n"
+	module.exports = "\n<div class=\"container\">\n    <p>{{msg}}</p>\n    <div class=\"row\">\n        <form class=\"col s12\">\n            <div class=\"row\">\n                <div class=\"input-field col s12\">\n                    <i class=\"material-icons prefix white-text\">search</i>\n                    <input id=\"icon_prefix\" type=\"text\" class=\"validate\" v-model=\"searchText\" @change=\"searchUser($event)\" @click=\"searchUser($event)\">\n                    <label for=\"icon_prefix\" class=\"white-text\">搜索</label>\n                </div>\n            </div>\n        </form>\n        <button class=\"btn\" @click=\"newList($event)\">\n            {{newText}}\n        </button>\n        <ul class=\"collection\">\n                <li class=\"collection-item\"  v-for=\"list in listData\">\n                    <span class=\"user-name\">{{list.name}}</span>\n                    <div class=\"secondary-content\">\n                        <a class=\"btn\" v-link=\"{path:hf+list.id}\">修改</a>\n                        <a class=\"btn\" @click=\"deleteUser($event,list.id)\" >删除</a>\n                    </div>\n                </li>\n            </ul>\n\n        <ul class=\"pagination white-text\">\n            <li class=\"\" :class=\"{'disabled':currentPage<=1?true:false,'waves-effect':currentPage<=1?false:true}\" @click=\"changePage($event,currentPage,'prev')\">\n                <a ><i class=\"material-icons\">chevron_left</i></a>\n            </li>\n            <li class=\"waves-effect\" :class=\"page.cls\"  v-for=\"page in pageLength\" @click=\"changePage($event,page.num)\">\n                <a>{{page.num}}</a>\n            </li>\n\n            <li class=\"\"  :class=\"{'disabled':currentPage>=pageLength.length?true:false,\n        'waves-effect':currentPage>=pageLength.length?false:true}\" @click=\"changePage($event,currentPage,'next')\">\n                <a  ><i class=\"material-icons\">chevron_right</i></a>\n            </li>\n        </ul>\n    </div>\n\n</div>\n\n"
 
 /***/ },
 /* 176 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"user-list\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/user/'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n            @new-list=\"newUser\"\n\n    ></user-list-view>\n    user-list\n</div>\n"
+	module.exports = "\n<div class=\"user-list\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/user/'\"\n            new-text=\"'新建用户'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n            @new-list=\"newUser\"\n\n    ></user-list-view>\n    user-list\n</div>\n"
 
 /***/ },
 /* 177 */
@@ -19136,6 +19143,7 @@
 	//                 :search-timer="searchTimer"
 	//                 :msg="msg"
 	//                 :hf="'/admin/project/'"
+	//                 :new-text="'新建项目'"
 	//                 @search-list="searchUser"
 	//                 @change-page="changePage"
 	//                 @delete-list="deleteUser"
@@ -19269,7 +19277,7 @@
 /* 196 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/project/'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n            @new-list=\"newUser\"\n    ></user-list-view>\n    project-list\n</div>\n"
+	module.exports = "\n<div class=\"project\">\n    <user-list-view\n            :list-data=\"userList\"\n            :page-length=\"pageLength\"\n            :current-page=\"currentPage\"\n            :search-timer=\"searchTimer\"\n            :msg=\"msg\"\n            :hf=\"'/admin/project/'\"\n            :new-text=\"'新建项目'\"\n            @search-list=\"searchUser\"\n            @change-page=\"changePage\"\n            @delete-list=\"deleteUser\"\n            @new-list=\"newUser\"\n    ></user-list-view>\n    project-list\n</div>\n"
 
 /***/ },
 /* 197 */
@@ -19360,7 +19368,10 @@
 	            imgs: [],
 	            content: "",
 	            preview: "",
-	            title: ""
+	            title: "",
+	            home_show: false,
+	            summary: "",
+	            cover: ""
 	        };
 	    },
 	
@@ -19371,7 +19382,8 @@
 	
 	            var id = this.$route.params.id;
 	            this.content = this.editor.getMarkdown();
-	            $.tokenAjax("/admin/project/" + id, "put", { title: this.title, content: this.content, cover: this.cover || "http://baidu.com/", home_show: this.home_show || 0 }).then(function (data) {
+	            console.log("this.home_show", this.home_show);
+	            $.tokenAjax("/admin/project/" + id, "put", { title: this.title, content: this.content, cover: this.cover || " ", home_show: 0 + this.home_show || 0, summary: this.summary }).then(function (data) {
 	                _this.showInfo("保存成功", 2000, "msg");
 	            }).catch();
 	        },
@@ -19419,6 +19431,14 @@
 	            }).catch(function (data) {
 	                _this3.showInfo(data.message, 2000, "msg");
 	            });
+	        },
+	        insertImg: function insertImg(e, url) {
+	            this.editor.insertValue("![图片描述](" + url + ")");
+	            this.editor.getCursor();
+	        },
+	        setCover: function setCover(e, url) {
+	            this.cover = url;
+	            this.saveContent();
 	        }
 	    },
 	    route: {
@@ -19430,6 +19450,8 @@
 	                _this4.title = data.result.name;
 	                _this4.cover = data.result.cover;
 	                _this4.content = data.result.content;
+	                _this4.summary = data.result.summary;
+	                _this4.home_show = data.result.home_show;
 	                //this.editor.setMarkdown(this.content);
 	                console.log("project-edit", data);
 	            }).catch();
@@ -19471,6 +19493,8 @@
 	                    if (_this6.content !== "") {
 	                        clearInterval(timer);
 	                        _this6.editor.setMarkdown(_this6.content);
+	                        //定时器的坑- -
+	                        $('.tooltipped').tooltip({ delay: 50 });
 	                    }
 	                }, 1000);
 	            }.bind(this)
@@ -19495,14 +19519,15 @@
 	//                <div class="row">
 	//                    <p>{{msg}}</p>
 	//                    <ul class="collapsible popout" data-collapsible="accordion">
-	//                        <li class="col s4 m4">
+	//                        <li class="col s6 m6">
 	//                                <div class="collapsible-header"><i class="mdi-image-filter-drama"></i>图片列表</div>
 	//                                <div class="collapsible-body">
 	//                                    <ul class="collection">
 	//                                        <li class="collection-item image-list-item" v-for="img in imgs">
 	//                                            <img class="image-list-item-img" src="" :src="img.url" alt="" :data-id="img.Id">
-	//                                            <button class="btn image-list-item-btn" >点击插入文章</button>
+	//                                            <button class="btn image-list-item-btn" @click="insertImg($event,img.url)" >点击插入文章</button>
 	//                                            <button class="btn image-list-item-btn" @click="deleteImg($event,img,img.Id)">删除图片</button>
+	//                                            <button class="btn image-list-item-btn " :class="img.url==cover?'tooltipped':''" data-position="top" data-delay="50" data-tooltip="封面图片" @click="setCover($event,img.url)">设置封面</button>
 	//                                        </li>
 	//                                    </ul>
 	//                                </div>
@@ -19534,12 +19559,12 @@
 	//                        <button class="btn right project-save-btn" @click="saveContent($event)">保存</button>
 	//                        <div class="row">
 	//                            <div class="col s12">
-	//                                <input type="checkbox" class="filled-in" id="home-project"  />
+	//                                <input type="checkbox" class="filled-in" id="home-project" v-model="home_show"  />
 	//                                <label for="home-project">是否推荐到首页</label>
 	//                            </div>
 	//                            <div class="input-field col s12">
-	//                                <textarea id="summary" class="materialize-textarea" length="120"></textarea>
-	//                                <label for="summary">摘要</label>
+	//                                <textarea id="summary" class="materialize-textarea" length="255" v-model="summary"></textarea>
+	//                                <label class="active" for="summary">摘要</label>
 	//                            </div>
 	//                        </div>
 	//                        <div id="editormd" class="col s12 m12" >
@@ -19562,7 +19587,7 @@
 /* 201 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s4 m4\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item image-list-item\" v-for=\"img in imgs\">\n                                        <img class=\"image-list-item-img\" src=\"\" :src=\"img.url\" alt=\"\" :data-id=\"img.Id\">\n                                        <button class=\"btn image-list-item-btn\" >点击插入文章</button>\n                                        <button class=\"btn image-list-item-btn\" @click=\"deleteImg($event,img,img.Id)\">删除图片</button>\n                                    </li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"row\">\n                    <div class=\"input-field col s10\">\n                        <input v-model=\"title\" id=\"first_name2\" type=\"text\" class=\"validate\">\n                        <label class=\"active\" for=\"first_name2\">标题</label>\n                    </div>\n                    <button class=\"btn right project-save-btn\" @click=\"saveContent($event)\">保存</button>\n                    <div class=\"row\">\n                        <div class=\"col s12\">\n                            <input type=\"checkbox\" class=\"filled-in\" id=\"home-project\"  />\n                            <label for=\"home-project\">是否推荐到首页</label>\n                        </div>\n                        <div class=\"input-field col s12\">\n                            <textarea id=\"summary\" class=\"materialize-textarea\" length=\"120\"></textarea>\n                            <label for=\"summary\">摘要</label>\n                        </div>\n                    </div>\n                    <div id=\"editormd\" class=\"col s12 m12\" >\n                        <textarea class=\"editormd-markdown-textarea\" name=\"$id-markdown-doc\"></textarea>\n                        <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->\n                        <textarea class=\"editormd-html-textarea\" name=\"$id-html-code\"></textarea>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s6 m6\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item image-list-item\" v-for=\"img in imgs\">\n                                        <img class=\"image-list-item-img\" src=\"\" :src=\"img.url\" alt=\"\" :data-id=\"img.Id\">\n                                        <button class=\"btn image-list-item-btn\" @click=\"insertImg($event,img.url)\" >点击插入文章</button>\n                                        <button class=\"btn image-list-item-btn\" @click=\"deleteImg($event,img,img.Id)\">删除图片</button>\n                                        <button class=\"btn image-list-item-btn \" :class=\"img.url==cover?'tooltipped':''\" data-position=\"top\" data-delay=\"50\" data-tooltip=\"封面图片\" @click=\"setCover($event,img.url)\">设置封面</button>\n                                    </li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"row\">\n                    <div class=\"input-field col s10\">\n                        <input v-model=\"title\" id=\"first_name2\" type=\"text\" class=\"validate\">\n                        <label class=\"active\" for=\"first_name2\">标题</label>\n                    </div>\n                    <button class=\"btn right project-save-btn\" @click=\"saveContent($event)\">保存</button>\n                    <div class=\"row\">\n                        <div class=\"col s12\">\n                            <input type=\"checkbox\" class=\"filled-in\" id=\"home-project\" v-model=\"home_show\"  />\n                            <label for=\"home-project\">是否推荐到首页</label>\n                        </div>\n                        <div class=\"input-field col s12\">\n                            <textarea id=\"summary\" class=\"materialize-textarea\" length=\"255\" v-model=\"summary\"></textarea>\n                            <label class=\"active\" for=\"summary\">摘要</label>\n                        </div>\n                    </div>\n                    <div id=\"editormd\" class=\"col s12 m12\" >\n                        <textarea class=\"editormd-markdown-textarea\" name=\"$id-markdown-doc\"></textarea>\n                        <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->\n                        <textarea class=\"editormd-html-textarea\" name=\"$id-html-code\"></textarea>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 202 */

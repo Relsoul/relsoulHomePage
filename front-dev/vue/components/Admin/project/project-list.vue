@@ -7,6 +7,7 @@
                 :search-timer="searchTimer"
                 :msg="msg"
                 :hf="'/admin/project/'"
+                :new-text="'新建项目'"
                 @search-list="searchUser"
                 @change-page="changePage"
                 @delete-list="deleteUser"

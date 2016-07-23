@@ -10,13 +10,19 @@
                         </div>
                     </li>
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">build</i>Second</div>
+                        <div class="collapsible-header"><i class="material-icons">build</i>学习经验</div>
                         <div class="collapsible-body">
                             <admin-study-exp></admin-study-exp>
                         </div>
                     </li>
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">build</i>Third</div>
+                        <div class="collapsible-header"><i class="material-icons">build</i>技能管理</div>
+                        <div class="collapsible-body">
+                            <admin-skill></admin-skill>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">build</i>推荐首页项目</div>
                         <div class="collapsible-body">
                             <admin-skill></admin-skill>
                         </div>
