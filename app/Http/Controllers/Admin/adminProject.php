@@ -18,7 +18,7 @@ class adminProject extends Controller{
     public function getProject(Request $request,$id=null){
         //获取某个特定项目
         if(!empty($id)){
-            $data=DB::table("project")->select("id","title as name","content","cover","imgs","summary","home_show","start_time","end_time")->where("id",$id)->first();
+            $data=DB::table("project")->select("title as name","content","cover","summary","home_show","start_time","end_time")->where("id",$id)->first();
             if(empty($data)){
                 return response()->json(["type"=>"false","message"=>"项目不存在","code"=>"40009"]);
             }
@@ -32,7 +32,7 @@ class adminProject extends Controller{
             if(!empty($page)){
                 $limit=--$page*10;
                 //分页获取项目
-                $data=DB::table("project")->select("id","title as name","content","cover","imgs")->skip($limit)->take(10)->get();
+                $data=DB::table("project")->select("id","title as name","content","cover","summary","home_show","start_time","end_time")->skip($limit)->take(10)->get();
                 $dataLength=DB::table("project")->count();
 
                 return response()->json(["type"=>"true","message"=>"获取分页项目成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
@@ -58,7 +58,7 @@ class adminProject extends Controller{
         if(!empty($page)&&!empty($s)){
             $limit=--$page*10;
             //分页获取项目
-            $data=DB::table("project")->select("id","title as name","content","cover","imgs")->where("title","like","%".$s."%")->skip($limit)->take(10)->get();
+            $data=DB::table("project")->select("id","title as name","content","cover","summary","home_show","start_time","end_time")->where("title","like","%".$s."%")->skip($limit)->take(10)->get();
             $dataLength=DB::table("project")->where("title","like","%".$s."%")->count();
 
             return response()->json(["type"=>"true","message"=>"搜索项目成功","result"=>["userList"=>$data,"count"=>$dataLength]]);
@@ -106,7 +106,7 @@ class adminProject extends Controller{
                 ->update($updateArr);
 
             if(empty($data)){
-                return response()->json(["type"=>"false","message"=>"更新失败,某些参数不正确","code"=>"40009"]);
+                return response()->json(["type"=>"false","message"=>"未做修改","code"=>"40009"]);
             }
 
             return response()->json(["type"=>"true","message"=>"更新成功","result"=>$data]);

@@ -1,7 +1,7 @@
 <template>
     <div class="project-list">
             <div class="row">
-                <div class="col s4 offset-s1" v-for="i in list">
+                <div class="col m4 offset-m1" v-for="i in list">
                     <div class="card">
                         <div class="card-image waves-effect waves-block waves-light">
                             <img class="activator" src="img/navTitle.png">
@@ -13,7 +13,7 @@
                         <div class="card-reveal">
                             <span class="card-title grey-text text-darken-4">{{i.name}}<i class="material-icons right">close</i></span>
                             <div class="project-md-preview">
-                                {{{i.mdContent}}}
+                                {{{i.summary}}}
                             </div>
                         </div>
                     </div>
@@ -32,27 +32,53 @@
                 msg:'',
                 page:1,
                 list:[],
-                mdPreview:null
+                mdPreview:null,
+                offSetHeight:0,
+                prevOffSetHeight:0,
+                getPageLock:false
             }
         },
         route:{
             data(){
-                console.log(24,this.page);
+                this.getNextPage();
+            }
+        },
+        methods:{
+            getNextPage(){
+                //锁定正在获取,无法再进行新的获取
+                if(this.getPageLock){
+                    console.log("getPageLock存在,正在获取下一页");
+                }
+                console.log("获取下一页");
+                this.getPageLock=true;
                 $.promiseAjax("/project/","get",{"page":this.page})
                         .then((data)=>{
-                            console.log(26,data);
-
-                            //解析并转markdown
-                            for(let i of data.result.userList){
-                                i.mdContent=window.markdown.toHTML(i.content);
-                            }
-
-                            this.list=data.result.userList;
+                            this.list=this.list.concat(data.result.userList);
+                            //算出最后图片scrollTop距离
+                            this.$nextTick(()=>{
+                                this.getLastCardHeight();
+                                this.getPageLock=false;
+                                this.page++;
+                            });
                         })
-                        .catch()
-
-
+            },
+            getLastCardHeight(){
+                this.prevOffSetHeight=this.offSetHeight;
+                this.offSetHeight=$(".card").last().offset().top;
+                console.log(72,this.offSetHeight,this.prevOffSetHeight);
             }
+        },
+        ready(){
+            $(window).on("scroll",(e)=>{
+
+                let windowScroll=$(window).scrollTop();
+
+                //判断上一次滚动获取的数据是否小于这一次获取的距离,以及是否正在获取下一页数据中
+                if(windowScroll+100>=this.offSetHeight&&this.prevOffSetHeight<this.offSetHeight&&!this.getPageLock){
+                    this.getNextPage();
+                }
+
+            })
         },
         components:{
 

@@ -19996,24 +19996,17 @@
 
 /***/ },
 /* 215 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	
-	var _getIterator2 = __webpack_require__(130);
-	
-	var _getIterator3 = _interopRequireDefault(_getIterator2);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
 	// <template>
 	//     <div class="project-list">
 	//             <div class="row">
-	//                 <div class="col s4 offset-s1" v-for="i in list">
+	//                 <div class="col m4 offset-m1" v-for="i in list">
 	//                     <div class="card">
 	//                         <div class="card-image waves-effect waves-block waves-light">
 	//                             <img class="activator" src="img/navTitle.png">
@@ -20025,7 +20018,7 @@
 	//                         <div class="card-reveal">
 	//                             <span class="card-title grey-text text-darken-4">{{i.name}}<i class="material-icons right">close</i></span>
 	//                             <div class="project-md-preview">
-	//                                 {{{i.mdContent}}}
+	//                                 {{{i.summary}}}
 	//                             </div>
 	//                         </div>
 	//                     </div>
@@ -20044,48 +20037,58 @@
 	            msg: '',
 	            page: 1,
 	            list: [],
-	            mdPreview: null
+	            mdPreview: null,
+	            offSetHeight: 0,
+	            prevOffSetHeight: 0,
+	            getPageLock: false
 	        };
 	    },
 	
 	    route: {
 	        data: function data() {
-	            var _this = this;
-	
-	            console.log(24, this.page);
-	            $.promiseAjax("/project/", "get", { "page": this.page }).then(function (data) {
-	                console.log(26, data);
-	
-	                //解析并转markdown
-	                var _iteratorNormalCompletion = true;
-	                var _didIteratorError = false;
-	                var _iteratorError = undefined;
-	
-	                try {
-	                    for (var _iterator = (0, _getIterator3.default)(data.result.userList), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                        var i = _step.value;
-	
-	                        i.mdContent = window.markdown.toHTML(i.content);
-	                    }
-	                } catch (err) {
-	                    _didIteratorError = true;
-	                    _iteratorError = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion && _iterator.return) {
-	                            _iterator.return();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError) {
-	                            throw _iteratorError;
-	                        }
-	                    }
-	                }
-	
-	                _this.list = data.result.userList;
-	            }).catch();
+	            this.getNextPage();
 	        }
 	    },
+	    methods: {
+	        getNextPage: function getNextPage() {
+	            var _this = this;
+	
+	            //锁定正在获取,无法再进行新的获取
+	            if (this.getPageLock) {
+	                console.log("getPageLock存在,正在获取下一页");
+	            }
+	            console.log("获取下一页");
+	            this.getPageLock = true;
+	            $.promiseAjax("/project/", "get", { "page": this.page }).then(function (data) {
+	                _this.list = _this.list.concat(data.result.userList);
+	                //算出最后图片scrollTop距离
+	                _this.$nextTick(function () {
+	                    _this.getLastCardHeight();
+	                    _this.getPageLock = false;
+	                    _this.page++;
+	                });
+	            });
+	        },
+	        getLastCardHeight: function getLastCardHeight() {
+	            this.prevOffSetHeight = this.offSetHeight;
+	            this.offSetHeight = $(".card").last().offset().top;
+	            console.log(72, this.offSetHeight, this.prevOffSetHeight);
+	        }
+	    },
+	    ready: function ready() {
+	        var _this2 = this;
+	
+	        $(window).on("scroll", function (e) {
+	
+	            var windowScroll = $(window).scrollTop();
+	
+	            //判断上一次滚动获取的数据是否小于这一次获取的距离,以及是否正在获取下一页数据中
+	            if (windowScroll + 100 >= _this2.offSetHeight && _this2.prevOffSetHeight < _this2.offSetHeight && !_this2.getPageLock) {
+	                _this2.getNextPage();
+	            }
+	        });
+	    },
+	
 	    components: {}
 	};
 	// </script>
@@ -20095,7 +20098,7 @@
 /* 216 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-list\">\n        <div class=\"row\">\n            <div class=\"col s4 offset-s1\" v-for=\"i in list\">\n                <div class=\"card\">\n                    <div class=\"card-image waves-effect waves-block waves-light\">\n                        <img class=\"activator\" src=\"img/navTitle.png\">\n                    </div>\n                    <div class=\"card-content\">\n                        <span class=\"card-title activator grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">more_vert</i></span>\n                        <p><a href=\"#\" v-link=\"{'path':'/project/'+i.id}\">详情</a></p>\n                    </div>\n                    <div class=\"card-reveal\">\n                        <span class=\"card-title grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">close</i></span>\n                        <div class=\"project-md-preview\">\n                            {{{i.mdContent}}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-list\">\n        <div class=\"row\">\n            <div class=\"col m4 offset-m1\" v-for=\"i in list\">\n                <div class=\"card\">\n                    <div class=\"card-image waves-effect waves-block waves-light\">\n                        <img class=\"activator\" src=\"img/navTitle.png\">\n                    </div>\n                    <div class=\"card-content\">\n                        <span class=\"card-title activator grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">more_vert</i></span>\n                        <p><a href=\"#\" v-link=\"{'path':'/project/'+i.id}\">详情</a></p>\n                    </div>\n                    <div class=\"card-reveal\">\n                        <span class=\"card-title grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">close</i></span>\n                        <div class=\"project-md-preview\">\n                            {{{i.summary}}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 217 */
@@ -20177,13 +20180,15 @@
 	});
 	// <template>
 	//     <div class="project-detail">
-	//         project-detail
+	//         <div class="container">
+	//
+	//         </div>
 	//     </div>
 	// </template>
 	// <style>
 	//
 	// </style>
-	// <script>
+	// <script type="text/ecmascript-6">
 	
 	exports.default = {
 	    data: function data() {
@@ -20192,6 +20197,11 @@
 	        };
 	    },
 	
+	    route: {
+	        data: function data() {
+	            var projectId = this.$route.params.userId;
+	        }
+	    },
 	    components: {}
 	};
 	// </script>
@@ -20201,7 +20211,7 @@
 /* 221 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-detail\">\n    project-detail\n</div>\n"
+	module.exports = "\n<div class=\"project-detail\">\n    <div class=\"container\">\n\n    </div>\n</div>\n"
 
 /***/ }
 /******/ ]);

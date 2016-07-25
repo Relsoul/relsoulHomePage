@@ -13,6 +13,10 @@ $mobile:420px;
 body{
   overflow-x:hidden;
   perspective: 1500px;
+
+  @media all and (max-width:$mobile){
+    background: #353541;
+  }
 }
 html{
   overflow-x: hidden;
