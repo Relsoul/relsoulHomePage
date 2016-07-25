@@ -10,4 +10,12 @@
 
     }
   }
+
+  .about-me-img{
+    padding: 25px;
+
+    @media all and (max-width: $mobile) {
+      padding: 0;
+    }
+  }
 }

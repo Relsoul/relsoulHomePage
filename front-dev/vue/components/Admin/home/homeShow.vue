@@ -9,13 +9,17 @@
                         <div class="col m6 s6">
                             <img :src="item.cover" class="responsive-img" alt="">
                         </div>
-                        <div class="col m6 s6">
+                        <div class="col m5 s5 offset-s1 offset-m1">
                             {{item.summary}}
+                        </div>
+                        <div class="col m12 m12">
+                            <p>项目开始时间:<span>{{item.start_time}}</span></p>
+                            <p>项目结束时间:<span>{{item.end_time}}</span></p>
                         </div>
                     </div>
                     <div class="row">
-                        <a class="btn col s4 s4">查看</a>
-                        <a class="btn col s4 s4">修改</a>
+                        <a class="btn col m4 s4" v-link="{'path':'/project/'+item.id}">查看</a>
+                        <a class="btn col m4 s4" v-link="{'path':'/admin/project/'+item.id}">修改</a>
                     </div>
                 </div>
             </li>
@@ -46,7 +50,7 @@
             }
         },
         ready(){
-            $.tokenAjax("/project-home-show","get")
+            $.promiseAjax("/project-home-show","get")
                     .then((data)=>{
                         this.list=data.result;
             })

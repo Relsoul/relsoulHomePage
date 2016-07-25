@@ -53,6 +53,16 @@
                                <label class="active" for="summary">摘要</label>
                            </div>
                        </div>
+                       <div class="row">
+                           <div class="input-field col s6">
+                               <input  id="first_name" type="text" class="validate" v-model="start_time" >
+                               <label class="active" for="first_name">项目开始</label>
+                           </div>
+                           <div class="input-field col s6">
+                               <input id="last_name" type="text" class="validate" v-model="end_time">
+                               <label class="active" for="last_name">项目结束</label>
+                           </div>
+                       </div>
                        <div id="editormd" class="col s12 m12" >
                            <textarea class="editormd-markdown-textarea" name="$id-markdown-doc"></textarea>
                            <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
@@ -82,7 +92,9 @@
                 title:"",
                 home_show:false,
                 summary:"",
-                cover:""
+                cover:"",
+                start_time:"",
+                end_time:""
             }
         },
         methods:{
@@ -91,7 +103,16 @@
                 let id=this.$route.params.id;
                 this.content=this.editor.getMarkdown();
                 console.log("this.home_show",this.home_show);
-                $.tokenAjax("/admin/project/"+id,"put",{title:this.title,content:this.content,cover:this.cover||" ",home_show:0+this.home_show||0,summary:this.summary})
+                $.tokenAjax("/admin/project/"+id,"put",
+                        {
+                            title:this.title,
+                            content:this.content,cover:this.cover||" ",
+                            home_show:0+this.home_show||0,
+                            summary:this.summary,
+                            start_time:this.start_time,
+                            end_time:this.end_time
+                        }
+                )
                         .then((data)=>{
                             this.showInfo("保存成功",2000,"msg");
                         })
@@ -168,6 +189,8 @@
                             this.content=data.result.content;
                             this.summary=data.result.summary;
                             this.home_show=data.result.home_show;
+                            this.start_time=data.result.start_time;
+                            this.end_time=data.result.end_time;
                             //this.editor.setMarkdown(this.content);
                             console.log("project-edit",data)
                         })

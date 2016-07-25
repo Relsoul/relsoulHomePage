@@ -16190,7 +16190,7 @@
 	//                         <home-title></home-title>
 	//                         <home-about-me></home-about-me>
 	//                         <time-line title="学习经历" cls="home-project" get-url="/home/studyexp/" ></time-line>
-	//                         <time-line title="test time-line project2" cls="home-project2" ></time-line>
+	//                         <time-line title="项目经验" cls="home-project2" :out-project-exp="projectExp" ></time-line>
 	//                         <home-skills></home-skills>
 	//                     </div>
 	//                 </div>
@@ -16201,10 +16201,11 @@
 	// <style>
 	//
 	// </style>
-	// <script>
+	// <script type="text/ecmascript-6">
 	exports.default = {
 	    data: function data() {
 	        return {
+	            projectExp: [],
 	            msg: 'hello vue',
 	            Headercls: "m2",
 	            Contentcls: {
@@ -16229,6 +16230,21 @@
 	            $("body").addClass("body-content-show");
 	        }
 	    },
+	    ready: function ready() {
+	        var _this = this;
+	
+	        $.promiseAjax("/project-home-show", "get").then(function (data) {
+	            var list = data.result;
+	            list.map(function (n) {
+	                n.exp_name = n.title;
+	                n.exp_start_time = n.start_time;
+	                n.exp_end_time = n.end_time;
+	                n.exp_content = n.summary;
+	                _this.projectExp.push(n);
+	            });
+	        });
+	    },
+	
 	    route: {},
 	    components: {
 	        rFooter: _rFooter2.default,
@@ -16435,7 +16451,7 @@
 	//         <div class="container">
 	//
 	//             <div class="row">
-	//                 <div class="col m6">
+	//                 <div class="col m6 s12">
 	//                     <h3 class="text_underline">关于我</h3>
 	//                     <p>
 	//                         it it me
@@ -16464,7 +16480,7 @@
 	//
 	//                     </dl>
 	//                 </div>
-	//                 <div class="col m6" style="padding: 25px">
+	//                 <div class="col m6 s12" class="about-me-img">
 	//                     <img :src="aboutMeImg" alt="" class="responsive-img">
 	//                 </div>
 	//                 <div class="row">
@@ -16534,7 +16550,7 @@
 /* 120 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>{{aboutMeName}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>{{aboutMeAge}} Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>{{aboutMeEmail}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>{{aboutMeUrl}}</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6\" style=\"padding: 25px\">\n                <img :src=\"aboutMeImg\" alt=\"\" class=\"responsive-img\">\n            </div>\n            <div class=\"row\">\n                <div class=\"col s6 m6\">\n                    <ul class=\"tabs\">\n                        <li class=\"tab col s6\">\n                            <a href=\"#normal-html\">markdown</a>\n                        </li>\n                        <li class=\"tab col s6\">\n                            <a href=\"#normal-markdown\">html</a>\n                        </li>\n                    </ul>\n                </div>\n                <div id=\"normal-html\" class=\"col s12 m12 markdown\">\n                    {{{aboutMeContent}}}\n                </div>\n                <div id=\"normal-markdown\" class=\"col s12 m12 markdown-body\">\n                    {{{aboutMeContent}}}\n                </div>\n            </div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6 s12\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>{{aboutMeName}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>{{aboutMeAge}} Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>{{aboutMeEmail}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>{{aboutMeUrl}}</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6 s12\" class=\"about-me-img\">\n                <img :src=\"aboutMeImg\" alt=\"\" class=\"responsive-img\">\n            </div>\n            <div class=\"row\">\n                <div class=\"col s6 m6\">\n                    <ul class=\"tabs\">\n                        <li class=\"tab col s6\">\n                            <a href=\"#normal-html\">markdown</a>\n                        </li>\n                        <li class=\"tab col s6\">\n                            <a href=\"#normal-markdown\">html</a>\n                        </li>\n                    </ul>\n                </div>\n                <div id=\"normal-html\" class=\"col s12 m12 markdown\">\n                    {{{aboutMeContent}}}\n                </div>\n                <div id=\"normal-markdown\" class=\"col s12 m12 markdown-body\">\n                    {{{aboutMeContent}}}\n                </div>\n            </div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
 
 /***/ },
 /* 121 */
@@ -16619,7 +16635,7 @@
 	//        <div class="container">
 	//            <h1 class="text_underline time-line-h1">{{title}}</h1>
 	//            <ul class="">
-	//                <li class="time-line-item" v-for="d in studyExpList">
+	//                <li class="time-line-item" v-for="d in studyExpList"  >
 	//                    <div class="time-line-circle">
 	//
 	//                    </div>
@@ -16656,20 +16672,23 @@
 	    data: function data() {
 	        return {
 	            msg: 'hello vue',
-	            getUrl: "",
 	            studyExpList: []
 	        };
 	    },
 	
-	    props: ["cls", "title", "getUrl"],
+	    props: ["cls", "title", "getUrl", "outProjectExp"],
 	    ready: function ready() {
 	        var _this = this;
 	
-	        if (this.getUrl) {
+	        if (this.getUrl && !this.outStudyExp) {
 	            $.promiseAjax(this.getUrl, "get").then(function (data) {
 	                _this.studyExpList = data.result;
 	                console.log("studtyExp", data);
 	            }).catch();
+	        } else {
+	            //外界适配器模式
+	            console.log(55, this.outProjectExp);
+	            this.studyExpList = this.outProjectExp;
 	        }
 	    },
 	
@@ -16682,7 +16701,7 @@
 /* 125 */
 /***/ function(module, exports) {
 
-	module.exports = "\n   <div :class=\"cls\" class=\"time-line\">\n       <div class=\"container\">\n           <h1 class=\"text_underline time-line-h1\">{{title}}</h1>\n           <ul class=\"\">\n               <li class=\"time-line-item\" v-for=\"d in studyExpList\">\n                   <div class=\"time-line-circle\">\n\n                   </div>\n                   <div class=\"time-line-border\" v-if=\"$index!=studyExpList.length-1\">\n\n                   </div>\n                   <div class=\"time-line-text \" :class=\"{'time-line-left':$index%2==0?false:true,'time-line-right':$index%2==0?true:false}\">\n                       <h2>{{d.exp_name}}</h2>\n                       <h3>{{d.exp_start_time}}至{{d.exp_end_time}}</h3>\n                       <p>{{d.exp_content}}</p>\n                   </div>\n               </li>\n<!--               <li class=\"time-line-item\">\n                   <div class=\"time-line-circle\">\n\n                   </div>\n                   <div class=\"time-line-border\">\n\n                   </div>\n                   <div class=\"time-line-text time-line-left \" >\n                       hello it is text2\n                   </div>\n               </li>-->\n           </ul>\n       </div>\n   </div>\n"
+	module.exports = "\n   <div :class=\"cls\" class=\"time-line\">\n       <div class=\"container\">\n           <h1 class=\"text_underline time-line-h1\">{{title}}</h1>\n           <ul class=\"\">\n               <li class=\"time-line-item\" v-for=\"d in studyExpList\"  >\n                   <div class=\"time-line-circle\">\n\n                   </div>\n                   <div class=\"time-line-border\" v-if=\"$index!=studyExpList.length-1\">\n\n                   </div>\n                   <div class=\"time-line-text \" :class=\"{'time-line-left':$index%2==0?false:true,'time-line-right':$index%2==0?true:false}\">\n                       <h2>{{d.exp_name}}</h2>\n                       <h3>{{d.exp_start_time}}至{{d.exp_end_time}}</h3>\n                       <p>{{d.exp_content}}</p>\n                   </div>\n               </li>\n<!--               <li class=\"time-line-item\">\n                   <div class=\"time-line-circle\">\n\n                   </div>\n                   <div class=\"time-line-border\">\n\n                   </div>\n                   <div class=\"time-line-text time-line-left \" >\n                       hello it is text2\n                   </div>\n               </li>-->\n           </ul>\n       </div>\n   </div>\n"
 
 /***/ },
 /* 126 */
@@ -16901,7 +16920,7 @@
 /* 134 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home\">\n        <div class=\"row no-gutters\">\n            <r-header  @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" :header-width=\"Headercls\"></r-header>\n\n            <div class=\"col s12  \"  :class=\"Contentcls\">\n                <div class=\" home-content right-content\" >\n                    <home-title></home-title>\n                    <home-about-me></home-about-me>\n                    <time-line title=\"学习经历\" cls=\"home-project\" get-url=\"/home/studyexp/\" ></time-line>\n                    <time-line title=\"test time-line project2\" cls=\"home-project2\" ></time-line>\n                    <home-skills></home-skills>\n                </div>\n            </div>\n        </div>\n        <r-footer></r-footer>\n</div>\n"
+	module.exports = "\n<div class=\"home\">\n        <div class=\"row no-gutters\">\n            <r-header  @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" :header-width=\"Headercls\"></r-header>\n\n            <div class=\"col s12  \"  :class=\"Contentcls\">\n                <div class=\" home-content right-content\" >\n                    <home-title></home-title>\n                    <home-about-me></home-about-me>\n                    <time-line title=\"学习经历\" cls=\"home-project\" get-url=\"/home/studyexp/\" ></time-line>\n                    <time-line title=\"项目经验\" cls=\"home-project2\" :out-project-exp=\"projectExp\" ></time-line>\n                    <home-skills></home-skills>\n                </div>\n            </div>\n        </div>\n        <r-footer></r-footer>\n</div>\n"
 
 /***/ },
 /* 135 */
@@ -18106,13 +18125,17 @@
 	//                         <div class="col m6 s6">
 	//                             <img :src="item.cover" class="responsive-img" alt="">
 	//                         </div>
-	//                         <div class="col m6 s6">
+	//                         <div class="col m5 s5 offset-s1 offset-m1">
 	//                             {{item.summary}}
+	//                         </div>
+	//                         <div class="col m12 m12">
+	//                             <p>项目开始时间:<span>{{item.start_time}}</span></p>
+	//                             <p>项目结束时间:<span>{{item.end_time}}</span></p>
 	//                         </div>
 	//                     </div>
 	//                     <div class="row">
-	//                         <a class="btn col s4 s4">查看</a>
-	//                         <a class="btn col s4 s4">修改</a>
+	//                         <a class="btn col m4 s4" v-link="{'path':'/project/'+item.id}">查看</a>
+	//                         <a class="btn col m4 s4" v-link="{'path':'/admin/project/'+item.id}">修改</a>
 	//                     </div>
 	//                 </div>
 	//             </li>
@@ -18144,7 +18167,7 @@
 	    ready: function ready() {
 	        var _this = this;
 	
-	        $.tokenAjax("/project-home-show", "get").then(function (data) {
+	        $.promiseAjax("/project-home-show", "get").then(function (data) {
 	            _this.list = data.result;
 	        });
 	    },
@@ -18158,7 +18181,7 @@
 /* 170 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"row\">\n    <p>{{msg}}</p>\n    <ul class=\"collapsible expcoll\" data-collapsible=\"expandable\">\n        <li class=\"\" v-for=\"item in list\">\n            <div class=\"collapsible-header \"><i class=\"material-icons\">build</i>{{item.title}} <i class=\"material-icons right\" @click=\"deleteItem($event,form)\">delete</i></div>\n            <div class=\"collapsible-body \">\n                <div class=\"row\">\n                    <div class=\"col m6 s6\">\n                        <img :src=\"item.cover\" class=\"responsive-img\" alt=\"\">\n                    </div>\n                    <div class=\"col m6 s6\">\n                        {{item.summary}}\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <a class=\"btn col s4 s4\">查看</a>\n                    <a class=\"btn col s4 s4\">修改</a>\n                </div>\n            </div>\n        </li>\n        <!--           <li class=\"\">\n                       <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>list2</div>\n                       <div class=\"collapsible-body \">\n                        2222\n                       </div>\n                   </li>-->\n    </ul>\n    <button class=\"btn\" @click=\"addNewExp($event)\">add</button>\n    <button class=\"btn\" @click=\"saveExp($event)\">保存</button>\n</div>\n"
+	module.exports = "\n<div class=\"row\">\n    <p>{{msg}}</p>\n    <ul class=\"collapsible expcoll\" data-collapsible=\"expandable\">\n        <li class=\"\" v-for=\"item in list\">\n            <div class=\"collapsible-header \"><i class=\"material-icons\">build</i>{{item.title}} <i class=\"material-icons right\" @click=\"deleteItem($event,form)\">delete</i></div>\n            <div class=\"collapsible-body \">\n                <div class=\"row\">\n                    <div class=\"col m6 s6\">\n                        <img :src=\"item.cover\" class=\"responsive-img\" alt=\"\">\n                    </div>\n                    <div class=\"col m5 s5 offset-s1 offset-m1\">\n                        {{item.summary}}\n                    </div>\n                    <div class=\"col m12 m12\">\n                        <p>项目开始时间:<span>{{item.start_time}}</span></p>\n                        <p>项目结束时间:<span>{{item.end_time}}</span></p>\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <a class=\"btn col m4 s4\" v-link=\"{'path':'/project/'+item.id}\">查看</a>\n                    <a class=\"btn col m4 s4\" v-link=\"{'path':'/admin/project/'+item.id}\">修改</a>\n                </div>\n            </div>\n        </li>\n        <!--           <li class=\"\">\n                       <div class=\"collapsible-header active\"><i class=\"material-icons\">build</i>list2</div>\n                       <div class=\"collapsible-body \">\n                        2222\n                       </div>\n                   </li>-->\n    </ul>\n    <button class=\"btn\" @click=\"addNewExp($event)\">add</button>\n    <button class=\"btn\" @click=\"saveExp($event)\">保存</button>\n</div>\n"
 
 /***/ },
 /* 171 */
@@ -19519,7 +19542,9 @@
 	            title: "",
 	            home_show: false,
 	            summary: "",
-	            cover: ""
+	            cover: "",
+	            start_time: "",
+	            end_time: ""
 	        };
 	    },
 	
@@ -19531,7 +19556,14 @@
 	            var id = this.$route.params.id;
 	            this.content = this.editor.getMarkdown();
 	            console.log("this.home_show", this.home_show);
-	            $.tokenAjax("/admin/project/" + id, "put", { title: this.title, content: this.content, cover: this.cover || " ", home_show: 0 + this.home_show || 0, summary: this.summary }).then(function (data) {
+	            $.tokenAjax("/admin/project/" + id, "put", {
+	                title: this.title,
+	                content: this.content, cover: this.cover || " ",
+	                home_show: 0 + this.home_show || 0,
+	                summary: this.summary,
+	                start_time: this.start_time,
+	                end_time: this.end_time
+	            }).then(function (data) {
 	                _this.showInfo("保存成功", 2000, "msg");
 	            }).catch();
 	        },
@@ -19606,6 +19638,8 @@
 	                _this4.content = data.result.content;
 	                _this4.summary = data.result.summary;
 	                _this4.home_show = data.result.home_show;
+	                _this4.start_time = data.result.start_time;
+	                _this4.end_time = data.result.end_time;
 	                //this.editor.setMarkdown(this.content);
 	                console.log("project-edit", data);
 	            }).catch();
@@ -19720,6 +19754,16 @@
 	//                                <label class="active" for="summary">摘要</label>
 	//                            </div>
 	//                        </div>
+	//                        <div class="row">
+	//                            <div class="input-field col s6">
+	//                                <input  id="first_name" type="text" class="validate" v-model="start_time" >
+	//                                <label class="active" for="first_name">项目开始</label>
+	//                            </div>
+	//                            <div class="input-field col s6">
+	//                                <input id="last_name" type="text" class="validate" v-model="end_time">
+	//                                <label class="active" for="last_name">项目结束</label>
+	//                            </div>
+	//                        </div>
 	//                        <div id="editormd" class="col s12 m12" >
 	//                            <textarea class="editormd-markdown-textarea" name="$id-markdown-doc"></textarea>
 	//                            <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
@@ -19740,7 +19784,7 @@
 /* 206 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s6 m6\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item image-list-item\" v-for=\"img in imgs\">\n                                        <img class=\"image-list-item-img\" src=\"\" :src=\"img.url\" alt=\"\" :data-id=\"img.Id\">\n                                        <button class=\"btn image-list-item-btn\" @click=\"insertImg($event,img.url)\" >点击插入文章</button>\n                                        <button class=\"btn image-list-item-btn\" @click=\"deleteImg($event,img,img.Id)\">删除图片</button>\n                                        <button class=\"btn image-list-item-btn \" :class=\"img.url==cover?'tooltipped':''\" data-position=\"top\" data-delay=\"50\" data-tooltip=\"封面图片\" @click=\"setCover($event,img.url)\">设置封面</button>\n                                    </li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"row\">\n                    <div class=\"input-field col s10\">\n                        <input v-model=\"title\" id=\"first_name2\" type=\"text\" class=\"validate\">\n                        <label class=\"active\" for=\"first_name2\">标题</label>\n                    </div>\n                    <button class=\"btn right project-save-btn\" @click=\"saveContent($event)\">保存</button>\n                    <div class=\"row\">\n                        <div class=\"col s12\">\n                            <input type=\"checkbox\" class=\"filled-in\" id=\"home-project\" v-model=\"home_show\"  />\n                            <label for=\"home-project\">是否推荐到首页</label>\n                        </div>\n                        <div class=\"input-field col s12\">\n                            <textarea id=\"summary\" class=\"materialize-textarea\" length=\"255\" v-model=\"summary\"></textarea>\n                            <label class=\"active\" for=\"summary\">摘要</label>\n                        </div>\n                    </div>\n                    <div id=\"editormd\" class=\"col s12 m12\" >\n                        <textarea class=\"editormd-markdown-textarea\" name=\"$id-markdown-doc\"></textarea>\n                        <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->\n                        <textarea class=\"editormd-html-textarea\" name=\"$id-html-code\"></textarea>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-edit\">\n    <div class=\"row\">\n        <div class=\"col s10 m10 offset-s1 offset-m1\">\n            <div class=\"row\">\n                <p>{{msg}}</p>\n                <ul class=\"collapsible popout\" data-collapsible=\"accordion\">\n                    <li class=\"col s6 m6\">\n                            <div class=\"collapsible-header\"><i class=\"mdi-image-filter-drama\"></i>图片列表</div>\n                            <div class=\"collapsible-body\">\n                                <ul class=\"collection\">\n                                    <li class=\"collection-item image-list-item\" v-for=\"img in imgs\">\n                                        <img class=\"image-list-item-img\" src=\"\" :src=\"img.url\" alt=\"\" :data-id=\"img.Id\">\n                                        <button class=\"btn image-list-item-btn\" @click=\"insertImg($event,img.url)\" >点击插入文章</button>\n                                        <button class=\"btn image-list-item-btn\" @click=\"deleteImg($event,img,img.Id)\">删除图片</button>\n                                        <button class=\"btn image-list-item-btn \" :class=\"img.url==cover?'tooltipped':''\" data-position=\"top\" data-delay=\"50\" data-tooltip=\"封面图片\" @click=\"setCover($event,img.url)\">设置封面</button>\n                                    </li>\n                                </ul>\n                            </div>\n                    </li>\n                </ul>\n                <div class=\"col s4 m4 img-upload-box\" style=\"padding-left:20px;\">\n                    <div class=\"file-field input-field project-file-upload\">\n                        <div class=\"btn\">\n                            <span>图片上传</span>\n                            <input type=\"file\" @change=\"uploadProjectImg($event)\">\n                        </div>\n                        <div class=\"file-path-wrapper\">\n                            <input class=\"file-path validate\" type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col s4 m4\">\n                            <img class=\"img-preview\" src=\"\" :src=\"preview\" alt=\"\" >\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"row\">\n                    <div class=\"input-field col s10\">\n                        <input v-model=\"title\" id=\"first_name2\" type=\"text\" class=\"validate\">\n                        <label class=\"active\" for=\"first_name2\">标题</label>\n                    </div>\n                    <button class=\"btn right project-save-btn\" @click=\"saveContent($event)\">保存</button>\n                    <div class=\"row\">\n                        <div class=\"col s12\">\n                            <input type=\"checkbox\" class=\"filled-in\" id=\"home-project\" v-model=\"home_show\"  />\n                            <label for=\"home-project\">是否推荐到首页</label>\n                        </div>\n                        <div class=\"input-field col s12\">\n                            <textarea id=\"summary\" class=\"materialize-textarea\" length=\"255\" v-model=\"summary\"></textarea>\n                            <label class=\"active\" for=\"summary\">摘要</label>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"input-field col s6\">\n                            <input  id=\"first_name\" type=\"text\" class=\"validate\" v-model=\"start_time\" >\n                            <label class=\"active\" for=\"first_name\">项目开始</label>\n                        </div>\n                        <div class=\"input-field col s6\">\n                            <input id=\"last_name\" type=\"text\" class=\"validate\" v-model=\"end_time\">\n                            <label class=\"active\" for=\"last_name\">项目结束</label>\n                        </div>\n                    </div>\n                    <div id=\"editormd\" class=\"col s12 m12\" >\n                        <textarea class=\"editormd-markdown-textarea\" name=\"$id-markdown-doc\"></textarea>\n                        <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->\n                        <textarea class=\"editormd-html-textarea\" name=\"$id-html-code\"></textarea>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 207 */

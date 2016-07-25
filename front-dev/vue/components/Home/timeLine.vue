@@ -3,7 +3,7 @@
        <div class="container">
            <h1 class="text_underline time-line-h1">{{title}}</h1>
            <ul class="">
-               <li class="time-line-item" v-for="d in studyExpList">
+               <li class="time-line-item" v-for="d in studyExpList"  >
                    <div class="time-line-circle">
 
                    </div>
@@ -40,17 +40,20 @@
         data(){
             return{
                 msg:'hello vue',
-                getUrl:"",
                 studyExpList:[]
             }
         },
-        props:["cls","title","getUrl"],
+        props:["cls","title","getUrl","outProjectExp"],
         ready(){
-            if(this.getUrl){
+            if(this.getUrl&&!this.outStudyExp){
                 $.promiseAjax(this.getUrl,"get").then((data)=>{
                     this.studyExpList=data.result;
                     console.log("studtyExp",data)
                 }).catch()
+            }else{
+                //外界适配器模式
+                console.log(55,this.outProjectExp);
+                this.studyExpList=this.outProjectExp;
             }
         },
         components:{

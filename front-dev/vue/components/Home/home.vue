@@ -8,7 +8,7 @@
                         <home-title></home-title>
                         <home-about-me></home-about-me>
                         <time-line title="学习经历" cls="home-project" get-url="/home/studyexp/" ></time-line>
-                        <time-line title="test time-line project2" cls="home-project2" ></time-line>
+                        <time-line title="项目经验" cls="home-project2" :out-project-exp="projectExp" ></time-line>
                         <home-skills></home-skills>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
 <style>
 
 </style>
-<script>
+<script type="text/ecmascript-6">
     import rFooter from '../rFooter.vue'
     import rHeader from '../rHeader.vue'
     import homeTitle from "./homeTitle.vue"
@@ -29,13 +29,14 @@
     export default{
         data(){
             return{
+                projectExp:[],
                 msg:'hello vue',
                 Headercls:"m2",
                 Contentcls:{
                     "m10":true,
                     "m12":false,
                     "show-content":true
-                },
+                }
             }
         },
         methods:{
@@ -51,6 +52,19 @@
                 this.Contentcls["show-content"]=true;
                 $("body").addClass("body-content-show");
             }
+        },
+        ready(){
+            $.promiseAjax("/project-home-show","get")
+                    .then((data)=>{
+                        let list=data.result;
+                        list.map((n)=>{
+                            n.exp_name=n.title;
+                            n.exp_start_time=n.start_time;
+                            n.exp_end_time=n.end_time;
+                            n.exp_content=n.summary;
+                            this.projectExp.push(n);
+                        });
+            })
         },
         route:{
         },

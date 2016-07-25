@@ -37,7 +37,7 @@
         },
         route:{
             data(){
-                console.log(24,this.page)
+                console.log(24,this.page);
                 $.promiseAjax("/project/","get",{"page":this.page})
                         .then((data)=>{
                             console.log(26,data);

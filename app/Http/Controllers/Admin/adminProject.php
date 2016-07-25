@@ -18,7 +18,7 @@ class adminProject extends Controller{
     public function getProject(Request $request,$id=null){
         //获取某个特定项目
         if(!empty($id)){
-            $data=DB::table("project")->select("id","title as name","content","cover","imgs","summary","home_show")->where("id",$id)->first();
+            $data=DB::table("project")->select("id","title as name","content","cover","imgs","summary","home_show","start_time","end_time")->where("id",$id)->first();
             if(empty($data)){
                 return response()->json(["type"=>"false","message"=>"项目不存在","code"=>"40009"]);
             }
@@ -87,6 +87,8 @@ class adminProject extends Controller{
             $cover=$request->input("cover");
             $home_show=(int) $request->input("home_show");
             $summary=$request->input("summary");
+            $start_time=$request->input("start_time");
+            $end_time=$request->input("end_time");
 
             //预先查找是否存在id项目
             $isData=DB::table("project")->where("id",$id)->first();
@@ -97,7 +99,7 @@ class adminProject extends Controller{
             }
 
             //构建数组进行填充.
-            $updateArr=["title"=>$title,"content"=>$content,"cover"=>$cover?$cover:" ","home_show"=>$home_show?$home_show:0,"summary"=>$summary?$summary:"项目未描述"];
+            $updateArr=["title"=>$title,"content"=>$content,"cover"=>$cover?$cover:" ","home_show"=>$home_show?$home_show:0,"summary"=>$summary?$summary:"项目未描述","start_time"=>$start_time?$start_time:"2016-07-01","end_time"=>$end_time?$end_time:"2016-07-02"];
 
             $data=DB::table('project')
                 ->where('id', $id)

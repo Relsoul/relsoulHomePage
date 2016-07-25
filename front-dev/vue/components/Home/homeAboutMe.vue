@@ -3,7 +3,7 @@
         <div class="container">
 
             <div class="row">
-                <div class="col m6">
+                <div class="col m6 s12">
                     <h3 class="text_underline">关于我</h3>
                     <p>
                         it it me
@@ -32,7 +32,7 @@
 
                     </dl>
                 </div>
-                <div class="col m6" style="padding: 25px">
+                <div class="col m6 s12" class="about-me-img">
                     <img :src="aboutMeImg" alt="" class="responsive-img">
                 </div>
                 <div class="row">
