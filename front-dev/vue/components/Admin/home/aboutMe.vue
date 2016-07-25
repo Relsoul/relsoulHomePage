@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="col m12">
-                <img :src="aboutMeImg"  class="responsive-img" alt="">
+                <img  :src="aboutMeImg"  class="responsive-img" alt="">
             </div>
             <div class=" input-field col m12">
                 <textarea id="textarea1" class="materialize-textarea" v-model="aboutMeContent" length="120"></textarea>

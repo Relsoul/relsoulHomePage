@@ -1,50 +1,50 @@
-.time-line{
+.time-line {
   background: #1d1d24;
-  .time-line-h1{
+  .time-line-h1 {
     color: #fff;
   }
 
-  .time-line-item{
+  .time-line-item {
     position: relative;
 
-    .time-line-circle{
+    .time-line-circle {
       width: 50px;
       height: 50px;
       border-radius: 50%;
       background: none;
-      border:2px solid #292929;
-      position:relative;
+      border: 2px solid #fff;
+      position: relative;
       margin: 0 auto;
 
-      &::before{
-        content:"";
+      &::before {
+        content: "";
         display: block;
         width: 25px;
         height: 25px;
         background: #fb6470;
         border-radius: 50%;
-        border:inherit;
+        border: inherit;
         left: 50%;
-        top:50%;
+        top: 50%;
         margin-left: -12.5px;
         margin-top: -12.5px;
         position: relative;
       }
     }
 
-    .time-line-border{
+    .time-line-border {
       position: absolute;
-      top:50px;
+      top: 50px;
       left: 50%;
       height: calc(100% - 50px);
       width: 2px;
       background: #000;
     }
 
-    .time-line-text{
+    .time-line-text {
       padding: 1rem;
 
-      p{
+      p {
         word-break: break-all;
       }
 
@@ -54,7 +54,7 @@
 
       width: 45%;
 
-      left:0;
+      left: 0;
       margin-left: 20px;
       position: relative;
       background: #353541;
@@ -62,7 +62,7 @@
 
       border-radius: 10px;
 
-      &::before{
+      &::before {
         content: "";
         width: 20px;
         height: 20px;
@@ -70,37 +70,36 @@
         position: absolute;
         bottom: 20px;
         left: -20px;
-        background: linear-gradient(135deg,transparent 50%,#353541 0);
+        background: linear-gradient(135deg, transparent 50%, #353541 0);
         transform: rotateX(180deg);
       }
 
-      h2,h3,p{
+      h2, h3, p {
         font-size: 0.9rem;
         margin: 0;
         padding: 0;
       }
-      
-      h3{
+
+      h3 {
         margin: 1rem 0;
         color: #fb6470;
       }
 
     }
 
-    .time-line-text.time-line-left{
+    .time-line-text.time-line-left {
 
       left: 50%;
-      transform: translateX(-100%)  translateY(-100%);
+      transform: translateX(-100%) translateY(-100%);
       margin-left: -50px;
 
       @media all and (max-width: $mobile) {
 
       }
 
-
-      &::before{
+      &::before {
         left: 100%;
-        background: linear-gradient(-135deg,transparent 50%,#353541 0);
+        background: linear-gradient(-135deg, transparent 50%, #353541 0);
         transform: rotate(0deg);
 
       }
@@ -108,11 +107,11 @@
     }
 
     //文本
-    .time-line-text.time-line-right{
+    .time-line-text.time-line-right {
       left: 50%;
       margin-left: 50px;
-      top:-40px;
-      &::before{
+      top: -40px;
+      &::before {
         bottom: 0;
         top: 20px;
       }

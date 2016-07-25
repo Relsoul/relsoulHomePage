@@ -7,8 +7,8 @@
                     <div class=" home-content right-content" >
                         <home-title></home-title>
                         <home-about-me></home-about-me>
-                        <time-line title="学习经历" cls="home-project" get-url="/home/studyexp/" ></time-line>
-                        <time-line title="项目经验" cls="home-project2" :out-project-exp="projectExp" ></time-line>
+                        <time-line title="学习经历" cls="home-study" get-url="/home/studyexp/" ></time-line>
+                        <time-line title="项目经验" cls="home-project" :out-project-exp="projectExp" ></time-line>
                         <home-skills></home-skills>
                     </div>
                 </div>

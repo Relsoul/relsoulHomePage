@@ -3,7 +3,7 @@
         <div class="container">
 
             <div class="row">
-                <div class="col m6 s12">
+                <div class="col m6 s12 about-me-text">
                     <h3 class="text_underline">关于我</h3>
                     <p>
                         it it me
@@ -32,8 +32,8 @@
 
                     </dl>
                 </div>
-                <div class="col m6 s12" class="about-me-img">
-                    <img :src="aboutMeImg" alt="" class="responsive-img">
+                <div class="col m6 s12 about-me-img" >
+                    <img :src="aboutMeImg" alt="" class="responsive-img" :style="{'height':aboutMeImgHeight+'px'}">
                 </div>
                 <div class="row">
                     <div class="col s6 m6">
@@ -75,7 +75,8 @@
                 aboutMeEmail:"",
                 aboutMeUrl:"",
                 aboutMeImg:"",
-                aboutMeContent:""
+                aboutMeContent:"",
+                aboutMeImgHeight:0
             }
         },
         ready(){
@@ -87,6 +88,7 @@
                 this.aboutMeUrl=data.result["website"]||"";
                 this.aboutMeImg=data.result["imgurl"]||"";
                 this.aboutMeContent=markdown.toHTML(data.result["content"]);
+                this.aboutMeImgHeight=$(".about-me-text").height()-40;
                 console.log("aboutme",data)
             }).catch(
 

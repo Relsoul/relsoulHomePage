@@ -16189,8 +16189,8 @@
 	//                     <div class=" home-content right-content" >
 	//                         <home-title></home-title>
 	//                         <home-about-me></home-about-me>
-	//                         <time-line title="学习经历" cls="home-project" get-url="/home/studyexp/" ></time-line>
-	//                         <time-line title="项目经验" cls="home-project2" :out-project-exp="projectExp" ></time-line>
+	//                         <time-line title="学习经历" cls="home-study" get-url="/home/studyexp/" ></time-line>
+	//                         <time-line title="项目经验" cls="home-project" :out-project-exp="projectExp" ></time-line>
 	//                         <home-skills></home-skills>
 	//                     </div>
 	//                 </div>
@@ -16451,7 +16451,7 @@
 	//         <div class="container">
 	//
 	//             <div class="row">
-	//                 <div class="col m6 s12">
+	//                 <div class="col m6 s12 about-me-text">
 	//                     <h3 class="text_underline">关于我</h3>
 	//                     <p>
 	//                         it it me
@@ -16480,8 +16480,8 @@
 	//
 	//                     </dl>
 	//                 </div>
-	//                 <div class="col m6 s12" class="about-me-img">
-	//                     <img :src="aboutMeImg" alt="" class="responsive-img">
+	//                 <div class="col m6 s12 about-me-img" >
+	//                     <img :src="aboutMeImg" alt="" class="responsive-img" :style="{'height':aboutMeImgHeight+'px'}">
 	//                 </div>
 	//                 <div class="row">
 	//                     <div class="col s6 m6">
@@ -16523,7 +16523,8 @@
 	            aboutMeEmail: "",
 	            aboutMeUrl: "",
 	            aboutMeImg: "",
-	            aboutMeContent: ""
+	            aboutMeContent: "",
+	            aboutMeImgHeight: 0
 	        };
 	    },
 	    ready: function ready() {
@@ -16537,6 +16538,7 @@
 	            _this.aboutMeUrl = data.result["website"] || "";
 	            _this.aboutMeImg = data.result["imgurl"] || "";
 	            _this.aboutMeContent = markdown.toHTML(data.result["content"]);
+	            _this.aboutMeImgHeight = $(".about-me-text").height() - 40;
 	            console.log("aboutme", data);
 	        }).catch();
 	    },
@@ -16550,7 +16552,7 @@
 /* 120 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6 s12\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>{{aboutMeName}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>{{aboutMeAge}} Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>{{aboutMeEmail}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>{{aboutMeUrl}}</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6 s12\" class=\"about-me-img\">\n                <img :src=\"aboutMeImg\" alt=\"\" class=\"responsive-img\">\n            </div>\n            <div class=\"row\">\n                <div class=\"col s6 m6\">\n                    <ul class=\"tabs\">\n                        <li class=\"tab col s6\">\n                            <a href=\"#normal-html\">markdown</a>\n                        </li>\n                        <li class=\"tab col s6\">\n                            <a href=\"#normal-markdown\">html</a>\n                        </li>\n                    </ul>\n                </div>\n                <div id=\"normal-html\" class=\"col s12 m12 markdown\">\n                    {{{aboutMeContent}}}\n                </div>\n                <div id=\"normal-markdown\" class=\"col s12 m12 markdown-body\">\n                    {{{aboutMeContent}}}\n                </div>\n            </div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"home-aboutme\">\n    <div class=\"container\">\n\n        <div class=\"row\">\n            <div class=\"col m6 s12 about-me-text\">\n                <h3 class=\"text_underline\">关于我</h3>\n                <p>\n                    it it me\n                </p>\n\n                <dl class=\"break-dl\">\n                    <div class=\"break-list\">\n                        <dt>Name:</dt>\n                        <dd>{{aboutMeName}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Age:</dt>\n                        <dd>{{aboutMeAge}} Years</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Email:</dt>\n                        <dd>{{aboutMeEmail}}</dd>\n                    </div>\n\n                    <div class=\"break-list\">\n                        <dt>Web:</dt>\n                        <dd>{{aboutMeUrl}}</dd>\n                    </div>\n\n                </dl>\n            </div>\n            <div class=\"col m6 s12 about-me-img\" >\n                <img :src=\"aboutMeImg\" alt=\"\" class=\"responsive-img\" :style=\"{'height':aboutMeImgHeight+'px'}\">\n            </div>\n            <div class=\"row\">\n                <div class=\"col s6 m6\">\n                    <ul class=\"tabs\">\n                        <li class=\"tab col s6\">\n                            <a href=\"#normal-html\">markdown</a>\n                        </li>\n                        <li class=\"tab col s6\">\n                            <a href=\"#normal-markdown\">html</a>\n                        </li>\n                    </ul>\n                </div>\n                <div id=\"normal-html\" class=\"col s12 m12 markdown\">\n                    {{{aboutMeContent}}}\n                </div>\n                <div id=\"normal-markdown\" class=\"col s12 m12 markdown-body\">\n                    {{{aboutMeContent}}}\n                </div>\n            </div>\n        </div>\n\n\n\n\n    </div>\n</div>\n"
 
 /***/ },
 /* 121 */
@@ -16920,7 +16922,7 @@
 /* 134 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"home\">\n        <div class=\"row no-gutters\">\n            <r-header  @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" :header-width=\"Headercls\"></r-header>\n\n            <div class=\"col s12  \"  :class=\"Contentcls\">\n                <div class=\" home-content right-content\" >\n                    <home-title></home-title>\n                    <home-about-me></home-about-me>\n                    <time-line title=\"学习经历\" cls=\"home-project\" get-url=\"/home/studyexp/\" ></time-line>\n                    <time-line title=\"项目经验\" cls=\"home-project2\" :out-project-exp=\"projectExp\" ></time-line>\n                    <home-skills></home-skills>\n                </div>\n            </div>\n        </div>\n        <r-footer></r-footer>\n</div>\n"
+	module.exports = "\n<div class=\"home\">\n        <div class=\"row no-gutters\">\n            <r-header  @header-show-change=\"headerShow\" @header-hide-change=\"headerHide\" :header-width=\"Headercls\"></r-header>\n\n            <div class=\"col s12  \"  :class=\"Contentcls\">\n                <div class=\" home-content right-content\" >\n                    <home-title></home-title>\n                    <home-about-me></home-about-me>\n                    <time-line title=\"学习经历\" cls=\"home-study\" get-url=\"/home/studyexp/\" ></time-line>\n                    <time-line title=\"项目经验\" cls=\"home-project\" :out-project-exp=\"projectExp\" ></time-line>\n                    <home-skills></home-skills>\n                </div>\n            </div>\n        </div>\n        <r-footer></r-footer>\n</div>\n"
 
 /***/ },
 /* 135 */
@@ -17433,7 +17435,7 @@
 	//                 </div>
 	//             </div>
 	//             <div class="col m12">
-	//                 <img :src="aboutMeImg"  class="responsive-img" alt="">
+	//                 <img  :src="aboutMeImg"  class="responsive-img" alt="">
 	//             </div>
 	//             <div class=" input-field col m12">
 	//                 <textarea id="textarea1" class="materialize-textarea" v-model="aboutMeContent" length="120"></textarea>
@@ -17454,7 +17456,7 @@
 /* 148 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"row\">\n    <p class=\"info-text\">{{msg}}</p>\n    <form class=\"col s12\" enctype=\"multipart/form-data\">\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n            <label for=\"admin-home-name\"  class=\"active\">姓名</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n            <label for=\"admin-home-age\"  class=\"active\">年龄</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n            <label for=\"admin-home-email\"  class=\"active\">邮箱</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n            <label for=\"admin-home-website\"  class=\"active\">网址</label>\n        </div>\n        <div class=\"file-field input-field col m12\">\n            <input class=\"file-path validate col m6\" type=\"text\"  />\n            <div class=\"btn\">\n                <span>File</span>\n                <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n            </div>\n        </div>\n        <div class=\"col m12\">\n            <img :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n        </div>\n        <div class=\" input-field col m12\">\n            <textarea id=\"textarea1\" class=\"materialize-textarea\" v-model=\"aboutMeContent\" length=\"120\"></textarea>\n            <label for=\"textarea1\">简介/支持markdown</label>\n        </div>\n    </form>\n    <div class=\"row\">\n        <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"row\">\n    <p class=\"info-text\">{{msg}}</p>\n    <form class=\"col s12\" enctype=\"multipart/form-data\">\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-name\" type=\"text\" v-model=\"aboutMeName\" class=\"validate\">\n            <label for=\"admin-home-name\"  class=\"active\">姓名</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-age\" type=\"number\" v-model=\"aboutMeAge\" class=\"validate\">\n            <label for=\"admin-home-age\"  class=\"active\">年龄</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-email\" type=\"email\" v-model=\"aboutMeEmail\" class=\"validate\">\n            <label for=\"admin-home-email\"  class=\"active\">邮箱</label>\n        </div>\n        <div class=\"input-field col m6\">\n            <input placeholder=\"Placeholder\" id=\"admin-home-website\"  type=\"url\" v-model=\"aboutMeUrl\" class=\"validate\">\n            <label for=\"admin-home-website\"  class=\"active\">网址</label>\n        </div>\n        <div class=\"file-field input-field col m12\">\n            <input class=\"file-path validate col m6\" type=\"text\"  />\n            <div class=\"btn\">\n                <span>File</span>\n                <input type=\"file\" @change=\"aboutMeUpload($event,'aboutMeImgFile','aboutMeImg')\" />\n            </div>\n        </div>\n        <div class=\"col m12\">\n            <img  :src=\"aboutMeImg\"  class=\"responsive-img\" alt=\"\">\n        </div>\n        <div class=\" input-field col m12\">\n            <textarea id=\"textarea1\" class=\"materialize-textarea\" v-model=\"aboutMeContent\" length=\"120\"></textarea>\n            <label for=\"textarea1\">简介/支持markdown</label>\n        </div>\n    </form>\n    <div class=\"row\">\n        <button class=\"btn col m3 offset-m2 s12 \" @click=\"updateAboutMe($event,'aboutMeImgFile')\">保存</button>\n    </div>\n</div>\n"
 
 /***/ },
 /* 149 */
