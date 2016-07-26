@@ -19560,7 +19560,7 @@
 	            console.log("this.home_show", this.home_show);
 	            $.tokenAjax("/admin/project/" + id, "put", {
 	                title: this.title,
-	                content: this.content, cover: this.cover || " ",
+	                content: this.content, cover: this.cover || "",
 	                home_show: 0 + this.home_show || 0,
 	                summary: this.summary,
 	                start_time: this.start_time,
@@ -20011,7 +20011,7 @@
 	//                 <div class="col m4 offset-m1" v-for="i in list">
 	//                     <div class="card">
 	//                         <div class="card-image waves-effect waves-block waves-light">
-	//                             <img class="activator" src="img/navTitle.png">
+	//                             <img class="activator" :src="i.cover?(i.cover.indexOf('http')!=-1?i.cover:'img/navTitle.png'):'img/navTitle.png'">
 	//                         </div>
 	//                         <div class="card-content">
 	//                             <span class="card-title activator grey-text text-darken-4">{{i.name}}<i class="material-icons right">more_vert</i></span>
@@ -20085,6 +20085,7 @@
 	            var windowScroll = $(window).scrollTop();
 	
 	            //判断上一次滚动获取的数据是否小于这一次获取的距离,以及是否正在获取下一页数据中
+	            console.log("滚动", windowScroll);
 	            if (windowScroll + 100 >= _this2.offSetHeight && _this2.prevOffSetHeight < _this2.offSetHeight && !_this2.getPageLock) {
 	                _this2.getNextPage();
 	            }
@@ -20100,7 +20101,7 @@
 /* 216 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-list\">\n        <div class=\"row\">\n            <div class=\"col m4 offset-m1\" v-for=\"i in list\">\n                <div class=\"card\">\n                    <div class=\"card-image waves-effect waves-block waves-light\">\n                        <img class=\"activator\" src=\"img/navTitle.png\">\n                    </div>\n                    <div class=\"card-content\">\n                        <span class=\"card-title activator grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">more_vert</i></span>\n                        <p><a href=\"#\" v-link=\"{'path':'/project/'+i.id}\">详情</a></p>\n                    </div>\n                    <div class=\"card-reveal\">\n                        <span class=\"card-title grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">close</i></span>\n                        <div class=\"project-md-preview\">\n                            {{{i.summary}}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-list\">\n        <div class=\"row\">\n            <div class=\"col m4 offset-m1\" v-for=\"i in list\">\n                <div class=\"card\">\n                    <div class=\"card-image waves-effect waves-block waves-light\">\n                        <img class=\"activator\" :src=\"i.cover?(i.cover.indexOf('http')!=-1?i.cover:'img/navTitle.png'):'img/navTitle.png'\">\n                    </div>\n                    <div class=\"card-content\">\n                        <span class=\"card-title activator grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">more_vert</i></span>\n                        <p><a href=\"#\" v-link=\"{'path':'/project/'+i.id}\">详情</a></p>\n                    </div>\n                    <div class=\"card-reveal\">\n                        <span class=\"card-title grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">close</i></span>\n                        <div class=\"project-md-preview\">\n                            {{{i.summary}}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 217 */
@@ -20175,7 +20176,7 @@
 /* 220 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -20183,7 +20184,25 @@
 	// <template>
 	//     <div class="project-detail">
 	//         <div class="container">
-	//
+	//             <div class="row teal lighten-1 card-panel">
+	//                 <div class="col m4 s12 ">
+	//                     <h4 class="white-text  center-align">项目名称</h4>
+	//                     <h5 class="white-text center-align">{{title}}</h5>
+	//                 </div>
+	//                 <div class="col m4 s12 ">
+	//                     <h4 class="white-text center-align">项目简介</h4>
+	//                     <h5 class="white-text center-align">{{summary}}</h5>
+	//                 </div>
+	//                 <div class="col m4 s12 ">
+	//                     <h4 class="white-text center-align">时间</h4>
+	//                     <h5 class="white-text center-align">{{start_time}}至{{end_time}}</h5>
+	//                 </div>
+	//             </div>
+	//             <div class="row detail-content-wrap">
+	//                 <div id="normal-markdown" class="col s12 m12 markdown-body detail-markdown">
+	//                     {{{content}}}
+	//                 </div>
+	//             </div>
 	//         </div>
 	//     </div>
 	// </template>
@@ -20195,13 +20214,27 @@
 	exports.default = {
 	    data: function data() {
 	        return {
-	            msg: 'hello vue'
+	            msg: 'hello vue',
+	            content: "",
+	            title: "",
+	            summary: "",
+	            start_time: "",
+	            end_time: ""
 	        };
 	    },
 	
 	    route: {
 	        data: function data() {
-	            var projectId = this.$route.params.userId;
+	            var _this = this;
+	
+	            var projectId = this.$route.params.projectId;
+	            $.promiseAjax("/project/" + projectId, "get").then(function (data) {
+	                _this.content = markdown.toHTML(data.result["content"]);
+	                _this.title = data.result["name"];
+	                _this.summary = data.result["summary"];
+	                _this.start_time = data.result['start_time'];
+	                _this.end_time = data.result['end_time'];
+	            }).catch();
 	        }
 	    },
 	    components: {}
@@ -20213,7 +20246,7 @@
 /* 221 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-detail\">\n    <div class=\"container\">\n\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-detail\">\n    <div class=\"container\">\n        <div class=\"row teal lighten-1 card-panel\">\n            <div class=\"col m4 s12 \">\n                <h4 class=\"white-text  center-align\">项目名称</h4>\n                <h5 class=\"white-text center-align\">{{title}}</h5>\n            </div>\n            <div class=\"col m4 s12 \">\n                <h4 class=\"white-text center-align\">项目简介</h4>\n                <h5 class=\"white-text center-align\">{{summary}}</h5>\n            </div>\n            <div class=\"col m4 s12 \">\n                <h4 class=\"white-text center-align\">时间</h4>\n                <h5 class=\"white-text center-align\">{{start_time}}至{{end_time}}</h5>\n            </div>\n        </div>\n        <div class=\"row detail-content-wrap\">\n            <div id=\"normal-markdown\" class=\"col s12 m12 markdown-body detail-markdown\">\n                {{{content}}}\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }
 /******/ ]);

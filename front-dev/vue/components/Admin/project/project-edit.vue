@@ -106,7 +106,7 @@
                 $.tokenAjax("/admin/project/"+id,"put",
                         {
                             title:this.title,
-                            content:this.content,cover:this.cover||" ",
+                            content:this.content,cover:this.cover||"",
                             home_show:0+this.home_show||0,
                             summary:this.summary,
                             start_time:this.start_time,

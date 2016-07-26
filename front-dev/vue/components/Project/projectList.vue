@@ -4,7 +4,7 @@
                 <div class="col m4 offset-m1" v-for="i in list">
                     <div class="card">
                         <div class="card-image waves-effect waves-block waves-light">
-                            <img class="activator" src="img/navTitle.png">
+                            <img class="activator" :src="i.cover?(i.cover.indexOf('http')!=-1?i.cover:'img/navTitle.png'):'img/navTitle.png'">
                         </div>
                         <div class="card-content">
                             <span class="card-title activator grey-text text-darken-4">{{i.name}}<i class="material-icons right">more_vert</i></span>
@@ -74,6 +74,7 @@
                 let windowScroll=$(window).scrollTop();
 
                 //判断上一次滚动获取的数据是否小于这一次获取的距离,以及是否正在获取下一页数据中
+                console.log("滚动",windowScroll);
                 if(windowScroll+100>=this.offSetHeight&&this.prevOffSetHeight<this.offSetHeight&&!this.getPageLock){
                     this.getNextPage();
                 }
