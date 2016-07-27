@@ -108,7 +108,7 @@ class userController extends Controller
         $GtSdk = new \GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
         $status=$GtSdk->pre_process();
         session(['gtserver' => $status]);
-        session(['user_id' => "testId"]);
+        //session(['user_id' => "testId"]);
         $result=$GtSdk->get_response_str();
         return response()->json(["type"=>"true","message"=>"获取验证码","result"=>json_decode($result)]);
     }
