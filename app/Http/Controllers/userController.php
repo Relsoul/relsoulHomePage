@@ -15,8 +15,11 @@ use JWT;
 //这里可以使用app_path来替换目录..
 define("geePath",realpath(__DIR__."/../../../vendor/gee-team/gt-php-sdk/"));
 
-require_once (geePath."/lib/class.geetestlib.php");
-require_once (geePath."/config/config.php");
+define("CAPTCHA_ID", "a8469534805e26e5322c27f343669b1d");
+define("PRIVATE_KEY", "42e99bea023ef99a3691fe56191d646e");
+
+/*require_once (geePath."/lib/class.geetestlib.php");
+require_once (geePath."/config/config.php");*/
 
 class userController extends Controller
 {
@@ -74,16 +77,15 @@ class userController extends Controller
        // dd($usersModel->get());
         $GtSdk = new \GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
         $status=session('gtserver');
-        $userID =session('user_id');
+        //$userID =session('user_id');
 
         $geetestChallenge=$request->input("geetest_challenge");
         $geetestValidate=$request->input("geetest_validate");
         $geetestSeccode=$request->input("geetest_seccode");
-        //dd($geetestChallenge,$geetestValidate,$geetestSeccode,$login,$logintype,$password,$userID);
-
+        //dd($geetestChallenge,$geetestValidate,$geetestSeccode,$login,$logintype,$password);
         //return $this->validateUser($login,$logintype,$password,$usersModel);
         if ($status == 1) {
-            $result = $GtSdk->success_validate($geetestChallenge, $geetestValidate, $geetestSeccode);
+            $result = $GtSdk->success_validate($geetestChallenge,$geetestValidate,$geetestSeccode);
             if ($result) {
                 return $this->validateUser($login,$logintype,$password,$usersModel);
             } else{
@@ -108,7 +110,7 @@ class userController extends Controller
         $GtSdk = new \GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
         $status=$GtSdk->pre_process();
         session(['gtserver' => $status]);
-        //session(['user_id' => "testId"]);
+        session(['user_id' => "testId"]);
         $result=$GtSdk->get_response_str();
         return response()->json(["type"=>"true","message"=>"获取验证码","result"=>json_decode($result)]);
     }

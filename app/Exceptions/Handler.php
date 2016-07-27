@@ -43,6 +43,7 @@ class Handler extends ExceptionHandler
     {
         $class_name=get_class($e);
 
+
         switch ($class_name){
             case "UnexpectedValueException":
             case "Firebase\\JWT\\SignatureInvalidException":
