@@ -83,7 +83,7 @@ class userController extends Controller
 
         //return $this->validateUser($login,$logintype,$password,$usersModel);
         if ($status == 1) {
-            $result = $GtSdk->success_validate($geetestChallenge, $geetestValidate, $geetestSeccode,$userID);
+            $result = $GtSdk->success_validate($geetestChallenge, $geetestValidate, $geetestSeccode);
             if ($result) {
                 return $this->validateUser($login,$logintype,$password,$usersModel);
             } else{
