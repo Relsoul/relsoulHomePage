@@ -110,3 +110,6 @@ Route::get("/project-uploadimg/{id}","Admin\\adminProject@getProjectImg");
 
 //获取Home_show项目
 Route::get("/project-home-show","Admin\\adminProject@getHomeShowProject");
+
+//找回密码
+Route::post("/fetchpw","userController@fetchPassWord");

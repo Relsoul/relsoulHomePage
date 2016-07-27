@@ -13597,8 +13597,8 @@
 	//                                     <div class="user-choose-box" >
 	//                                         <ul id="user-choose" class="dropdown-content" >
 	//                                             <li><a href="#!" v-link="{path:'/user/'+userId}">个人中心<span class="badge">1</span></a></li>
-	//                                             <li><a href="#!">two<span class="new badge">1</span></a></li>
 	//                                             <li v-if="role>=10?true:false" ><a href="#!" v-link="{path:'/admin'}" >admin管理</a></li>
+	//                                             <li><a href="#!" @click="logout($event)">登出</a></li>
 	//                                         </ul>
 	//                                         <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >选择与访问
 	//                                             <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>
@@ -13707,6 +13707,13 @@
 	        showUserMenu: function showUserMenu(e) {
 	            $(e.target).dropdown();
 	            $(e.target).click();
+	        },
+	        logout: function logout(e) {
+	            e.stopImmediatePropagation();
+	            this.isLogin = false;
+	            window.localStorage.removeItem("token");
+	            window.localStorage.removeItem("name");
+	            window.location.reload(true);
 	        }
 	    },
 	    components: {
@@ -13802,13 +13809,17 @@
 	exports.default = {
 	    data: function data() {
 	        return {
+	            msg: "",
 	            passwordCls: {
 	                "password": false
 	            },
 	            loginUser: "",
 	            loginPw: "",
+	            loginCode: "",
+	            loginType: 1,
 	            loginFailed: false,
-	            loginDone: false
+	            loginDone: false,
+	            dataImg: ""
 	        };
 	    },
 	
@@ -13821,85 +13832,55 @@
 	        },
 	
 	        showInfo: (0, _showInfo.showInfo)(),
-	        loginValidate: function loginValidate(captchaObj) {
+	        loginClick: function loginClick(e) {
 	            var _this = this;
 	
-	            $(".login-btn").on("click", function (e) {
-	                var validate = captchaObj.getValidate();
-	                if (!validate) {
-	                    alert('请先完成验证！');
-	                    return false;
-	                }
-	                console.log("validate", validate);
-	                console.log(validate.geetest_challenge, validate.geetest_validate, validate.geetest_seccode);
-	                $.ajax({
-	                    url: "/login", // 进行二次验证
-	                    type: "post",
-	                    // dataType: "json",
-	                    data: {
-	                        // 二次验证所需的三个值
-	                        geetest_challenge: validate.geetest_challenge,
-	                        geetest_validate: validate.geetest_validate,
-	                        geetest_seccode: validate.geetest_seccode,
-	                        name: _this.loginUser,
-	                        loginType: 1,
-	                        password: _this.loginPw
-	                    },
-	                    success: function success(data) {
-	                        console.log(91, data);
-	                        if (data.type == "true") {
-	                            _this.loginDone = true;
-	                            //成功通知父级事件
-	                            _this.$dispatch("login-done");
-	                            setTimeout(function () {
-	                                _this.loginDone = false;
-	                                $("#" + _this.loginId).closeModal();
-	                            }, 800);
-	                            //设置token与role
-	                            window.localStorage.setItem("token", data.result.token);
-	                            window.localStorage.setItem("name", data.result.userName);
-	                        } else {
-	                            //登陆失败
-	                            _this.loginFailed = true;
-	                            setTimeout(function () {
-	                                _this.loginFailed = false;
-	                            }, 1000);
-	                        }
-	                    }
-	                });
-	                e.stopImmediatePropagation();
-	                return false;
+	            if (/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(this.loginUser)) {
+	                this.loginType = 2;
+	            }
+	
+	            $.promiseAjax("/login", "post", { name: this.loginUser, loginType: this.loginType, password: this.loginPw, code: this.loginCode }).then(function (data) {
+	                _this.showInfo(data.message, 2000, "msg");
+	                console.log("login", data);
+	                _this.loginDone = true;
+	                //成功通知父级事件
+	                _this.$dispatch("login-done");
+	                setTimeout(function () {
+	                    _this.loginDone = false;
+	                    $("#" + _this.loginId).closeModal();
+	                }, 800);
+	                //设置token与role
+	                window.localStorage.setItem("token", data.result.token);
+	                window.localStorage.setItem("name", data.result.userName);
+	                window.location.reload(true);
+	            }).catch(function (data) {
+	                _this.showInfo(data.message, 2000, "msg");
+	                _this.loginFailed = true;
+	                _this.getCode();
+	                setTimeout(function () {
+	                    _this.loginFailed = false;
+	                }, 1000);
 	            });
-	            captchaObj.bindOn(".login-btn");
-	            captchaObj.appendTo("#popup-captcha");
 	        },
-	        loginClick: function loginClick(e) {
-	            console.log(233);
-	            e.stopImmediatePropagation();
-	            return false;
+	        changeCode: function changeCode() {
+	            this.getCode();
+	        },
+	        getCode: function getCode() {
+	            var _this2 = this;
+	
+	            $.ajax({
+	                // 获取id，challenge，success（是否启用failback）
+	                url: "/login?t=" + new Date().getTime(), // 加随机数防止缓存
+	                type: "get",
+	                dataType: "json",
+	                success: function success(data) {
+	                    _this2.dataImg = data.result;
+	                }
+	            });
 	        }
 	    },
 	    ready: function ready() {
-	        var _this2 = this;
-	
-	        $.ajax({
-	            // 获取id，challenge，success（是否启用failback）
-	            url: "/login?t=" + new Date().getTime(), // 加随机数防止缓存
-	            type: "get",
-	            dataType: "json",
-	            success: function success(data) {
-	                // 使用initGeetest接口
-	                // 参数1：配置参数
-	                // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
-	                initGeetest({
-	                    gt: data.result.gt,
-	                    challenge: data.result.challenge,
-	                    product: "float", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
-	                    offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
-	                }, _this2.loginValidate);
-	                console.log(data);
-	            }
-	        });
+	        this.getCode();
 	    },
 	
 	    props: {
@@ -13931,7 +13912,7 @@
 	//             <div class="container">
 	//                 <div class="row">
 	//                     <h4>登陆</h4>
-	//                     <p class="info-text"></p>
+	//                     <p class="info-text">{{msg}}</p>
 	//                     <form  class="col m12" >
 	//                         <div class="row">
 	//                             <div class="input-field col m5 offset-m3 s12 ">
@@ -13946,12 +13927,19 @@
 	//                             </div>
 	//                         </div>
 	//                         <div class="row">
-	//                             <div id="popup-captcha" class="col m5 offset-m3 s12 "></div>
+	//                             <div class="input-field col m5 offset-m3 s6 ">
+	//                                 <i class="material-icons prefix">account_box</i>
+	//                                 <input type="text" id="loginUserText" name="loginUserText" v-model="loginCode" class="validate">
+	//                                 <label for="loginUserText">验证码</label>
+	//                             </div>
+	//                             <div class="col m4 s6 code-img-wrap">
+	//                                 <img class="code-img responsive-img" :src="dataImg" alt="" @click="changeCode">
+	//                             </div>
 	//                         </div>
 	//
 	//                     </form>
 	//                     <div class="row">
-	//                         <button class="btn col m3 offset-m2 s12 login-btn animated" :class="{'flipInX':loginDone}" >登陆</button>
+	//                         <button class="btn col m3 offset-m2 s12 login-btn animated" :class="{'flipInX':loginDone}" @click="loginClick" >登陆</button>
 	//                         <button data-target="fetchPassWord" class=" modal-trigger modal-close btn col m3 offset-m1 s12 findpw-btn">忘记密码</button>
 	//                     </div>
 	//                 </div>
@@ -14006,7 +13994,7 @@
 /* 19 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div :id=\"loginId\" class=\"modal login-modal animated\" :class=\"{'shake':loginFailed}\">\n    <div class=\"owl-login\"  :class=\"passwordCls\">\n        <div class=\"hand\"></div>\n        <div class=\"hand hand-r\"></div>\n        <div class=\"arms\">\n            <div class=\"arm\"></div>\n            <div class=\"arm arm-r\">\n            </div>\n        </div>\n    </div>\n    <div class=\"modal-content\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <h4>登陆</h4>\n                <p class=\"info-text\"></p>\n                <form  class=\"col m12\" >\n                    <div class=\"row\">\n                        <div class=\"input-field col m5 offset-m3 s12 \">\n                            <i class=\"material-icons prefix\">account_box</i>\n                            <input type=\"text\" id=\"loginUser\" name=\"loginUser\" v-model=\"loginUser\" class=\"validate\">\n                            <label for=\"loginUser\">用户名/邮箱地址</label>\n                        </div>\n                        <div class=\"input-field col m5 offset-m3 s12 \">\n                            <i class=\"material-icons prefix\">vpn_key</i>\n                            <input type=\"password\" id=\"loginPw\" name=\"loginPw\" v-model=\"loginPw\" @focus=\"pwFocus\" @blur=\"pwBlur\" class=\"validate\">\n                            <label for=\"loginPw\">密码</label>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div id=\"popup-captcha\" class=\"col m5 offset-m3 s12 \"></div>\n                    </div>\n\n                </form>\n                <div class=\"row\">\n                    <button class=\"btn col m3 offset-m2 s12 login-btn animated\" :class=\"{'flipInX':loginDone}\" >登陆</button>\n                    <button data-target=\"fetchPassWord\" class=\" modal-trigger modal-close btn col m3 offset-m1 s12 findpw-btn\">忘记密码</button>\n                </div>\n            </div>\n            <div class=\"modal-footer\">\n                <p>还没有账号?赶紧来注册吧</p>\n                <button :data-target=\"registerId\" class=\" modal-close btn btn-flat left modal-trigger\">注册</button>\n                <a href=\"#\" class=\"btn modal-action modal-close waves-effect waves-green btn-flat\">close</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div :id=\"loginId\" class=\"modal login-modal animated\" :class=\"{'shake':loginFailed}\">\n    <div class=\"owl-login\"  :class=\"passwordCls\">\n        <div class=\"hand\"></div>\n        <div class=\"hand hand-r\"></div>\n        <div class=\"arms\">\n            <div class=\"arm\"></div>\n            <div class=\"arm arm-r\">\n            </div>\n        </div>\n    </div>\n    <div class=\"modal-content\">\n        <div class=\"container\">\n            <div class=\"row\">\n                <h4>登陆</h4>\n                <p class=\"info-text\">{{msg}}</p>\n                <form  class=\"col m12\" >\n                    <div class=\"row\">\n                        <div class=\"input-field col m5 offset-m3 s12 \">\n                            <i class=\"material-icons prefix\">account_box</i>\n                            <input type=\"text\" id=\"loginUser\" name=\"loginUser\" v-model=\"loginUser\" class=\"validate\">\n                            <label for=\"loginUser\">用户名/邮箱地址</label>\n                        </div>\n                        <div class=\"input-field col m5 offset-m3 s12 \">\n                            <i class=\"material-icons prefix\">vpn_key</i>\n                            <input type=\"password\" id=\"loginPw\" name=\"loginPw\" v-model=\"loginPw\" @focus=\"pwFocus\" @blur=\"pwBlur\" class=\"validate\">\n                            <label for=\"loginPw\">密码</label>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"input-field col m5 offset-m3 s6 \">\n                            <i class=\"material-icons prefix\">account_box</i>\n                            <input type=\"text\" id=\"loginUserText\" name=\"loginUserText\" v-model=\"loginCode\" class=\"validate\">\n                            <label for=\"loginUserText\">验证码</label>\n                        </div>\n                        <div class=\"col m4 s6 code-img-wrap\">\n                            <img class=\"code-img responsive-img\" :src=\"dataImg\" alt=\"\" @click=\"changeCode\">\n                        </div>\n                    </div>\n\n                </form>\n                <div class=\"row\">\n                    <button class=\"btn col m3 offset-m2 s12 login-btn animated\" :class=\"{'flipInX':loginDone}\" @click=\"loginClick\" >登陆</button>\n                    <button data-target=\"fetchPassWord\" class=\" modal-trigger modal-close btn col m3 offset-m1 s12 findpw-btn\">忘记密码</button>\n                </div>\n            </div>\n            <div class=\"modal-footer\">\n                <p>还没有账号?赶紧来注册吧</p>\n                <button :data-target=\"registerId\" class=\" modal-close btn btn-flat left modal-trigger\">注册</button>\n                <a href=\"#\" class=\"btn modal-action modal-close waves-effect waves-green btn-flat\">close</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 20 */
@@ -14120,23 +14108,15 @@
 	                    return false;
 	                }
 	
-	                $.ajax({
-	                    url: "/register",
-	                    type: "post",
-	                    data: {
-	                        // 二次验证所需的三个值
-	                        name: this.registerUser,
-	                        email: this.registerEmail,
-	                        password: this.registerPw
-	                    },
-	                    success: function success(result) {
-	                        console.log("register", result);
-	                        _this.showInfo(result.message, 3000, "fromInfo");
-	                        if (result.type = true) {
-	                            $("#" + _this.registerId).closeModal();
-	                            $("#" + _this.loginId).openModal();
-	                        }
+	                $.promiseAjax("/register", "post", { name: this.registerUser, email: this.registerEmail, password: this.registerPw }).then(function (result) {
+	                    console.log("register", result);
+	                    _this.showInfo(result.message, 3000, "fromInfo");
+	                    if (result.type = true) {
+	                        $("#" + _this.registerId).closeModal();
+	                        $("#" + _this.loginId).openModal();
 	                    }
+	                }).catch(function (result) {
+	                    _this.showInfo(result.message, 3000, "fromInfo");
 	                });
 	                return false;
 	            } else {
@@ -14305,24 +14285,51 @@
 
 /***/ },
 /* 29 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	
+	var _showInfo = __webpack_require__(18);
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            msg: '',
+	            email: ""
+	        };
+	    },
+	
+	    methods: {
+	        showInfo: (0, _showInfo.showInfo)(),
+	        getPassword: function getPassword() {
+	            var _this = this;
+	
+	            $.promiseAjax("/fetchpw", "post", { email: this.email }).then(function (data) {
+	                _this.showInfo(data.message, 4000, "msg");
+	            }).catch(function (data) {
+	                _this.showInfo(data.message, 3000, "msg");
+	            });
+	        }
+	    },
+	    components: {}
+	};
+	// </script>
+	/* generated by vue-loader */
 	// <template>
 	//         <div id="fetchPassWord" class="modal fetch-password">
 	//             <div class="modal-content">
 	//                 <div class="container">
-	//                     <p>{{msg}}</p>
+	//                     <h6>{{msg}}</h6>
 	//                     <div class="row">
 	//                         <div class="input-field col s12">
-	//                             <input  id="first_name2" type="text" class="validate">
+	//                             <input placeholder="请输入用户名所对应的email"  id="first_name2" type="text" class="validate" v-model="email">
 	//                             <label class="active" for="first_name2">email</label>
 	//                         </div>
-	//                         <button class="btn col s6 off-s3">
+	//                         <button class="btn col s6 off-s3" @click="getPassword($event)">
 	//                             提交
 	//                         </button>
 	//                     </div>
@@ -14336,32 +14343,19 @@
 	// <style>
 	//
 	// </style>
-	// <script>
-	
-	exports.default = {
-	    data: function data() {
-	        return {
-	            msg: 'hello vue'
-	        };
-	    },
-	
-	    methods: {},
-	    components: {}
-	};
-	// </script>
-	/* generated by vue-loader */
+	// <script type="text/ecmascript-6">
 
 /***/ },
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div id=\"fetchPassWord\" class=\"modal fetch-password\">\n    <div class=\"modal-content\">\n        <div class=\"container\">\n            <p>{{msg}}</p>\n            <div class=\"row\">\n                <div class=\"input-field col s12\">\n                    <input  id=\"first_name2\" type=\"text\" class=\"validate\">\n                    <label class=\"active\" for=\"first_name2\">email</label>\n                </div>\n                <button class=\"btn col s6 off-s3\">\n                    提交\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"modal-footer\">\n        <a class=\" modal-close modal-action modal-close waves-effect waves-green btn-flat\">关闭</a>\n    </div>\n</div>\n"
+	module.exports = "\n<div id=\"fetchPassWord\" class=\"modal fetch-password\">\n    <div class=\"modal-content\">\n        <div class=\"container\">\n            <h6>{{msg}}</h6>\n            <div class=\"row\">\n                <div class=\"input-field col s12\">\n                    <input placeholder=\"请输入用户名所对应的email\"  id=\"first_name2\" type=\"text\" class=\"validate\" v-model=\"email\">\n                    <label class=\"active\" for=\"first_name2\">email</label>\n                </div>\n                <button class=\"btn col s6 off-s3\" @click=\"getPassword($event)\">\n                    提交\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"modal-footer\">\n        <a class=\" modal-close modal-action modal-close waves-effect waves-green btn-flat\">关闭</a>\n    </div>\n</div>\n"
 
 /***/ },
 /* 31 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <fetch-pass-word-modal></fetch-pass-word-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6 user-hello-wrap\">\n                                    <p class=\"user-hello\">欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6 user-choose-box-wrap\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\" v-link=\"{path:'/user/'+userId}\">个人中心<span class=\"badge\">1</span></a></li>\n                                            <li><a href=\"#!\">two<span class=\"new badge\">1</span></a></li>\n                                            <li v-if=\"role>=10?true:false\" ><a href=\"#!\" v-link=\"{path:'/admin'}\" >admin管理</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >选择与访问\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\" v-link=\"{path:'/project/'}\">项目列表</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
+	module.exports = "\n    <div class=\"header col s12\" :class=\"[headerWidth,navHide]\">\n        <button class=\"btn header-btn\" :class=\"navButton\" @click=\"showNav\"><i class=\"material-icons\">menu</i></button>\n        <login-modal :login-id=\"loginModalId\" @login-done=\"loginDone\"></login-modal>\n        <register-modal :register-id=\"registerModalId\"></register-modal>\n        <fetch-pass-word-modal></fetch-pass-word-modal>\n        <div class=\"row no-gutters\">\n            <div class=\"navcol s12 m12 \">\n                <nav>\n                    <div class=\"header-nav-title\">\n                        <div class=\"nav-logo\">\n                            <a href=\"#\" class=\"brand-logo left\">Relsoul</a>\n                            <a href=\"#\" class=\"nav-clear\"><i class=\"material-icons right \" @click=\"hideNav\">clear</i></a>\n                        </div>\n                        <div class=\"col s12\">\n                            <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n                        </div>\n                        <div class=\"userInfo clearfix\" v-if=\"isLogin\">\n                            <div class=\"row\">\n                                <div class=\"col s6 user-hello-wrap\">\n                                    <p class=\"user-hello\">欢迎回来 <span class=\"green\">{{loginName}}</span></p>\n                                </div>\n                                <div class=\"col s6 user-choose-box-wrap\">\n                                    <div class=\"user-choose-box\" >\n                                        <ul id=\"user-choose\" class=\"dropdown-content\" >\n                                            <li><a href=\"#!\" v-link=\"{path:'/user/'+userId}\">个人中心<span class=\"badge\">1</span></a></li>\n                                            <li v-if=\"role>=10?true:false\" ><a href=\"#!\" v-link=\"{path:'/admin'}\" >admin管理</a></li>\n                                            <li><a href=\"#!\" @click=\"logout($event)\">登出</a></li>\n                                        </ul>\n                                        <button class=\"btn dropdown-button user-choose-btn\" @click=\"showUserMenu\" data-activates=\"user-choose\" >选择与访问\n                                            <i class=\"material-icons right user-choose-arrow\" >keyboard_arrow_down</i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <ul class=\"header-nav header-nav-list hide-on-med-and-down\">\n                        <li><a href=\"#!\" v-link=\"{path:'/project/'}\">项目列表</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <!--\n                            data-target to login id\n                        -->\n                        <li><button :data-target=\"loginModalId\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                        <li><button :data-target=\"registerModalId\" class=\"btn waves-effect waves-purple modal-trigger\">注册</button></li>\n                    </ul>\n\n                    <ul id=\"slide-out\" class=\"side-nav \">\n                        <li><a href=\"#!\">First Sidebar Link</a></li>\n                        <li><a href=\"#!\">Second Sidebar Link</a></li>\n                        <li><button data-target=\"loginModal\" class=\"btn waves-effect waves-purple modal-trigger\">登陆</button></li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n\n</div>\n\n"
 
 /***/ },
 /* 32 */
@@ -18769,7 +18763,6 @@
 	                _this.userInfo = {};
 	            }).catch(function (data) {
 	                _this.showInfo(data.message, 3000, "msg");
-	                _this.$router.go({ path: "/" });
 	            });
 	
 	            return false;
@@ -18801,11 +18794,11 @@
 	                //更新成功移除下重新登陆
 	                window.localStorage.removeItem("name");
 	                window.localStorage.removeItem("token");
+	                _this2.$router.go({ path: "/" });
 	                //重新打开登陆框
 	                $("#loginModal").openModal();
 	            }).catch(function (data) {
 	                _this2.showInfo(data.message, 3000, "msg");
-	                _this2.$router.go({ path: "/" });
 	            });
 	
 	            return false;
@@ -20012,7 +20005,7 @@
 	//                 <div class="col m4 offset-m1" v-for="i in list">
 	//                     <div class="card">
 	//                         <div class="card-image waves-effect waves-block waves-light">
-	//                             <img class="activator" :src="i.cover?(i.cover.indexOf('http')!=-1?i.cover:'img/navTitle.png'):'img/navTitle.png'">
+	//                             <img class="activator responsive-img" :src="i.cover?(i.cover.indexOf('http')!=-1?i.cover:'img/navTitle.png'):'img/navTitle.png'">
 	//                         </div>
 	//                         <div class="card-content">
 	//                             <span class="card-title activator grey-text text-darken-4">{{i.name}}<i class="material-icons right">more_vert</i></span>
@@ -20102,7 +20095,7 @@
 /* 216 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"project-list\">\n        <div class=\"row\">\n            <div class=\"col m4 offset-m1\" v-for=\"i in list\">\n                <div class=\"card\">\n                    <div class=\"card-image waves-effect waves-block waves-light\">\n                        <img class=\"activator\" :src=\"i.cover?(i.cover.indexOf('http')!=-1?i.cover:'img/navTitle.png'):'img/navTitle.png'\">\n                    </div>\n                    <div class=\"card-content\">\n                        <span class=\"card-title activator grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">more_vert</i></span>\n                        <p><a href=\"#\" v-link=\"{'path':'/project/'+i.id}\">详情</a></p>\n                    </div>\n                    <div class=\"card-reveal\">\n                        <span class=\"card-title grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">close</i></span>\n                        <div class=\"project-md-preview\">\n                            {{{i.summary}}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    </div>\n</div>\n"
+	module.exports = "\n<div class=\"project-list\">\n        <div class=\"row\">\n            <div class=\"col m4 offset-m1\" v-for=\"i in list\">\n                <div class=\"card\">\n                    <div class=\"card-image waves-effect waves-block waves-light\">\n                        <img class=\"activator responsive-img\" :src=\"i.cover?(i.cover.indexOf('http')!=-1?i.cover:'img/navTitle.png'):'img/navTitle.png'\">\n                    </div>\n                    <div class=\"card-content\">\n                        <span class=\"card-title activator grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">more_vert</i></span>\n                        <p><a href=\"#\" v-link=\"{'path':'/project/'+i.id}\">详情</a></p>\n                    </div>\n                    <div class=\"card-reveal\">\n                        <span class=\"card-title grey-text text-darken-4\">{{i.name}}<i class=\"material-icons right\">close</i></span>\n                        <div class=\"project-md-preview\">\n                            {{{i.summary}}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 217 */

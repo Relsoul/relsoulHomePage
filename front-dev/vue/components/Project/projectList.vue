@@ -4,7 +4,7 @@
                 <div class="col m4 offset-m1" v-for="i in list">
                     <div class="card">
                         <div class="card-image waves-effect waves-block waves-light">
-                            <img class="activator" :src="i.cover?(i.cover.indexOf('http')!=-1?i.cover:'img/navTitle.png'):'img/navTitle.png'">
+                            <img class="activator responsive-img" :src="i.cover?(i.cover.indexOf('http')!=-1?i.cover:'img/navTitle.png'):'img/navTitle.png'">
                         </div>
                         <div class="card-content">
                             <span class="card-title activator grey-text text-darken-4">{{i.name}}<i class="material-icons right">more_vert</i></span>

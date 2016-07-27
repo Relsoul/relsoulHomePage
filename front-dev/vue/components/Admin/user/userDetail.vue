@@ -99,7 +99,6 @@
                         })
                         .catch((data)=>{
                             this.showInfo(data.message,3000,"msg");
-                            this.$router.go({path:"/"})
                         });
 
                 return false;
@@ -126,12 +125,12 @@
                             //更新成功移除下重新登陆
                             window.localStorage.removeItem("name");
                             window.localStorage.removeItem("token");
+                            this.$router.go({path:"/"});
                             //重新打开登陆框
                             $("#loginModal").openModal();
                         })
                         .catch((data)=>{
                             this.showInfo(data.message,3000,"msg");
-                            this.$router.go({path:"/"})
                         });
 
                 return false;
@@ -157,7 +156,6 @@
                             })
                             .catch((data)=>{
                                 this.$router.go({path:"/"})
-
                             })
                 }
             }

@@ -24,8 +24,8 @@
                                     <div class="user-choose-box" >
                                         <ul id="user-choose" class="dropdown-content" >
                                             <li><a href="#!" v-link="{path:'/user/'+userId}">个人中心<span class="badge">1</span></a></li>
-                                            <li><a href="#!">two<span class="new badge">1</span></a></li>
                                             <li v-if="role>=10?true:false" ><a href="#!" v-link="{path:'/admin'}" >admin管理</a></li>
+                                            <li><a href="#!" @click="logout($event)">登出</a></li>
                                         </ul>
                                         <button class="btn dropdown-button user-choose-btn" @click="showUserMenu" data-activates="user-choose" >选择与访问
                                             <i class="material-icons right user-choose-arrow" >keyboard_arrow_down</i>
@@ -138,6 +138,13 @@
             showUserMenu(e){
                 $(e.target).dropdown();
                 $(e.target).click();
+            },
+            logout(e){
+                e.stopImmediatePropagation();
+                this.isLogin=false;
+                window.localStorage.removeItem("token");
+                window.localStorage.removeItem("name");
+                window.location.reload(true);
             }
         },
         components:{

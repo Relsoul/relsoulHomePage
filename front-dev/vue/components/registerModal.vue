@@ -73,24 +73,18 @@
                         return false;
                     }
 
-                    $.ajax({
-                        url:"/register",
-                        type:"post",
-                        data: {
-                            // 二次验证所需的三个值
-                            name:this.registerUser,
-                            email:this.registerEmail,
-                            password:this.registerPw,
-                        },
-                        success:(result)=>{
-                            console.log("register",result);
-                            this.showInfo(result.message,3000,"fromInfo");
-                            if(result.type=true){
-                                $("#"+this.registerId).closeModal();
-                                $("#"+this.loginId).openModal();
-                            }
-                        }
-                    });
+                    $.promiseAjax("/register","post",{name:this.registerUser, email:this.registerEmail, password:this.registerPw})
+                            .then((result)=>{
+                                console.log("register",result);
+                                this.showInfo(result.message,3000,"fromInfo");
+                                if(result.type=true){
+                                    $("#"+this.registerId).closeModal();
+                                    $("#"+this.loginId).openModal();
+                                }
+                            })
+                            .catch((result)=>{
+                                this.showInfo(result.message,3000,"fromInfo");
+                            });
                     return false;
 
                 }else{

@@ -13,7 +13,7 @@
             <div class="container">
                 <div class="row">
                     <h4>登陆</h4>
-                    <p class="info-text"></p>
+                    <p class="info-text">{{msg}}</p>
                     <form  class="col m12" >
                         <div class="row">
                             <div class="input-field col m5 offset-m3 s12 ">
@@ -28,12 +28,19 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div id="popup-captcha" class="col m5 offset-m3 s12 "></div>
+                            <div class="input-field col m5 offset-m3 s6 ">
+                                <i class="material-icons prefix">account_box</i>
+                                <input type="text" id="loginUserText" name="loginUserText" v-model="loginCode" class="validate">
+                                <label for="loginUserText">验证码</label>
+                            </div>
+                            <div class="col m4 s6 code-img-wrap">
+                                <img class="code-img responsive-img" :src="dataImg" alt="" @click="changeCode">
+                            </div>
                         </div>
 
                     </form>
                     <div class="row">
-                        <button class="btn col m3 offset-m2 s12 login-btn animated" :class="{'flipInX':loginDone}" >登陆</button>
+                        <button class="btn col m3 offset-m2 s12 login-btn animated" :class="{'flipInX':loginDone}" @click="loginClick" >登陆</button>
                         <button data-target="fetchPassWord" class=" modal-trigger modal-close btn col m3 offset-m1 s12 findpw-btn">忘记密码</button>
                     </div>
                 </div>
@@ -55,13 +62,17 @@
     export default{
         data(){
             return{
+                msg:"",
                 passwordCls:{
                     "password":false
                 },
                 loginUser:"",
                 loginPw:"",
+                loginCode:"",
+                loginType:1,
                 loginFailed:false,
                 loginDone:false,
+                dataImg:"",
             }
         },
         methods:{
@@ -72,82 +83,54 @@
                 this.passwordCls["password"]=false;
             },
             showInfo:showInfo(),
-            loginValidate(captchaObj){
-                $(".login-btn").on("click",(e)=>{
-                    var validate = captchaObj.getValidate();
-                    if (!validate) {
-                        alert('请先完成验证！');
-                        return false;
-                    }
-                    console.log("validate",validate);
-                    console.log(validate.geetest_challenge,validate.geetest_validate,validate.geetest_seccode);
-                    $.ajax({
-                        url: "/login", // 进行二次验证
-                        type: "post",
-                        // dataType: "json",
-                        data: {
-                            // 二次验证所需的三个值
-                            geetest_challenge: validate.geetest_challenge,
-                            geetest_validate: validate.geetest_validate,
-                            geetest_seccode: validate.geetest_seccode,
-                            name:this.loginUser,
-                            loginType:1,
-                            password:this.loginPw,
-                        },
-                        success:(data)=>{
-                            console.log(91,data);
-                            if (data.type == "true") {
-                                this.loginDone=true;
-                                //成功通知父级事件
-                                this.$dispatch("login-done");
-                                setTimeout(()=>{
-                                    this.loginDone=false;
-                                    $("#"+this.loginId).closeModal();
-                                },800);
-                                //设置token与role
-                                window.localStorage.setItem("token",data.result.token);
-                                window.localStorage.setItem("name",data.result.userName);
-                            }else{
-                                //登陆失败
-                                this.loginFailed=true;
-                                setTimeout(()=>{
-                                    this.loginFailed=false;
-                                },1000)
-                            }
-                        },
-                    });
-                    e.stopImmediatePropagation();
-                    return false;
-                });
-                captchaObj.bindOn(".login-btn");
-                captchaObj.appendTo("#popup-captcha");
-
-            },
             loginClick(e){
-                console.log(233);
-                e.stopImmediatePropagation();
-                return false;
+
+                if(/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(this.loginUser)){
+                    this.loginType=2;
+                }
+
+                $.promiseAjax("/login","post",{name:this.loginUser,loginType:this.loginType,password:this.loginPw,code:this.loginCode})
+                        .then((data)=>{
+                            this.showInfo(data.message,2000,"msg");
+                            console.log("login",data);
+                            this.loginDone=true;
+                            //成功通知父级事件
+                            this.$dispatch("login-done");
+                            setTimeout(()=>{
+                                this.loginDone=false;
+                                $("#"+this.loginId).closeModal();
+                            },800);
+                            //设置token与role
+                            window.localStorage.setItem("token",data.result.token);
+                            window.localStorage.setItem("name",data.result.userName);
+                            window.location.reload(true);
+                        })
+                        .catch((data)=>{
+                            this.showInfo(data.message,2000,"msg");
+                            this.loginFailed=true;
+                            this.getCode();
+                            setTimeout(()=>{
+                                this.loginFailed=false;
+                            },1000)
+                        })
+            },
+            changeCode(){
+                this.getCode();
+            },
+            getCode(){
+                $.ajax({
+                    // 获取id，challenge，success（是否启用failback）
+                    url: "/login?t=" + (new Date()).getTime(), // 加随机数防止缓存
+                    type: "get",
+                    dataType: "json",
+                    success:(data)=>{
+                        this.dataImg=data.result;
+                    },
+                });
             }
         },
         ready(){
-            $.ajax({
-                // 获取id，challenge，success（是否启用failback）
-                url: "/login?t=" + (new Date()).getTime(), // 加随机数防止缓存
-                type: "get",
-                dataType: "json",
-                success:(data)=>{
-                    // 使用initGeetest接口
-                    // 参数1：配置参数
-                    // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
-                    initGeetest({
-                        gt: data.result.gt,
-                        challenge: data.result.challenge,
-                        product: "float", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
-                        offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
-                    },this.loginValidate );
-                    console.log(data);
-                },
-            });
+            this.getCode();
         },
         props:{
             loginId:{

@@ -14,7 +14,6 @@
     <script src="lib/underscore-min.js"></script>
     <script src="lib/markdown.js"></script>
     <script src="lib/editor/editormd.min.js"></script>
-    <script src="https://static.geetest.com/static/tools/gt.js"></script>
 </head>
 <body>
 <div id="app"></div>
