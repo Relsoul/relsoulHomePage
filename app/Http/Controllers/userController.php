@@ -79,7 +79,7 @@ class userController extends Controller
         $geetestChallenge=$request->input("geetest_challenge");
         $geetestValidate=$request->input("geetest_validate");
         $geetestSeccode=$request->input("geetest_seccode");
-        //dd($geetestChallenge,$geetestValidate,$geetestSeccode,$login,$logintype,$password,$userID);
+        //dd($geetestChallenge,$geetestValidate,$geetestSeccode,$login,$logintype,$password,$userID,$status);
 
         //return $this->validateUser($login,$logintype,$password,$usersModel);
         if ($status == 1) {
@@ -106,9 +106,10 @@ class userController extends Controller
 
     public function initGeeTest(Request $request){
         $GtSdk = new \GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
+        
         $status=$GtSdk->pre_process();
         session(['gtserver' => $status]);
-        //session(['user_id' => "testId"]);
+        session(['user_id' => "testId"]);
         $result=$GtSdk->get_response_str();
         return response()->json(["type"=>"true","message"=>"获取验证码","result"=>json_decode($result)]);
     }

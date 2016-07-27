@@ -79,6 +79,7 @@
                         alert('请先完成验证！');
                         return false;
                     }
+                    console.log("validate",validate);
                     console.log(validate.geetest_challenge,validate.geetest_validate,validate.geetest_seccode);
                     $.ajax({
                         url: "/login", // 进行二次验证
