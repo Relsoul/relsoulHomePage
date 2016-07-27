@@ -36,7 +36,7 @@
                     <img :src="aboutMeImg" alt="" class="responsive-img" :style="{'height':aboutMeImgHeight+'px'}">
                 </div>
                 <div class="row">
-                    <div class="col s6 m6">
+                    <div class="col s12 m12">
                         <ul class="tabs">
                             <li class="tab col s6">
                                 <a href="#normal-html">markdown</a>

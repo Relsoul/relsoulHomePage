@@ -81,8 +81,8 @@ class userController extends Controller
         $geetestSeccode=$request->input("geetest_seccode");
         //dd($geetestChallenge,$geetestValidate,$geetestSeccode,$login,$logintype,$password,$userID);
 
-        return $this->validateUser($login,$logintype,$password,$usersModel);
-/*        if ($status == 1) {
+        //return $this->validateUser($login,$logintype,$password,$usersModel);
+        if ($status == 1) {
             $result = $GtSdk->success_validate($geetestChallenge, $geetestValidate, $geetestSeccode,$userID);
             if ($result) {
                 return $this->validateUser($login,$logintype,$password,$usersModel);
@@ -95,7 +95,7 @@ class userController extends Controller
             }else{
                 return response()->json(["type"=>"false","message"=>"验证码不正确","code"=>"40004"]);
             }
-        }*/
+        }
     }
 
 
