@@ -13,13 +13,11 @@ use Crypt;
 use JWT;
 
 //这里可以使用app_path来替换目录..
-define("geePath",realpath(__DIR__."/../../../vendor/gee-team/gt-php-sdk/"));
-
 define("CAPTCHA_ID", "a8469534805e26e5322c27f343669b1d");
 define("PRIVATE_KEY", "42e99bea023ef99a3691fe56191d646e");
 
-/*require_once (geePath."/lib/class.geetestlib.php");
-require_once (geePath."/config/config.php");*/
+require_once (app_path()."/../libs/geetestlib.php");
+/*require_once (geePath."/config/config.php");*/
 
 class userController extends Controller
 {
