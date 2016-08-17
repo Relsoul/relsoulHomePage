@@ -177,7 +177,7 @@ class adminHome extends  Controller
                     if(!empty($tryData)){
                         $t=DB::table("skill")->where("skill_id",$value["skill_id"])
                             ->update([
-                                "skill_name"=>(int)$value["skill_name"],
+                                "skill_name"=>$value["skill_name"],
                                 "start_exp"=>(int) $value["start_exp"],
                                 "end_exp"=>(int) $value["end_exp"],
                                 "updated_at"=>time()
