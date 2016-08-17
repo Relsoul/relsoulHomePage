@@ -17,8 +17,6 @@ class databaseError{
             return response()->json(["type"=>"false","message"=>"发生了一点小问题".$e->getMessage()]);
         }
         return $obj->$func($e);
-
-
-
+        
     }
 }
