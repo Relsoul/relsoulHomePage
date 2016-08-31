@@ -4,21 +4,9 @@
 
 为了练习MYSQL,本项目并没有采用最佳数据查询与设计.
 
-[预览](https://github.com/Relsoul/relsoulHomePage)
+[live预览](https://github.com/Relsoul/relsoulHomePage)
 
-![1](http://cdn.emufan.com/relsoul.com/Relsoul-admin-user-1.jpg)
-![2](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-home-1.jpeg)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-home-2.jpeg)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-project.jpeg)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-projet-1.png)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-user.jpeg)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-home-2.jpeg)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-login.jpg)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-project-2.jpg)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-project-list.jpg)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-register.jpg)
-![1](http://cdn.emufan.com/relsoul.com/RelsoulHome.jpeg)
-
+[大图预览](http://relsoul.com/#!/project/18)
 
 # restful返回信息与错误代码
 restfulAPI返回的格式为
