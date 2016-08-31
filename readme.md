@@ -6,7 +6,18 @@
 
 [预览](https://github.com/Relsoul/relsoulHomePage)
 
-
+![1](http://cdn.emufan.com/relsoul.com/Relsoul-admin-user-1.jpg)
+![2](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-home-1.jpeg)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-home-2.jpeg)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-project.jpeg)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-projet-1.png)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-admin-user.jpeg)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-home-2.jpeg)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-login.jpg)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-project-2.jpg)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-project-list.jpg)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome-register.jpg)
+![1](http://cdn.emufan.com/relsoul.com/RelsoulHome.jpeg)
 
 
 # restful返回信息与错误代码
@@ -41,6 +52,10 @@ curl -sS https://getcomposer.org/installer | php
 php composer.phar install
 ```
 
+如在安装中发现错误请参考 laravel安装教程 或者 提交 issue
+
+[laravel安装教程](http://www.golaravel.com/laravel/docs/5.0/)
+
 ## 设置.env文件
 ```
 DB_HOST=你的地址域名
@@ -70,3 +85,42 @@ MAIL_ENCRYPTION=null
 'url' => 'http://relsoul.com', (更改为你自己的域名)
 "jwt"=>"test!"  (JWT TOKEN加盐方法 推荐更改为自定义字符串 比如 xxx!@#xxx)
 ```
+
+
+# 日志
+
+### v0.1 2016-05-20
+
+- 初始化laravel框架
+- 初始化前端自动化
+
+### v0.2 2016-05-25
+
+- 添加token验证系统
+
+### v0.3 2016-06-05
+
+- 添加登录注册功能
+- 添加后台首页管理功能
+- 添加后台用户管理功能
+- 添加后台项目添加与管理功能
+- 添加后台首页技能管理功能
+- 添加后台项目列表功能
+- 添加功能用户列表功能
+
+### v0.4 2016-06-20
+
+- 修复首页样式
+- 添加项目列表样式
+
+
+### v0.5 2016-09-01
+
+- 大抵完善
+- 添加readme说明文件
+- 下一步修改细节问题 如去除某些文字 修改样式 修改手机端自适应样式 等
+
+
+
+
+
