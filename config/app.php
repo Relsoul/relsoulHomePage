@@ -14,7 +14,7 @@ return [
     */
 
     'debug' => env('APP_DEBUG'),
-    "jwt"=>"relsoulJWT!",
+    "jwt"=>"test!",
     "jwtTime"=>"259200",
 
     /*

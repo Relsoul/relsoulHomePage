@@ -4,7 +4,7 @@
 
 为了练习MYSQL,本项目并没有采用最佳数据查询与设计.
 
-
+[预览](https://github.com/Relsoul/relsoulHomePage)
 
 
 
@@ -22,50 +22,51 @@ restfulAPI返回的格式为
 
 ```
 
-## 错误代码
-|错误代码|说明|
-|:---:|:---:|
-|40001|用户token过期|
-|40002|无效的token|
-|40003|用户不存在或者账号密码错误|
-|40004|验证码不正确|
-|40005|注册参数不正确|
-|40006|注册插入数据库失败|
-|40007|解析token成功,但是获取数据库用户失败|
-|40008|程序异常|
-|40009|请求参数不正确|
-|40010|用户权限不足|
+# 安装
 
+## 克隆项目
 
-## 注册与登录
-| 说明 | URL | 附加参数 | 成功返回说明 |
-| --- | :---: | :---: | :---:|
-| 注册 | /register | name,password,email |result(username) |
-| 登录 | /login | name(email or username )<br>,geetest_challenge(验证码参数一)<br>,geetest_validate(验证码参数二)<br>,geetest_seccode(验证码参数三)<br>,password<br>,loginType(1:userName登录,2:email登录)<br>|result:{token,userName}|
-
-
-
-
-# 登陆与注册modal框
 ```
-<login-modal :login-id="loginModalId" :register-id="registerModalId"></login-modal>
-<register-modal :login-id="loginModalId" :register-id="registerModalId"></register-modal>
+git clone https://github.com/Relsoul/relsoulHomePage
 ```
-login与register可以传递两个值 register-id与login-id 类型为String 如果不传递默认的值为
-login-id:"loginModal",register-id:"registerId"
 
+## 安装composer
 
+```
+curl -sS https://getcomposer.org/installer | php
+```
 
-# AboutMe
+## 安装依赖
+```
+php composer.phar install
+```
 
-更新需要在头部附加token与进行role验证
+## 设置.env文件
+```
+DB_HOST=你的地址域名
+DB_DATABASE=你的数据库名称
+DB_USERNAME=数据库账号
+DB_PASSWORD=数据库密码
 
-| 说明 | URL | 附加参数 | 成功返回说明 |
-| --- | :---: | :---: | :---:|
-| 获取abouteMe | /home/aboutme |  |result(name,age,email,website,img) |
-| 更新abouteMe | /admin/home/aboutme | | |
+CACHE_DRIVER=file
+SESSION_DRIVER=file
+QUEUE_DRIVER=sync
 
+MAIL_DRIVER=smtp
+MAIL_HOST=mail.relsoul.com(你的邮箱地址)
+MAIL_PORT=25
+MAIL_USERNAME=postmaster@relsoul.com(你的邮箱发件人)
+MAIL_PASSWORD=你的邮箱密码
+MAIL_ENCRYPTION=null
+```
 
+## 导入数据
 
+/sql/init.sql里面有默认的数据 在phpmyadmin选择你的数据库(DB_DATABASE)导入init.sql即可
 
+## 更改config/app.php 
 
+```
+'url' => 'http://relsoul.com', (更改为你自己的域名)
+"jwt"=>"test!"  (JWT TOKEN加盐方法 推荐更改为自定义字符串 比如 xxx!@#xxx)
+```

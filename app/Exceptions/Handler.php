@@ -50,8 +50,8 @@ class Handler extends ExceptionHandler
                 return response()->json(["type"=>"false","message"=>"无效的token","code"=>"40002"]);
                 break;
             case "ErrorException":
-            case "DomainException":
-                return response()->json(["type"=>"false","message"=>"程序异常".$e->getMessage(),"code"=>"40008"]);
+            /*case "DomainException":
+                return response()->json(["type"=>"false","message"=>"程序异常".$e->getMessage(),"code"=>"40008"]);*/
                 break;
         }
 

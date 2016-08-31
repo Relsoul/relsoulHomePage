@@ -39,10 +39,10 @@
                     <div class="col s12 m12">
                         <ul class="tabs">
                             <li class="tab col s6">
-                                <a href="#normal-html">markdown</a>
+                                <a @click='chooseTabs("normal-markdown")' >markdown</a>
                             </li>
                             <li class="tab col s6">
-                                <a href="#normal-markdown">html</a>
+                                <a @click='chooseTabs("normal-html")' >html</a>
                             </li>
                         </ul>
                     </div>
@@ -77,6 +77,11 @@
                 aboutMeImg:"",
                 aboutMeContent:"",
                 aboutMeImgHeight:0
+            }
+        },
+        methods:{
+            chooseTabs(id){
+                $(".tabs").tabs("select_tab",id);
             }
         },
         ready(){
