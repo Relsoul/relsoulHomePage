@@ -47,7 +47,8 @@
             getNextPage(){
                 //锁定正在获取,无法再进行新的获取
                 if(this.getPageLock){
-                    console.log("getPageLock存在,正在获取下一页");
+                    console.log("getPageLock存在,无法获取下一页");
+                    return false;
                 }
                 console.log("获取下一页");
                 this.getPageLock=true;
@@ -57,15 +58,16 @@
                             //算出最后图片scrollTop距离
                             this.$nextTick(()=>{
                                 this.getLastCardHeight();
+                                if(data.result.userList.length<=0){
+                                    return this.getPageLock=true;
+                                }
                                 this.getPageLock=false;
                                 this.page++;
                             });
                         })
             },
             getLastCardHeight(){
-                this.prevOffSetHeight=this.offSetHeight;
                 this.offSetHeight=$(".card").last().offset().top;
-                console.log(72,this.offSetHeight,this.prevOffSetHeight);
             }
         },
         ready(){
@@ -74,8 +76,9 @@
                 let windowScroll=$(window).scrollTop();
 
                 //判断上一次滚动获取的数据是否小于这一次获取的距离,以及是否正在获取下一页数据中
-                console.log("滚动",windowScroll);
-                if(windowScroll+100>=this.offSetHeight&&this.prevOffSetHeight<this.offSetHeight&&!this.getPageLock){
+                console.log("滚动",windowScroll,"this.offSetHeight",this.offSetHeight);
+
+                if(windowScroll+200>=this.offSetHeight){
                     this.getNextPage();
                 }
 
